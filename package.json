@@ -1,0 +1,33 @@
+{
+  "name": "proyecto-ceo",
+  "version": "1.0.0",
+  "description": "Fase 1 Implementación Autenticacion usuario",
+  "private": true,
+  "main": "node src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon --watch src src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/error": "^4.0.0",
+    "@fastify/jwt": "^9.0.3",
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "env-var": "^7.5.0",
+    "express": "^4.21.2",
+    "fastify": "^5.2.1",
+    "fastify-plugin": "^5.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "winston": "^3.17.0",
+    "yup": "^1.6.1"
+  }
+}
