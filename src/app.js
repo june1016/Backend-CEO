@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 import { conectionDataBase, envs } from './config/index.js';
 import { getVersion } from './routes/index.js';
 import authenticateDatabase from './shared/functions/authenticateDataBase.js';
@@ -10,6 +11,12 @@ const initializeApp = async () => {
   const fastify = Fastify({
     logger: false,
   });
+
+    await fastify.register(cors, {
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    });
 
   fastify.decorate('auth', verifyJwt);
   fastify.register(getVersion, { prefix: '/' });

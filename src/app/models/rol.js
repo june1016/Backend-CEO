@@ -13,12 +13,12 @@ const Rol = conectionDataBase().define('Rol', {
     type: DataTypes.STRING(50),
     allowNull: false
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
     allowNull: true
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
     allowNull: true

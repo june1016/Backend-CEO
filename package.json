@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cors": "^10.0.2",
     "@fastify/error": "^4.0.0",
     "@fastify/jwt": "^9.0.3",
     "bcryptjs": "^2.4.3",
