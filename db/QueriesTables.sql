@@ -1,9 +1,9 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  gmail VARCHAR(100) NOT NULL UNIQUE,
+  gmail VARCHAR(500) NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  last_name VARCHAR(100) NOT NULL,
+  name VARCHAR(500) NOT NULL,
+  last_name VARCHAR(500) NOT NULL,
   token TEXT NULL,
   reset_password_token varchar(255) NULL,
 	reset_password_expires timestamp NULL,
@@ -30,25 +30,14 @@ CREATE TABLE financial_data (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     category VARCHAR(255) NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    initial_amount DECIMAL(10,2) NOT NULL,
+    amount DECIMAL(50,2) NOT NULL,
+    initial_amount DECIMAL(50,2) NOT NULL,
     created_by INTEGER NOT NULL,
     updated_by INTEGER NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE beginning_balance_sheet (
-    id SERIAL PRIMARY KEY,
-    account VARCHAR(255) NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    literal_id INTEGER NOT NULL,
-    created_by INTEGER NOT NULL,
-    updated_by INTEGER NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_literal FOREIGN KEY (literal_id) REFERENCES literals(id) ON UPDATE CASCADE ON DELETE RESTRICT
-);
 
 CREATE TABLE literals (
     id SERIAL PRIMARY KEY,
@@ -57,5 +46,56 @@ CREATE TABLE literals (
     created_by INTEGER NOT NULL,
     updated_by INTEGER NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE beginning_balance_sheet (
+    id SERIAL PRIMARY KEY,
+    account VARCHAR(255) NOT NULL,
+    amount DECIMAL(50,2) NOT NULL,
+    literal_id INTEGER NOT NULL,
+    created_by INTEGER NOT NULL,
+    updated_by INTEGER NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_literal FOREIGN KEY (literal_id) REFERENCES literals(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE units (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    created_by INT NOT NULL,
+    updated_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE annual_objective_indicators (
+    id SERIAL PRIMARY KEY,
+    literal_id INTEGER NOT NULL,
+    unit_id INTEGER NOT NULL,
+    product VARCHAR(255) NOT NULL,
+    account VARCHAR(255) NOT NULL,
+    value DECIMAL(50,2) NOT NULL,
+    created_by INTEGER NOT NULL,
+    updated_by INTEGER NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_literal FOREIGN KEY (literal_id) REFERENCES literals(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT fk_unit FOREIGN KEY (unit_id) REFERENCES units(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE sales_budget (
+    id SERIAL PRIMARY KEY,
+    month BIGINT NOT NULL,
+    growth DECIMAL(5,2) NOT NULL,
+    decade_1 DECIMAL(50,2) NOT NULL,
+    decade_2 DECIMAL(50,2) NOT NULL,
+    decade_3 DECIMAL(50,2) NOT NULL,
+    created_by INTEGER NOT NULL,
+    updated_by INTEGER NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
