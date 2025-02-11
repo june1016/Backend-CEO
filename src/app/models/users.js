@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
-import { conectionDataBase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 
 /* Defining a Sequelize model named `Users` that represents a table in a database */
-const Users = conectionDataBase().define(
+const Users = connectToDatabase().define(
   'Users',
   {
     id: {
@@ -10,7 +10,7 @@ const Users = conectionDataBase().define(
       autoIncrement: true,
       primaryKey: true
     },
-    gmail: {
+    email: {
       type: DataTypes.STRING(100),
       unique: true,
       allowNull: false

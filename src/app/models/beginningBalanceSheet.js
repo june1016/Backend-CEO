@@ -1,9 +1,9 @@
 import { DataTypes } from 'sequelize';
-import { connectionDatabase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 import Literals from './literals.js';
 
 /* Defining a Sequelize model named `BeginningBalanceSheet` */
-const BeginningBalanceSheet = connectionDatabase().define('BeginningBalanceSheet', {
+const BeginningBalanceSheet = connectToDatabase().define('BeginningBalanceSheet', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

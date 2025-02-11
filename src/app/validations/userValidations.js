@@ -3,7 +3,7 @@ import * as yup from 'yup';
 export const registerUserSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   lastName: yup.string().required('Last name is required'),
-  gmail: yup.string().email('Invalid email format').required('Gmail is required'),
+  email: yup.string().email('Invalid email format').required('email is required'),
   password: yup
     .string()
     .required('Password is required')

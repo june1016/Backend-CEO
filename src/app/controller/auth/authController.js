@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import  { Users, UserByRol } from '../models/index.js';
-import { generateToken } from '../adapter/tokenAdapter.js';
-import { LoginError } from '../../errors/error.js';
-import envs from '../../config/envs.js';
+import  { Users, UserByRol } from '../../models/index.js';
+import { generateToken } from '../../adapter/tokenAdapter.js';
+import { LoginError } from '../../../errors/error.js';
+import envs from '../../../config/envs.js';
 
 /**
  * Handles user authentication by validating the username and password, generating a JWT token, and updating the user with the token.
@@ -17,9 +17,9 @@ import envs from '../../config/envs.js';
 const authUser = async (req, reply) => {
   const { body } = req;
   const clientIp = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.ip;
-  const { gmail, password } = body;
+  const { email, password } = body;
 
-  const user = await Users.findOne({ where: { gmail }, logging: false });
+  const user = await Users.findOne({ where: { email }, logging: false });
 
   if (!user || !await bcrypt.compare(password, user.password)) {
     throw new LoginError();

@@ -1,9 +1,9 @@
 import { DataTypes } from 'sequelize';
-import { connectionDatabase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 import Literals from './literals.js'; // Importing the Literals model
 
 /* Defining a Sequelize model named `AnnualObjectiveIndicators` */
-const AnnualObjectiveIndicators = connectionDatabase().define('AnnualObjectiveIndicators', {
+const AnnualObjectiveIndicators = connectToDatabase().define('AnnualObjectiveIndicators', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

@@ -1,10 +1,10 @@
 import { DataTypes } from 'sequelize';
-import { conectionDataBase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 import Users from './users.js';
 import Rol from './rol.js';
 
 /* Defining a Sequelize model named `UserByProject` that represents a table in a database */
-const UserByRol = conectionDataBase().define(
+const UserByRol = connectToDatabase().define(
   'UserByRol',
   {
     id: {

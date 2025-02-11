@@ -1,4 +1,4 @@
-import { conectionDataBase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 
 /**
  * Authenticates the database connection.
@@ -7,6 +7,6 @@ import { conectionDataBase } from '../../config/index.js';
  * @author Juan Sebastian Gonzalez Sosssa 
  * @date   120-01-2025
  */
-const authenticateDatabase = () => conectionDataBase().authenticate();
+const authenticateDatabase = () => connectToDatabase().authenticate();
 
 export default authenticateDatabase;

@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
-import { conectionDataBase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 
 /* Defining a Sequelize model named `Project` that represents a table in a database */
-const Rol = conectionDataBase().define('Rol', {
+const Rol = connectToDatabase().define('Rol', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

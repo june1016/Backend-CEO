@@ -1,7 +1,7 @@
-import { requestPasswordReset } from '../app/controller/requestPasswordReset .js';
-import { resetPassword } from '../app/controller/resetPassword.js';
+import { requestPasswordReset } from '../app/controller/auth/requestPasswordReset.js';
+import { resetPassword } from '../app/controller/auth/resetPassword.js';
 import authenticateDatabase from '../shared/functions/authenticateDataBase.js';
-import { authUser, registerUser } from './../app/controller/index.js'
+import { authUser, registerUser } from '../app/controller/auth/index.js'
 
 /**
  * Retrieves the version from environment variables using Fastify.
@@ -25,7 +25,7 @@ const authRouter = async (fastify) => {
     handler: registerUser
   });
 
-  fastify.post('/reset-password-with-gmail', {
+  fastify.post('/reset-password-with-email', {
     preValidation: [
       authenticateDatabase
     ],

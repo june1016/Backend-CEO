@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
-import { connectionDatabase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 
 /* Defining a Sequelize model named `Literals` */
-const Literals = connectionDatabase().define('Literals', {
+const Literals = connectToDatabase().define('Literals', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

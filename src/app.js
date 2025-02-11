@@ -1,11 +1,12 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import { conectionDataBase, envs } from './config/index.js';
+import { connectToDatabase, envs } from './config/index.js';
 import { getVersion } from './routes/index.js';
 import authenticateDatabase from './shared/functions/authenticateDataBase.js';
 import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
 import verifyJwt from './shared/hooks/verifyToken.js';
 import authRouter from './routes/authRouter.js';
+import userRouter from './routes/userRouter.js';
 
 const initializeApp = async () => {
   const fastify = Fastify({
@@ -21,6 +22,7 @@ const initializeApp = async () => {
   fastify.decorate('auth', verifyJwt);
   fastify.register(getVersion, { prefix: '/' });
   fastify.register(authRouter, { prefix: '/auth' });
+  fastify.register(userRouter, { prefix: '/users' });
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
 

@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
-import { connectionDatabase } from '../../config/index.js';
+import { connectToDatabase } from '../../config/index.js';
 
 /* Defining a Sequelize model named `SalesBudget` */
-const SalesBudget = connectionDatabase().define('SalesBudget', {
+const SalesBudget = connectToDatabase().define('SalesBudget', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

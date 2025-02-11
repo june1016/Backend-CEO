@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import { Users } from '../models/index.js';
-import { sendResetEmail } from '../services/emailService.js';
-import logger from '../../config/logger.js';
+import { Users } from '../../models/index.js';
+import { sendResetEmail } from '../../services/emailService.js';
+import logger from '../../../config/logger.js';
 
 /**
  * Request a password reset by sending a reset token to the user's email.
@@ -17,9 +17,9 @@ import logger from '../../config/logger.js';
  * @date   23-01-2025
  */
 const requestPasswordReset = async (req, reply) => {
-  const { gmail } = req.body;
+  const { email } = req.body;
 
-  if (!gmail) {
+  if (!email) {
     return reply.code(400).send({
       ok: false,
       message: 'Email is required.',
@@ -27,7 +27,7 @@ const requestPasswordReset = async (req, reply) => {
   }
 
   try {
-    const user = await Users.findOne({ where: { gmail }, logging: false });
+    const user = await Users.findOne({ where: { email }, logging: false });
     if (!user) {
       return reply.code(404).send({
         ok: false,
@@ -48,7 +48,7 @@ const requestPasswordReset = async (req, reply) => {
 
     const resetLink = `${req.protocol}://${req.headers.host}/auth/reset-password?token=${resetToken}`;
 
-    await sendResetEmail(user.gmail, resetLink);
+    await sendResetEmail(user.email, resetLink);
 
     reply.code(200).send({
       ok: true,
