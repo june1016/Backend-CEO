@@ -46,7 +46,7 @@ const requestPasswordReset = async (req, reply) => {
       { logging: false }
     );
 
-    const resetLink = `${req.protocol}://${req.headers.host}/auth/reset-password?token=${resetToken}`;
+    const resetLink = `http://localhost:5173/resetPassword/${resetToken}`;
 
     await sendResetEmail(user.email, resetLink);
 

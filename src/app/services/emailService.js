@@ -3,7 +3,7 @@ import { envs } from '../../config/index.js';
 
 export const sendResetEmail = async (email, resetLink) => {
   const transporter = nodemailer.createTransport({
-    service: 'email',
+    service: 'gmail',
     auth: {
       user: envs.EMAIL_USER,
       pass: envs.EMAIL_PASS,
