@@ -7,6 +7,7 @@ import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
 import verifyJwt from './shared/hooks/verifyToken.js';
 import authRouter from './routes/authRouter.js';
 import userRouter from './routes/userRouter.js';
+import financialDataRouter from './routes/financialDataRouter.js';
 
 const initializeApp = async () => {
   const fastify = Fastify({
@@ -23,6 +24,7 @@ const initializeApp = async () => {
   fastify.register(getVersion, { prefix: '/' });
   fastify.register(authRouter, { prefix: '/auth' });
   fastify.register(userRouter, { prefix: '/users' });
+  fastify.register(financialDataRouter, { prefix: '/financialdata' });
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
 
