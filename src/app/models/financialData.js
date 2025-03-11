@@ -1,52 +1,65 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
+import FinancialTitle from './FinancialTitle.js';
+import Users from './users.js';
 
-/* Defining a Sequelize model named `FinancialData` */
 const FinancialData = connectToDatabase().define('FinancialData', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     autoIncrement: true,
-    allowNull: false
+    primaryKey: true,
   },
-  title: {
-    type: DataTypes.STRING(255),
-    allowNull: false
-  },
-  category: {
-    type: DataTypes.STRING(255),
-    allowNull: false
+  title_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: FinancialTitle,
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
   },
   amount: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
-  },
-  initial_amount: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
+    type: DataTypes.DECIMAL(50, 2),
+    allowNull: false,
   },
   created_by: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: Users,
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
   },
   updated_by: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
+    references: {
+      model: Users,
+      key: 'id',
+    },
+    onDelete: 'SET NULL',
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
-    allowNull: true
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
-    allowNull: true
-  }
+  },
 }, {
   tableName: 'financial_data',
-  timestamps: true,
   underscored: true
 });
+
+// Definir relaciones
+FinancialTitle.hasMany(FinancialData, { foreignKey: 'title_id', onDelete: 'CASCADE' });
+FinancialData.belongsTo(FinancialTitle, { foreignKey: 'title_id' });
+
+Users.hasMany(FinancialData, { foreignKey: 'created_by' });
+Users.hasMany(FinancialData, { foreignKey: 'updated_by' });
+FinancialData.belongsTo(Users, { foreignKey: 'created_by', as: 'creator' });
+FinancialData.belongsTo(Users, { foreignKey: 'updated_by', as: 'updater' });
 
 export default FinancialData;

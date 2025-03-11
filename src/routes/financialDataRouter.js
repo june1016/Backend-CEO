@@ -1,4 +1,4 @@
-import { getAllFinancialData } from "../app/controller/financialData/financialDataController.js";
+import getInitialFinancialData from "../app/controller/financialData/financialDataController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
   
@@ -11,12 +11,12 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
    * @date   04-03-2025
    */
   const financialDataRouter = async (fastify) => {
-    fastify.get("/all", {
+    fastify.get("/initialdata", {
       preValidation: [
         authenticateDatabase,
         verifyJwt
     ],
-      handler: getAllFinancialData
+      handler: getInitialFinancialData
     });
   };
   
