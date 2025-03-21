@@ -1,4 +1,4 @@
-import getInitialFinancialData from "../app/controller/financialData/financialDataController.js";
+import { getInitialFinancialData, createFinancialData } from "../app/controller/financialData/financialDataController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
   
@@ -17,6 +17,14 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
         verifyJwt
     ],
       handler: getInitialFinancialData
+    });
+
+    fastify.post('/createfinancialdata', {
+      preValidation: [
+        authenticateDatabase,
+        verifyJwt
+      ],
+      handler: createFinancialData
     });
   };
   

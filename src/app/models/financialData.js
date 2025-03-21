@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import FinancialTitle from './FinancialTitle.js';
 import Users from './users.js';
+import Literals from './literals.js';
 
 const FinancialData = connectToDatabase().define('FinancialData', {
   id: {
@@ -17,6 +18,17 @@ const FinancialData = connectToDatabase().define('FinancialData', {
       key: 'id',
     },
     onDelete: 'CASCADE',
+    unique: 'unique_title_user',
+  },
+  literal_id: { 
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Literals,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'RESTRICT'
   },
   amount: {
     type: DataTypes.DECIMAL(50, 2),
@@ -30,6 +42,7 @@ const FinancialData = connectToDatabase().define('FinancialData', {
       key: 'id',
     },
     onDelete: 'CASCADE',
+    unique: 'unique_title_user',
   },
   updated_by: {
     type: DataTypes.INTEGER,

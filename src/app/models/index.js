@@ -1,10 +1,9 @@
 import Users from './users.js';
 import Rol from './rol.js';
 import UserByRol from './userByRol.js';
-import FinancialData from './financialData.js';
+import FinancialData from './FinancialData.js';
 import Literals from './literals.js';
 import SalesBudget from './salesBudget.js';
-import BeginningBalanceSheet from './beginningBalanceSheet.js';
 import AnnualObjectiveIndicators from './annualObjectiveIndicators.js';
 
 export {
@@ -14,6 +13,5 @@ export {
   FinancialData,
   Literals,
   SalesBudget,
-  BeginningBalanceSheet,
   AnnualObjectiveIndicators
 };
