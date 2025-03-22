@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS monthly_operations;
-DROP TABLE IF EXISTS indicator_titles;
 DROP TABLE IF EXISTS annual_objective_indicators;
+DROP TABLE IF EXISTS indicator_titles;
 DROP TABLE IF EXISTS sales_budget;
 DROP TABLE IF EXISTS financial_data;
 DROP TABLE IF EXISTS financial_titles;
