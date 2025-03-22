@@ -1,63 +1,95 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
-import Literals from './literals.js'; // Importing the Literals model
+import Users from './users.js';
+import Literals from './literals.js';
+import Units from './Units.js';
+import IndicatorTitles from './IndicatorTitles.js';
 
-/* Defining a Sequelize model named `AnnualObjectiveIndicators` */
 const AnnualObjectiveIndicators = connectToDatabase().define('AnnualObjectiveIndicators', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false
-  },
-  product: {
-    type: DataTypes.STRING(255),
-    allowNull: false
-  },
-  account: {
-    type: DataTypes.STRING(255),
-    allowNull: false
-  },
-  value: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
-  },
-  literal_id: { // Foreign key referencing Literals
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Literals,
-      key: 'id'
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
-  },
-  created_by: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  updated_by: {
-    type: DataTypes.INTEGER,
-    allowNull: true
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: true
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: true
-  }
+    title_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: IndicatorTitles,
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
+    },
+    literal_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Literals,
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
+    },
+    unit_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Units,
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
+    },
+    value: {
+        type: DataTypes.DECIMAL(50, 2),
+        allowNull: false,
+    },
+    created_by: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Users,
+            key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    },
+    updated_by: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: Users,
+            key: 'id',
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
+    },
+    created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
 }, {
-  tableName: 'annual_objective_indicators',
-  timestamps: true,
-  underscored: true
+    tableName: 'annual_objective_indicators',
+    underscored: true
 });
 
-/* Defining the relationship: One `Literals` record can be referenced by multiple `AnnualObjectiveIndicators` records */
-AnnualObjectiveIndicators.belongsTo(Literals, { foreignKey: 'literal_id', as: 'literal' });
-Literals.hasMany(AnnualObjectiveIndicators, { foreignKey: 'literal_id', as: 'objective_indicators' });
+IndicatorTitles.hasMany(AnnualObjectiveIndicators, { foreignKey: 'title_id', onDelete: 'RESTRICT' });
+AnnualObjectiveIndicators.belongsTo(IndicatorTitles, { foreignKey: 'title_id' });
+
+Literals.hasMany(AnnualObjectiveIndicators, { foreignKey: 'literal_id' });
+AnnualObjectiveIndicators.belongsTo(Literals, { foreignKey: 'literal_id' });
+
+Units.hasMany(AnnualObjectiveIndicators, { foreignKey: 'unit_id' });
+AnnualObjectiveIndicators.belongsTo(Units, { foreignKey: 'unit_id' });
+
+Users.hasMany(AnnualObjectiveIndicators, { foreignKey: 'created_by' });
+Users.hasMany(AnnualObjectiveIndicators, { foreignKey: 'updated_by' });
+AnnualObjectiveIndicators.belongsTo(Users, { foreignKey: 'created_by', as: 'creator' });
+AnnualObjectiveIndicators.belongsTo(Users, { foreignKey: 'updated_by', as: 'updater' });
 
 export default AnnualObjectiveIndicators;

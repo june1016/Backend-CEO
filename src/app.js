@@ -8,6 +8,7 @@ import verifyJwt from './shared/hooks/verifyToken.js';
 import authRouter from './routes/authRouter.js';
 import userRouter from './routes/userRouter.js';
 import financialDataRouter from './routes/financialDataRouter.js';
+import annualObjectiveIndicatorsRouter from './routes/annualObjectiveIndicators.js';
 
 const initializeApp = async () => {
   const fastify = Fastify({
@@ -25,6 +26,7 @@ const initializeApp = async () => {
   fastify.register(authRouter, { prefix: '/auth' });
   fastify.register(userRouter, { prefix: '/users' });
   fastify.register(financialDataRouter, { prefix: '/financialdata' });
+  fastify.register(annualObjectiveIndicatorsRouter, { prefix: '/indicatordata' });
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
 
