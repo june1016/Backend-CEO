@@ -43,21 +43,21 @@ INSERT INTO financial_titles (name, category_id) VALUES
 ('Utilidades retenidas', 3),
 ('Costos operativos', 4);
 
-INSERT INTO financial_data (title_id, literal_id, amount, created_by, updated_by) VALUES
-(1, 1, 16060868.00, 1, 1),
-(2, 1, 62000000.00, 1, 1),
-(3, 1, 108653261.00, 1, 1),
-(4, 1, 45800000.00, 1, 1),
-(5, 3, 38000000.00, 1, 1),
-(6, 3, 95857171.00, 1, 1),
-(7, 3, 186500000.00, 1, 1),
-(8, 3, 5000000.00, 1, 1),
-(9, 2, 69580000.00, 1, 1),
-(10, 2, 28520000.00, 1, 1),
-(11, 3, 161436150.00, 1, 1),
-(12, 4, 253115150.00, 1, 1),
-(13, 4, 100000000.00, 1, 1),
-(14, 3, 19700000.00, 1, 1);
+INSERT INTO financial_data (title_id, literal_id, amount, icon, created_by, updated_by) VALUES
+(1, 1, 16060868.00, 'Wallet', 1, 1),
+(2, 1, 62000000.00, 'AccountBalance',1, 1),
+(3, 1, 108653261.00, 'Receipt',1, 1),
+(4, 1, 45800000.00, 'Inventory', 1, 1),
+(5, 3, 38000000.00, 'Computer',1, 1),
+(6, 3, 95857171.00, 'MenuBook', 1, 1),
+(7, 3, 186500000.00, 'Build', 1, 1),
+(8, 3, 5000000.00, 'EmojiEvents', 1, 1),
+(9, 2, 69580000.00, 'CreditCard',1, 1),
+(10, 2, 28520000.00, 'Description', 1, 1),
+(11, 3, 161436150.00, 'Apartment', 1, 1),
+(12, 4, 253115150.00, 'Work', 1, 1),
+(13, 4, 100000000.00, 'Savings', 1, 1),
+(14, 3, 19700000.00, 'AttachMoney', 1, 1);
 
 INSERT INTO indicator_titles (name) VALUES 
 ('Betacos'), 
