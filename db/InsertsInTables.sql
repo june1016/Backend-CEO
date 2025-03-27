@@ -2,6 +2,12 @@ INSERT INTO rol (id, name_rol) VALUES
 (1, 'Administrador'),
 (2, 'Users');
 
+INSERT INTO users (email, "password", "name", last_name) VALUES
+('administradorceo@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Administrador', 'Ceo');
+
+INSERT INTO users_by_rol (user_id, rol_id) VALUES
+(1, 1);
+
 INSERT INTO literals (id, name, active, created_by, updated_by) VALUES
 (1, 'Activos corrientes', TRUE, 1, 1),
 (2, 'Pasivos corrientes', TRUE, 1, 1),
@@ -19,7 +25,7 @@ INSERT INTO units (id, name, active, created_by, updated_by) VALUES
 (4, 'Ratio', TRUE, 1, 1);
 
 INSERT INTO financial_categories (name) VALUES 
-('activos'), ('Pasivos'), ('Patrimonio'), ('otros');
+('Activos'), ('Pasivos'), ('Patrimonio'), ('Otros');
 
 INSERT INTO financial_titles (name, category_id) VALUES 
 ('Dinero en caja', 1), 
@@ -96,6 +102,22 @@ INSERT INTO annual_objective_indicators (title_id, value, literal_id, created_by
 (18, 26.00, 8, 1, 1, 1),
 (19, 35.00, 8, 1, 1, 1),
 (20, 8500000.00, 8, 1, 1, 1);
+
+INSERT INTO months (id, name, created_by, updated_by) VALUES
+(0, 'Configuracion', 1, 1),
+(1, 'Enero', 1, 1),
+(2, 'Febrero', 1, 1),
+(3, 'Marzo', 1, 1),
+(4, 'Abril', 1, 1),
+(5, 'Mayo', 1, 1),
+(6, 'Junio', 1, 1),
+(7, 'Julio', 1, 1),
+(8, 'Agosto', 1, 1),
+(9, 'Septiembre', 1, 1),
+(10, 'Octubre', 1, 1),
+(11, 'Noviembre', 1, 1),
+(12, 'Diciembre', 1, 1);
+
 
 
 

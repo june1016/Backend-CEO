@@ -54,6 +54,12 @@ const registerUser = async (req, reply) => {
       ok: true,
       token,
       message: 'User registered successfully.',
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        lastName: newUser.lastName,
+        email: newUser.email,
+      },
     });
   } catch (error) {
     if (error.name === 'ValidationError') {

@@ -1,14 +1,11 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import { connectToDatabase, envs } from './config/index.js';
-import { getVersion } from './routes/index.js';
+import { envs } from './config/index.js';
+import { authRouter, getVersion, userRouter, financialDataRouter, annualObjectiveIndicatorsRouter, salesBudgetRouter } from './routes/index.js';
 import authenticateDatabase from './shared/functions/authenticateDataBase.js';
 import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
 import verifyJwt from './shared/hooks/verifyToken.js';
-import authRouter from './routes/authRouter.js';
-import userRouter from './routes/userRouter.js';
-import financialDataRouter from './routes/financialDataRouter.js';
-import annualObjectiveIndicatorsRouter from './routes/annualObjectiveIndicators.js';
+
 
 const initializeApp = async () => {
   const fastify = Fastify({
@@ -27,6 +24,7 @@ const initializeApp = async () => {
   fastify.register(userRouter, { prefix: '/users' });
   fastify.register(financialDataRouter, { prefix: '/financialdata' });
   fastify.register(annualObjectiveIndicatorsRouter, { prefix: '/indicatordata' });
+  fastify.register(salesBudgetRouter, { prefix: '/salesBudget' });
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
 

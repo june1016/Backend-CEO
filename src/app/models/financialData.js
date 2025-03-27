@@ -34,6 +34,10 @@ const FinancialData = connectToDatabase().define('FinancialData', {
     type: DataTypes.DECIMAL(50, 2),
     allowNull: false,
   },
+  icon: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+  },
   created_by: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -69,6 +73,9 @@ const FinancialData = connectToDatabase().define('FinancialData', {
 // Definir relaciones
 FinancialTitle.hasMany(FinancialData, { foreignKey: 'title_id', onDelete: 'CASCADE' });
 FinancialData.belongsTo(FinancialTitle, { foreignKey: 'title_id' });
+
+Literals.hasMany(FinancialData, { foreignKey: "literal_id", onDelete: "CASCADE" });
+FinancialData.belongsTo(Literals, { foreignKey: "literal_id" });
 
 Users.hasMany(FinancialData, { foreignKey: 'created_by' });
 Users.hasMany(FinancialData, { foreignKey: 'updated_by' });

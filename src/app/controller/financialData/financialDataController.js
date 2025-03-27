@@ -6,7 +6,7 @@ import FinancialCategory from "../../models/FinancialCategory.js";
 const getInitialFinancialData = async (_req, reply) => {
   try {
     const financialDataResult = await FinancialData.findAll({
-      attributes: ["id", "amount", "created_at", "updated_at"],
+      attributes: ["id", "amount", "icon", "created_at", "updated_at"],
       where: { created_by: 1 },
       include: [
         {
@@ -26,6 +26,7 @@ const getInitialFinancialData = async (_req, reply) => {
       title: data.FinancialTitle?.name,
       category: data.FinancialTitle?.FinancialCategory?.name,
       amount: data.amount,
+      icon: data.icon,
       created_at: data.created_at,
       updated_at: data.updated_at,
     }));
