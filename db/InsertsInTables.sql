@@ -66,7 +66,7 @@ INSERT INTO indicator_titles (name) VALUES
 ('Ingreso por ventas'),
 ('Costos totales'),
 ('Utilidad bruta'),
-('Gastos Generales'),
+('Gastos generales'),
 ('Utilidad operacional'),
 ('Impuestos'),
 ('Utilidad neta'),
@@ -77,7 +77,7 @@ INSERT INTO indicator_titles (name) VALUES
 ('Margen neto'),
 ('Ebitda'),
 ('Nivel de endeudamiento'),
-('Rent del patrimonio'),
+('Rentabilidad del patrimonio'),
 ('Rentabilidad del activo'),
 ('Capital de trabajo');
 
@@ -92,15 +92,15 @@ INSERT INTO annual_objective_indicators (title_id, value, literal_id, created_by
 (8, 34790000, 7, 1, 1, 3),
 (9, 11480700, 7, 1, 1, 3),
 (10, 23309300, 7, 1, 1, 3),
-(11, 2.5, 8, 1, 1, 1),
-(12, 3.0, 8, 1, 1, 1),
-(13, 45.00, 8, 1, 1, 1),
-(14, 28.00, 8, 1, 1, 1),
-(15, 19.00, 8, 1, 1, 1),
+(11, 2.37, 8, 1, 1, 1),
+(12, 1.90, 8, 1, 1, 1),
+(13, 63.78, 8, 1, 1, 1),
+(14, 30.25, 8, 1, 1, 1),
+(15, 20.27, 8, 1, 1, 1),
 (16, 18000000.00, 8, 1, 1, 1),
-(17, 42.00, 8, 1, 1, 1),
-(18, 26.00, 8, 1, 1, 1),
-(19, 35.00, 8, 1, 1, 1),
+(17, 46.48, 8, 1, 1, 1),
+(18, 6.60, 8, 1, 1, 1),
+(19, 4.17, 8, 1, 1, 1),
 (20, 8500000.00, 8, 1, 1, 1);
 
 INSERT INTO months (id, name, created_by, updated_by) VALUES

@@ -54,42 +54,67 @@ const createFinancialData = async (req, reply) => {
       return reply.code(400).send({
         ok: false,
         statusCode: 400,
-        message: "Se requiere un array con los datos financieros a registrar."
+        message: "Se requiere un array con los datos financieros a registrar.",
       });
     }
 
-    const newFinancialData = await FinancialData.bulkCreate(
-      financialData.map(({ title_id, literal_id, amount, created_by }) => ({
-        title_id,
-        literal_id,
-        amount,
-        created_by,
-        updated_by: created_by
-      })),
-      { logging: false } 
-    );
+    const invalidAmounts = financialData.some(({ amount }) => amount <= 0);
 
-    return reply.code(201).send({
+    if (invalidAmounts) {
+      return reply.code(400).send({
+        ok: false,
+        statusCode: 400,
+        message:
+          "El valor de los campos no puede contener valores menores o iguales a 0.",
+      });
+    }
+
+    const processedData = [];
+
+    for (const data of financialData) {
+      const { title_id, created_by, literal_id, amount } = data;
+
+      const existingRecord = await FinancialData.findOne({
+        where: { title_id, created_by },
+        logging: false,
+      });
+
+      if (existingRecord) {
+        // Actualizamos si ya existe
+        await existingRecord.update({
+          amount,
+          literal_id,
+          updated_by: created_by,
+        });
+
+        processedData.push(existingRecord);
+      } else {
+        // Creamos si no existe
+        const newData = await FinancialData.create({
+          title_id,
+          literal_id,
+          amount,
+          created_by,
+          updated_by: created_by,
+        });
+
+        processedData.push(newData);
+      }
+    }
+
+    return reply.code(200).send({
       ok: true,
-      statusCode: 201,
-      message: "Datos financieros registrados exitosamente.",
-      financialData: newFinancialData
+      statusCode: 200,
+      message: "Datos financieros registrados o actualizados exitosamente.",
+      financialData: processedData,
     });
   } catch (error) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      logger.error("Error de clave única duplicada:", error);
-      return reply.code(409).send({
-        ok: false,
-        statusCode: 409,
-        message: "Ya existen tus datos financieros. "
-      });
-    }
-
     logger.error("Error registrando datos financieros:", error);
     return reply.code(500).send({
       ok: false,
       statusCode: 500,
-      message: "Se ha producido un error al intentar registrar los datos financieros."
+      message:
+        "Se ha producido un error al intentar registrar los datos financieros.",
     });
   }
 };

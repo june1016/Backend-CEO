@@ -101,6 +101,8 @@ CREATE TABLE annual_objective_indicators (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE annual_objective_indicators ADD CONSTRAINT unique_title_user UNIQUE (title_id, created_by);
+
 CREATE TABLE months (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -125,7 +127,35 @@ CREATE TABLE sales_budget (
 
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
+    name VARCHAR(255) NOT NULL UNIQUE,
+    units INTEGER NOT NULL,
+    unit_price DECIMAL(50,2) NOT NULL,
+    total DECIMAL(100,2) NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE costs (
+    id SERIAL PRIMARY KEY,
+    labor_cost INTEGER NOT NULL,
+    raw_material_cost INTEGER NOT NULL,
+    indirect costs INTEGER NOT NULL,
+    total DECIMAL(100,2) NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE operating_expenses (
+    id SERIAL PRIMARY KEY,
+    depreciation INTEGER NOT NULL,
+    administrative_expenses INTEGER NOT NULL,
+    sales_expenses INTEGER NOT NULL,
+    other_expenses INTEGER NOT NULL,
+    total DECIMAL(100,2) NOT NULL,
     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

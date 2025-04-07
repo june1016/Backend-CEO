@@ -1,4 +1,5 @@
-import { createAnnualObjectiveIndicators, getInitialAnnualObjectiveIndicators } from "../app/controller/annualObjectiveIndicators/annualObjectiveIndicatorsController.js";
+import createAnnualObjectiveIndicators from "../app/controller/annualObjectiveIndicators/annualObjectiveIndicatorsController.js";
+import getIndicatorTitles from "../app/controller/annualObjectiveIndicators/indicatorTitles.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
   
@@ -11,12 +12,12 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
    * @date   21-03-2025
    */
   const annualObjectiveIndicatorsRouter = async (fastify) => {
-    fastify.get("/initialindicators", {
+    fastify.get("/getIndicatortitles", {
       preValidation: [
         authenticateDatabase,
         verifyJwt
     ],
-      handler: getInitialAnnualObjectiveIndicators
+      handler: getIndicatorTitles
     });
 
     fastify.post('/createindicators', {
