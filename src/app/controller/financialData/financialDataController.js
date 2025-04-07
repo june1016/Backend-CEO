@@ -105,7 +105,7 @@ const createFinancialData = async (req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      message: "Datos financieros registrados o actualizados exitosamente.",
+      message: "Datos financieros registrados exitosamente.",
       financialData: processedData,
     });
   } catch (error) {

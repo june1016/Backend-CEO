@@ -57,11 +57,11 @@ const createAnnualObjectiveIndicators = async (req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      message: "Indicadores anuales creados o actualizados exitosamente.",
+      message: "Los Indicadores anuales han sido registrados exitosamente.",
       indicators: processedIndicators
     });
   } catch (error) {
-    console.error("Error creando o actualizando indicadores anuales:", error);
+    console.error("Error registrando indicadores anuales:", error);
     return reply.code(500).send({
       ok: false,
       statusCode: 500,
