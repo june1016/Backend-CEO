@@ -17,7 +17,7 @@ import logger from '../../config/logger.js';
  * @author Juan Sebastian Gonzalez Sosssa 
  * @date   20-01-2025
  */
-export const generateToken = (seed, user, ip, roleId) => jwt.sign({ id: user?.id, ip, roleId }, seed, {
+const generateToken = (seed, user, ip, roleId) => jwt.sign({ id: user?.id, ip, roleId }, seed, {
   expiresIn: envs.TIME_EXPIRED
 });
 
@@ -30,7 +30,7 @@ export const generateToken = (seed, user, ip, roleId) => jwt.sign({ id: user?.id
  * @author Juan Sebastian Gonzalez Sosssa 
  * @date   20-01-2025
  */
-export const verifyToken = (token) => {
+const verifyToken = (token) => {
   try {
     const decoded = jwt.verify(token, envs.JWT_SECRET);
     return decoded;
@@ -51,7 +51,7 @@ export const verifyToken = (token) => {
  * @author Juan Sebastian Gonzalez Sosssa 
  * @date   20-01-2025
  */
-export const logout = async (decodedToken) => {
+const logout = async (decodedToken) => {
   try {
     const invalidToken = '';
     await Users.update(
@@ -65,3 +65,10 @@ export const logout = async (decodedToken) => {
     logger.error(error);
   }
 };
+
+
+export {
+  generateToken,
+  verifyToken,
+  logout
+}

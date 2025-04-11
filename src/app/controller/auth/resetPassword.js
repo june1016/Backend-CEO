@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { Op } from 'sequelize';
 import { Users } from '../../models/index.js';
-import { resetPasswordSchema } from '../../validations/resetPasswordSchema.js';
+import resetPasswordSchema from '../../validations/resetPasswordSchema.js';
 import logger from '../../../config/logger.js';
 
 /**

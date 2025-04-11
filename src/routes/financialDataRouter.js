@@ -1,5 +1,6 @@
-import { getInitialFinancialData, createFinancialData } from "../app/controller/financialData/financialDataController.js";
-import getFinancialTitles from "../app/controller/financialData/financialTitles.js";
+
+import { createFinancialData, getInitialFinancialData } from "../app/controller/planning/financialDataController.js";
+import getFinancialTitles from "../app/controller/planning/financialTitles.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
   

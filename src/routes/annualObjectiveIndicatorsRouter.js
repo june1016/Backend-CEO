@@ -1,5 +1,5 @@
-import createAnnualObjectiveIndicators from "../app/controller/annualObjectiveIndicators/annualObjectiveIndicatorsController.js";
-import getIndicatorTitles from "../app/controller/annualObjectiveIndicators/indicatorTitles.js";
+import createAnnualObjectiveIndicators from "../app/controller/planning/annualObjectiveIndicatorsController.js";
+import getIndicatorTitles from "../app/controller/planning/indicatorTitles.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
   

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import  { Users, UserByRol } from '../../models/index.js';
 import { generateToken } from '../../adapter/tokenAdapter.js';
-import { registerUserSchema } from '../../validations/userValidations.js';
+import registerUserSchema from '../../validations/userValidations.js';
 import envs from '../../../config/envs.js';
 import logger from '../../../config/logger.js';
 

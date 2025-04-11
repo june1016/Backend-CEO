@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import Users from './users.js';
 
-const Product = connectToDatabase().define('Product', {
+const Products = connectToDatabase().define('Product', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -56,10 +56,10 @@ const Product = connectToDatabase().define('Product', {
   timestamps: false,
 });
 
-Users.hasMany(Product, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Users.hasMany(Product, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+Users.hasMany(Products, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Users.hasMany(Products, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
 
-Product.belongsTo(Users, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Product.belongsTo(Users, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+Products.belongsTo(Users, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Products.belongsTo(Users, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
 
-export default Product;
+export default Products;

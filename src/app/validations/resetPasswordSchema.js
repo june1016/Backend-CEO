@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const resetPasswordSchema = yup.object().shape({
+const resetPasswordSchema = yup.object().shape({
   token: yup.string().required('Token is required.'),
  password: yup
      .string()
@@ -11,3 +11,5 @@ export const resetPasswordSchema = yup.object().shape({
      .matches(/[0-9]/, 'Password must contain at least one number')
      .matches(/[@$!%*?&]/, 'Password must contain at least one special character')
 });
+
+export default resetPasswordSchema;

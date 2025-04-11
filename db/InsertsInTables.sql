@@ -165,8 +165,13 @@ INSERT INTO social_charges (name, value_cop, created_by, updated_by) VALUES
 ('PRESTACIONES-POS', 5100000, 1, 1);
 
 INSERT INTO raw_materials_inventory (code, description, quantity, unit, unit_cost, created_by, updated_by) VALUES 
-    ('A1', 'Material A1', 2500, 'LIBRAS', 8000, 1, 1),
-    ('A2', 'Material A2', 1500, 'LITROS', 12000, 1, 1),
-    ('A3', 'Material A3', 1800, 'KILOS', 9500, 1, 1),
-    ('A4', 'Material A4', 2200, 'UNIDADES', 7500, 1, 1),
-    ('A5', 'Material A5', 1200, 'UNIDADES', 11000, 1, 1);
+('A1', 'Material A1', 2500, 'LIBRAS', 8000, 1, 1),
+('A2', 'Material A2', 1500, 'LITROS', 12000, 1, 1),
+('A3', 'Material A3', 1800, 'KILOS', 9500, 1, 1),
+('A4', 'Material A4', 2200, 'UNIDADES', 7500, 1, 1),
+('A5', 'Material A5', 1200, 'UNIDADES', 11000, 1, 1);
+
+INSERT INTO product_inventory (product_id, quantity, unit_cost, created_by, updated_by) VALUES 
+(1, 320, 139500, 1, 1),
+(2, 250, 132000, 1, 1),
+(3, 180, 123000, 1, 1); 

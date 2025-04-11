@@ -3,7 +3,7 @@ import { connectToDatabase } from '../../config/index.js';
 import Users from './users.js';
 import Products from './products.js';
 
-const Sale = connectToDatabase().define('Sale', {
+const ProductInventory = connectToDatabase().define('ProductInventory', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -19,7 +19,11 @@ const Sale = connectToDatabase().define('Sale', {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   },
-  value_cop: {
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  unit_cost: {
     type: DataTypes.BIGINT,
     allowNull: false,
   },
@@ -54,17 +58,18 @@ const Sale = connectToDatabase().define('Sale', {
     allowNull: true,
   },
 }, {
-  tableName: 'sales',
+  tableName: 'product_inventory',
   timestamps: false,
 });
 
-Products.hasMany(Sale, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Sale.belongsTo(Products, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+// Relaciones
+Users.hasMany(ProductInventory, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Users.hasMany(ProductInventory, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
 
-Users.hasMany(Sale, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Users.hasMany(Sale, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+ProductInventory.belongsTo(Users, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+ProductInventory.belongsTo(Users, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
 
-Sale.belongsTo(Users, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-Sale.belongsTo(Users, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+Products.hasMany(ProductInventory, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+ProductInventory.belongsTo(Products, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
-export default Sale;
+export default ProductInventory;

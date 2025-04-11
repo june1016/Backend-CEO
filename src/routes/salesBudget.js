@@ -1,4 +1,4 @@
-import { createSalesBudget, getSalesBudgetDetailsByMonth } from "../app/controller/salesBudget/salesBudgetController.js";
+import { createSalesBudget, getSalesBudgetDetailsByMonth } from "../app/controller/preOperation/salesBudgetController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
   
@@ -15,7 +15,7 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
       preValidation: [
         authenticateDatabase,
         verifyJwt
-      ],
+      ],  
       handler: createSalesBudget
     });
     

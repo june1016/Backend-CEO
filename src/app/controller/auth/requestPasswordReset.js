@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { Users } from '../../models/index.js';
-import { sendResetEmail } from '../../services/emailService.js';
+import sendResetEmail from '../../services/emailService.js';
 import logger from '../../../config/logger.js';
 
 /**

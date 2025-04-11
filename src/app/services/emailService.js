@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import { envs } from '../../config/index.js';
 
-export const sendResetEmail = async (email, resetLink) => {
+const sendResetEmail = async (email, resetLink) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -20,3 +20,5 @@ export const sendResetEmail = async (email, resetLink) => {
 
   await transporter.sendMail(mailOptions);
 };
+
+export default sendResetEmail;

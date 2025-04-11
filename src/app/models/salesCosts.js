@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import Users from './users.js';
-import Product from './products.js';
+import Products from './products.js';
 
 const SalesCost = connectToDatabase().define('SalesCost', {
   id: {
@@ -13,7 +13,7 @@ const SalesCost = connectToDatabase().define('SalesCost', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Product,
+      model: Products,
       key: 'id',
     },
     onDelete: 'CASCADE',
@@ -58,8 +58,8 @@ const SalesCost = connectToDatabase().define('SalesCost', {
   timestamps: false,
 });
 
-Product.hasMany(SalesCost, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-SalesCost.belongsTo(Product, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Products.hasMany(SalesCost, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+SalesCost.belongsTo(Products, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
 Users.hasMany(SalesCost, { foreignKey: 'created_by', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Users.hasMany(SalesCost, { foreignKey: 'updated_by', onDelete: 'SET NULL', onUpdate: 'CASCADE' });

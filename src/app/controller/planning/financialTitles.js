@@ -1,14 +1,14 @@
+import FinancialTitle from "../../models/FinancialTitle.js";
 import logger from "../../../config/logger.js";
-import AnnualObjectiveIndicators from "../../models/annualObjectiveIndicators.js";
-import IndicatorTitles from "../../models/IndicatorTitles.js";
+import FinancialData from "../../models/FinancialData.js";
 
-export const getIndicatorTitles = async (req, reply) => {
+const getFinancialTitles = async (req, reply) => {
   try {
-    const indicatorTitles = await IndicatorTitles.findAll({
+    const financialTitles = await FinancialTitle.findAll({
         include: [
           {
-            model: AnnualObjectiveIndicators,
-            attributes: ["literal_id", "unit_id"]
+            model: FinancialData,
+            attributes: ["literal_id"]
           },
         ],
         attributes: ["id", "name"],
@@ -20,7 +20,7 @@ export const getIndicatorTitles = async (req, reply) => {
       ok: true,
       statusCode: 200,
       message: "Títulos financieros obtenidos exitosamente",
-      indicatorTitles: indicatorTitles,
+      financialTitles: financialTitles,
     });
   } catch (error) {
     logger.error("Error al obtener los títulos financieros:", error);
@@ -32,4 +32,4 @@ export const getIndicatorTitles = async (req, reply) => {
   }
 };
 
-export default getIndicatorTitles;
+export default getFinancialTitles;
