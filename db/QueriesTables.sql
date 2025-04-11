@@ -1,7 +1,19 @@
 DROP TABLE IF EXISTS monthly_operations;
+DROP TABLE IF EXISTS raw_materials_inventory;
+DROP TABLE IF EXISTS social_charges;
+DROP TABLE IF EXISTS personnel_expenses;
+DROP TABLE IF EXISTS financial_obligations;
+DROP TABLE IF EXISTS operating_costs;
+DROP TABLE IF EXISTS other_expenses;
+DROP TABLE IF EXISTS operating_expenses;
+DROP TABLE IF EXISTS costs;
+DROP TABLE IF EXISTS sales_costs;
+DROP TABLE IF EXISTS sales;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS sales_budget;
+DROP TABLE IF EXISTS months;
 DROP TABLE IF EXISTS annual_objective_indicators;
 DROP TABLE IF EXISTS indicator_titles;
-DROP TABLE IF EXISTS sales_budget;
 DROP TABLE IF EXISTS financial_data;
 DROP TABLE IF EXISTS financial_titles;
 DROP TABLE IF EXISTS financial_categories;
@@ -82,7 +94,7 @@ CREATE TABLE financial_data (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE financial_data ADD CONSTRAINT unique_title_user UNIQUE (title_id, created_by);
+ALTER TABLE financial_data ADD CONSTRAINT unique_title_user_financial_data UNIQUE (title_id, created_by);
 
 CREATE TABLE indicator_titles (
     id SERIAL PRIMARY KEY,
@@ -101,7 +113,7 @@ CREATE TABLE annual_objective_indicators (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE annual_objective_indicators ADD CONSTRAINT unique_title_user UNIQUE (title_id, created_by);
+ALTER TABLE annual_objective_indicators ADD CONSTRAINT unique_title_user_annual_objective_indicators UNIQUE (title_id, created_by);
 
 CREATE TABLE months (
     id SERIAL PRIMARY KEY,
@@ -128,9 +140,28 @@ CREATE TABLE sales_budget (
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
-    units INTEGER NOT NULL,
-    unit_price DECIMAL(50,2) NOT NULL,
-    total DECIMAL(100,2) NOT NULL,
+    quantity INTEGER NOT NULL,
+    unit_cost BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE sales (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    value_cop BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE sales_costs (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    value_cop BIGINT NOT NULL,
     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -141,7 +172,7 @@ CREATE TABLE costs (
     id SERIAL PRIMARY KEY,
     labor_cost INTEGER NOT NULL,
     raw_material_cost INTEGER NOT NULL,
-    indirect costs INTEGER NOT NULL,
+    indirect_costs INTEGER NOT NULL,
     total DECIMAL(100,2) NOT NULL,
     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -151,11 +182,60 @@ CREATE TABLE costs (
 
 CREATE TABLE operating_expenses (
     id SERIAL PRIMARY KEY,
-    depreciation INTEGER NOT NULL,
-    administrative_expenses INTEGER NOT NULL,
-    sales_expenses INTEGER NOT NULL,
-    other_expenses INTEGER NOT NULL,
-    total DECIMAL(100,2) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    value_cop BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE other_expenses (
+    id SERIAL PRIMARY KEY,
+    concept VARCHAR(255) NOT NULL,
+    value_cop BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE operating_costs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    value_cop BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE financial_obligations (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    value_cop BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE personnel_expenses (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    quantity INTEGER NOT NULL,
+    value_cop BIGINT NOT NULL,
+    note TEXT,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE social_charges (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    value_cop BIGINT NOT NULL,
     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -170,6 +250,19 @@ CREATE TABLE monthly_operations (
     decade_1 DECIMAL(50,2) NOT NULL,
     decade_2 DECIMAL(50,2) NOT NULL,
     decade_3 DECIMAL(50,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE raw_materials_inventory (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(10) NOT NULL UNIQUE,
+    description VARCHAR(255) NOT NULL,
+    quantity INTEGER NOT NULL,
+    unit VARCHAR(50) NOT NULL,
+    unit_cost BIGINT NOT NULL,
+    created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

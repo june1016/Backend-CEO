@@ -30,34 +30,32 @@ INSERT INTO financial_categories (name) VALUES
 INSERT INTO financial_titles (name, category_id) VALUES 
 ('Dinero en caja', 1), 
 ('Dinero en banco', 1),
-('Cuentas por cobrar', 1),
 ('Inventario', 1),
-('Equipos de oficina', 1),
-('Muebles y enseres', 1),
+('Cuentas por cobrar', 1),
 ('Maquinaria y equipo', 1),
+('Equipos de cómputo', 1),
+('Muebles y enseres', 1),
 ('Patentes', 1),
 ('Cuentas por pagar', 2),
 ('Letras por pagar', 2),
 ('Deuda a largo plazo', 2),
 ('Capital social', 3),
-('Utilidades retenidas', 3),
-('Costos operativos', 4);
+('Utilidades retenidas', 3);
 
 INSERT INTO financial_data (title_id, literal_id, amount, icon, created_by, updated_by) VALUES
-(1, 1, 16060868.00, 'Wallet', 1, 1),
-(2, 1, 62000000.00, 'AccountBalance',1, 1),
-(3, 1, 108653261.00, 'Receipt',1, 1),
-(4, 1, 45800000.00, 'Inventory', 1, 1),
-(5, 3, 38000000.00, 'Computer',1, 1),
-(6, 3, 95857171.00, 'MenuBook', 1, 1),
-(7, 3, 186500000.00, 'Build', 1, 1),
-(8, 3, 5000000.00, 'EmojiEvents', 1, 1),
-(9, 2, 69580000.00, 'CreditCard',1, 1),
-(10, 2, 28520000.00, 'Description', 1, 1),
-(11, 3, 161436150.00, 'Apartment', 1, 1),
-(12, 4, 253115150.00, 'Work', 1, 1),
-(13, 4, 100000000.00, 'Savings', 1, 1),
-(14, 3, 19700000.00, 'AttachMoney', 1, 1);
+(1, 1, 25000000.00, 'Wallet', 1, 1),
+(2, 1, 95000000.00, 'AccountBalance', 1, 1),
+(3, 1, 120000000.00, 'Inventory', 1, 1),
+(4, 1, 60000000.00, 'Receipt', 1, 1),
+(5, 1, 180000000.00, 'Build', 1, 1),
+(6, 1, 40000000.00, 'Computer', 1, 1),
+(7, 1, 30000000.00, 'MenuBook', 1, 1),
+(8, 1, 50000000.00, 'EmojiEvents', 1, 1),
+(9, 2, 60000000.00, 'CreditCard', 1, 1),
+(10, 2, 30000000.00, 'Description', 1, 1),
+(11, 2, 150000000.00, 'Apartment', 1, 1),
+(12, 3, 300000000.00, 'Work', 1, 1),
+(13, 3, 60000000.00, 'Savings', 1, 1);
 
 INSERT INTO indicator_titles (name) VALUES 
 ('Betacos'), 
@@ -118,10 +116,57 @@ INSERT INTO months (id, name, created_by, updated_by) VALUES
 (11, 'Noviembre', 1, 1),
 (12, 'Diciembre', 1, 1);
 
+INSERT INTO products (name, quantity, unit_cost, created_by, updated_by) VALUES 
+('Alfaros', 320, 139500, 1, 1),
+('Betacos', 250, 132000, 1, 1),
+('Gamaroles', 180, 123000, 1, 1);
 
+INSERT INTO sales (product_id, value_cop, created_by, updated_by) VALUES 
+(1, 792000000, 1, 1),
+(2, 648000000, 1, 1),
+(3, 360000000, 1, 1);
 
+INSERT INTO sales_costs (product_id, value_cop, created_by, updated_by) VALUES 
+(1, 475200000, 1, 1),
+(2, 388800000, 1, 1),
+(3, 216000000, 1, 1);
 
+INSERT INTO operating_expenses (type, value_cop, created_by, updated_by) VALUES 
+('Gastos de Administración', 198000000, 1, 1),
+('Gastos de Ventas', 162000000, 1, 1),
+('Otros Gastos Operativos', 90000000, 1, 1);
 
+INSERT INTO other_expenses (concept, value_cop, created_by, updated_by) VALUES 
+('Gastos Financieros', 72000000, 1, 1),
+('Depreciación y Amortización', 60000000, 1, 1),
+('Impuestos', 30000000, 1, 1);
 
+INSERT INTO operating_costs (name, value_cop, created_by, updated_by) VALUES 
+('Arrendamiento', 12000000, 1, 1),
+('Servicios Públicos', 8000000, 1, 1),
+('Mantenimiento', 7500000, 1, 1),
+('Telefonía móvil', 2000000, 1, 1),
+('Cafetería y Papelería', 3000000, 1, 1),
+('Otros gastos operativos', 5000000, 1, 1);
 
+INSERT INTO financial_obligations (name, value_cop, created_by, updated_by) VALUES 
+('Abono a Cuentas x pagar', 1500000, 1, 1),
+('Abono Máquina 1 (NRX31 - Alfaros)', 1500000, 1, 1),
+('Abono Máquina 2 (XLG77 - Betacos)', 1200000, 1, 1),
+('Abono Máquina 3 (CP23H - Gamaroles)', 1000000, 1, 1),
+('Abono otras inversiones', 800000, 1, 1);
 
+INSERT INTO personnel_expenses (name, quantity, value_cop, note, created_by, updated_by) VALUES 
+('Nómina Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
+('Nómina Vendedor', 1, 0, 'Mínimo requerido (1 × <salario>)', 1, 1),
+('Nómina operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
+
+INSERT INTO social_charges (name, value_cop, created_by, updated_by) VALUES 
+('PRESTACIONES-POS', 5100000, 1, 1);
+
+INSERT INTO raw_materials_inventory (code, description, quantity, unit, unit_cost, created_by, updated_by) VALUES 
+    ('A1', 'Material A1', 2500, 'LIBRAS', 8000, 1, 1),
+    ('A2', 'Material A2', 1500, 'LITROS', 12000, 1, 1),
+    ('A3', 'Material A3', 1800, 'KILOS', 9500, 1, 1),
+    ('A4', 'Material A4', 2200, 'UNIDADES', 7500, 1, 1),
+    ('A5', 'Material A5', 1200, 'UNIDADES', 11000, 1, 1);
