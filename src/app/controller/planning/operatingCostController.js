@@ -9,7 +9,7 @@ const getInitialOperatingCosts = async (_req, reply) => {
       logging: false,
     });
 
-    const operating_costs = operatingCostsResult.map((cost) => ({
+    const operatingCosts = operatingCostsResult.map((cost) => ({
       id: cost.id,
       name: cost.name,
       value_cop: cost.value_cop,
@@ -20,7 +20,7 @@ const getInitialOperatingCosts = async (_req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      operating_costs,
+      operatingCosts,
     });
   } catch (error) {
     logger.error('Error obteniendo los costos operativos iniciales:', error);

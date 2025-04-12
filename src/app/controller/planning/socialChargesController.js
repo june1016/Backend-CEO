@@ -9,7 +9,7 @@ const getInitialSocialCharges = async (_req, reply) => {
       logging: false,
     });
 
-    const social_charges = chargesResult.map((charge) => ({
+    const socialCharges = chargesResult.map((charge) => ({
       id: charge.id,
       name: charge.name,
       value_cop: charge.value_cop,
@@ -20,7 +20,7 @@ const getInitialSocialCharges = async (_req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      social_charges,
+      socialCharges,
     });
   } catch (error) {
     logger.error('Error obteniendo las cargas sociales iniciales:', error);

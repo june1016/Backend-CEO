@@ -9,7 +9,7 @@ const getInitialFinancialObligations = async (_req, reply) => {
       logging: false,
     });
 
-    const financial_obligations = obligationsResult.map((obligation) => ({
+    const financialObligations = obligationsResult.map((obligation) => ({
       id: obligation.id,
       name: obligation.name,
       value_cop: obligation.value_cop,
@@ -20,7 +20,7 @@ const getInitialFinancialObligations = async (_req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      financial_obligations,
+      financialObligations,
     });
   } catch (error) {
     logger.error('Error obteniendo las obligaciones financieras iniciales:', error);

@@ -16,7 +16,7 @@ const getInitialSalesCosts = async (_req, reply) => {
       logging: false,
     });
 
-    const sales_costs = salesCostsResult.map((cost) => ({
+    const salesCost = salesCostsResult.map((cost) => ({
       id: cost.id,
       product_name: cost.Products?.name,
       value_cop: cost.value_cop,
@@ -27,7 +27,7 @@ const getInitialSalesCosts = async (_req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      sales_costs,
+      salesCost,
     });
   } catch (error) {
     logger.error('Error obteniendo los costos de ventas iniciales:', error);

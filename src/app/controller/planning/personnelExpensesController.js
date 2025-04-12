@@ -9,7 +9,7 @@ const getInitialPersonnelExpenses = async (_req, reply) => {
       logging: false,
     });
 
-    const personnel_expenses = personnelResult.map((expense) => ({
+    const personnelExpenses = personnelResult.map((expense) => ({
       id: expense.id,
       name: expense.name,
       quantity: expense.quantity,
@@ -22,7 +22,7 @@ const getInitialPersonnelExpenses = async (_req, reply) => {
     return reply.code(200).send({
       ok: true, 
       statusCode: 200,
-      personnel_expenses,
+      personnelExpenses,
     });
   } catch (error) {
     logger.error('Error obteniendo los gastos de personal iniciales:', error);

@@ -18,7 +18,7 @@ const getInitialRawMaterialsInventory = async (_req, reply) => {
       logging: false,
     });
 
-    const raw_materials_inventory = inventoryResult.map((item) => ({
+    const rawMaterialsInventory = inventoryResult.map((item) => ({
       id: item.id,
       code: item.code,
       description: item.description,
@@ -32,7 +32,7 @@ const getInitialRawMaterialsInventory = async (_req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      raw_materials_inventory,
+      rawMaterialsInventory,
     });
   } catch (error) {
     logger.error('Error obteniendo el inventario inicial de materias primas:', error);

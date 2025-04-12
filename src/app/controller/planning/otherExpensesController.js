@@ -9,7 +9,7 @@ const getInitialOtherExpenses = async (_req, reply) => {
       logging: false,
     });
 
-    const other_expenses = otherExpensesResult.map((expense) => ({
+    const otherExpenses = otherExpensesResult.map((expense) => ({
       id: expense.id,
       concept: expense.concept,
       value_cop: expense.value_cop,
@@ -20,7 +20,7 @@ const getInitialOtherExpenses = async (_req, reply) => {
     return reply.code(200).send({
       ok: true,
       statusCode: 200,
-      other_expenses,
+      otherExpenses,
     });
   } catch (error) {
     logger.error('Error obteniendo los otros gastos iniciales:', error);

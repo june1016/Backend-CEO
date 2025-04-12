@@ -158,7 +158,7 @@ INSERT INTO financial_obligations (name, value_cop, created_by, updated_by) VALU
 
 INSERT INTO personnel_expenses (name, quantity, value_cop, note, created_by, updated_by) VALUES 
 ('Nómina Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
-('Nómina Vendedor', 1, 0, 'Mínimo requerido (1 × <salario>)', 1, 1),
+('Nómina Vendedor', 1, 2000000, 'Mínimo requerido (1 × <salario>)', 1, 1),
 ('Nómina operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
 
 INSERT INTO social_charges (name, value_cop, created_by, updated_by) VALUES 
