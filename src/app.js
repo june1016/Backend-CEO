@@ -26,6 +26,8 @@ import {
 import authenticateDatabase from './shared/functions/authenticateDataBase.js';
 import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
 import verifyJwt from './shared/hooks/verifyToken.js';
+import reportRouter from './routes/reportRouter.js';
+import inventoryPoliceRouter from './routes/inventoryPoliceRouter.js';
 
 
 const initializeApp = async () => {
@@ -33,18 +35,21 @@ const initializeApp = async () => {
     logger: false,
   });
 
-    await fastify.register(cors, {
-      origin: '*',
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    });
+  await fastify.register(cors, {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   fastify.decorate('auth', verifyJwt);
 
   fastify.register(getVersion, { prefix: '/' });
   fastify.register(authRouter, { prefix: '/auth' });
   fastify.register(userRouter, { prefix: '/users' });
-  
+
+  //report
+  await fastify.register(reportRouter);
+
   // Planning
   fastify.register(financialDataRouter, { prefix: '/financialdata' });
   fastify.register(financialObligationsRouter, { prefix: '/financialobligations' });
@@ -58,7 +63,8 @@ const initializeApp = async () => {
   fastify.register(salesCostRouter, { prefix: '/salescosts' });
   fastify.register(salesRouter, { prefix: '/sales' });
   fastify.register(socialChargesRouter, { prefix: '/socialcharges' });
-  
+  fastify.register(inventoryPoliceRouter, { prefix: '/inventorypolice' });
+
   // pre-operation
   fastify.register(salesBudgetRouter, { prefix: '/salesbudget' });
 

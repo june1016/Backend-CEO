@@ -1,70 +1,81 @@
 import logger from "../../../config/logger.js";
+import ProjectedSales from "../../models/projectedSales.js";
 import SalesBudget from "../../models/salesBudget.js";
 
 const createSalesBudget = async (req, reply) => {
-  try {
+    try {
       const { salesBudget } = req.body;
-
+  
       if (!Array.isArray(salesBudget) || salesBudget.length === 0) {
-          return reply.code(400).send({
-              ok: false,
-              statusCode: 400,
-              message: "Se requiere un array con los datos del presupuesto de ventas a registrar."
-          });
+        return reply.code(400).send({
+          ok: false,
+          statusCode: 400,
+          message: "Se requiere un array con los datos del presupuesto de ventas a registrar."
+        });
       }
-
-      const validatedSalesBudget = salesBudget.map(({ month_id, growth, decade_1, decade_2, decade_3, created_by }) => {
-          let total = decade_1 + decade_2 + decade_3;
-
-          console.log(total);
-
-          if (total >= 99.5 && total < 100) {
-            decade_3 += Math.round(100 - total);
-          } else if (total !== 100) {
-            return reply.code(409).send({
-              ok: false,
-              statusCode: 409,
-              message: `La suma de las tres décadas en el mes ${month_id} decadas: 1=${decade_1} 2=${decade_2} 3=${decade_3} debe ser exactamente 100.`
-          });
-          }
-
-          return {
-              month_id,
-              growth,
-              decade_1,
-              decade_2,
-              decade_3,
-              created_by,
-              updated_by: created_by
-          };
-      });
-
-      const newSalesBudget = await SalesBudget.bulkCreate(validatedSalesBudget, { logging: false });
-
-      return reply.code(201).send({
-          ok: true,
-          statusCode: 201,
-          message: "Presupuesto de ventas registrado exitosamente.",
-          salesBudget: newSalesBudget
-      });
-  } catch (error) {
-      if (error.name === "SequelizeUniqueConstraintError") {
-          logger.error("Error de clave única duplicada:", error);
+  
+      const results = [];
+  
+      for (const item of salesBudget) {
+        const { month_id, growth, decade_1, decade_2, decade_3, created_by } = item;
+  
+        let total = decade_1 + decade_2 + decade_3;
+  
+        if (total >= 99.5 && total < 100) {
+          item.decade_3 += Math.round(100 - total);
+        } else if (total !== 100) {
           return reply.code(409).send({
-              ok: false,
-              statusCode: 409,
-              message: "Ya existe un presupuesto de ventas registrado para el mes especificado."
+            ok: false,
+            statusCode: 409,
+            message: `La suma de las tres décadas en el mes ${month_id} debe ser exactamente 100 (actual: ${total}).`
           });
+        }
+  
+        const existing = await SalesBudget.findOne({
+          where: {
+            month_id,
+            created_by
+          },
+          logging: false
+        });
+  
+        if (existing) {
+          await existing.update({
+            growth,
+            decade_1: item.decade_1,
+            decade_2: item.decade_2,
+            decade_3: item.decade_3,
+            updated_by: created_by
+          }, { logging: false });
+  
+          results.push(existing);
+        } else {
+          const newBudget = await SalesBudget.create({
+            ...item,
+            updated_by: created_by
+          }, { logging: false });
+  
+          results.push(newBudget);
+        }
       }
-
+  
+      return reply.code(201).send({
+        ok: true,
+        statusCode: 201,
+        message: "Presupuesto de ventas procesado exitosamente.",
+        salesBudget: results
+      });
+  
+    } catch (error) {
       logger.error("Error registrando presupuesto de ventas:", error);
       return reply.code(500).send({
-          ok: false,
-          statusCode: 500,
-          message: "Se ha producido un error al intentar registrar el presupuesto de ventas."
+        ok: false,
+        statusCode: 500,
+        message: "Se ha producido un error al intentar registrar el presupuesto de ventas."
       });
-  }
-};
+    }
+  };
+  
 
 const getSalesBudgetDetailsByMonth = async (req, reply) => {
   try {
@@ -100,7 +111,66 @@ const getSalesBudgetDetailsByMonth = async (req, reply) => {
   }
 };
 
+const createOrUpdateProjectedSales = async (req, reply) => {
+    try {
+      const { projectedSalesData } = req.body;
+  
+      if (!Array.isArray(projectedSalesData) || projectedSalesData.length === 0) {
+        return reply.code(400).send({
+          ok: false,
+          statusCode: 400,
+          message: "Se requiere un array con las proyecciones de ventas.",
+        });
+      }
+  
+      const createdBy = projectedSalesData[0].created_by;
+      const updatedSales = [];
+  
+      for (const item of projectedSalesData) {
+        const { product_id, quantity } = item;
+  
+        const existing = await ProjectedSales.findOne({
+          where: {
+            product_id,
+            created_by: createdBy,
+          },
+          logging: false
+        });
+  
+        if (existing) {
+          existing.quantity = quantity;
+          existing.updated_by = createdBy;
+          await existing.save();
+          updatedSales.push(existing);
+        } else {
+          const newSale = await ProjectedSales.create({
+            product_id,
+            quantity,
+            created_by: createdBy,
+            updated_by: createdBy,
+          });
+          updatedSales.push(newSale);
+        }
+      }
+  
+      return reply.code(201).send({
+        ok: true,
+        statusCode: 201,
+        message: 'Proyecciones de ventas registradas/actualizadas exitosamente.',
+        data: updatedSales,
+      });
+    } catch (error) {
+      logger.error('Error en crear/actualizar proyecciones de ventas:', error);
+      return reply.code(500).send({
+        ok: false,
+        statusCode: 500,
+        message: 'Error interno al registrar las proyecciones de ventas.',
+      });
+    }
+  };
+
 export {
  createSalesBudget,
- getSalesBudgetDetailsByMonth
+ getSalesBudgetDetailsByMonth,
+ createOrUpdateProjectedSales
 }

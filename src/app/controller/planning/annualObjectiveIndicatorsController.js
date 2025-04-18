@@ -1,3 +1,4 @@
+import logger from "../../../config/logger.js";
 import AnnualObjectiveIndicators from "../../models/annualObjectiveIndicators.js";
 
 const createAnnualObjectiveIndicators = async (req, reply) => {
@@ -61,7 +62,7 @@ const createAnnualObjectiveIndicators = async (req, reply) => {
       indicators: processedIndicators
     });
   } catch (error) {
-    console.error("Error registrando indicadores anuales:", error);
+    logger.error("Error registrando indicadores anuales:", error);
     return reply.code(500).send({
       ok: false,
       statusCode: 500,
