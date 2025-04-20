@@ -28,6 +28,10 @@ import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
 import verifyJwt from './shared/hooks/verifyToken.js';
 import reportRouter from './routes/reportRouter.js';
 import inventoryPoliceRouter from './routes/inventoryPoliceRouter.js';
+import catalogRouter from './routes/catalogRouter.js';
+import machineRouter from './routes/machineRouter.js';
+import payrollRolesRouter from './routes/payrollRolesRouter.js';
+import payrollImprovementsAssignmentsRouter from './routes/payrollImprovementsAssignmentsRouter.js';
 
 
 const initializeApp = async () => {
@@ -63,10 +67,14 @@ const initializeApp = async () => {
   fastify.register(salesCostRouter, { prefix: '/salescosts' });
   fastify.register(salesRouter, { prefix: '/sales' });
   fastify.register(socialChargesRouter, { prefix: '/socialcharges' });
-  fastify.register(inventoryPoliceRouter, { prefix: '/inventorypolice' });
 
   // pre-operation
   fastify.register(salesBudgetRouter, { prefix: '/salesbudget' });
+  fastify.register(inventoryPoliceRouter, { prefix: '/inventorypolice' });
+  fastify.register(catalogRouter, { prefix: '/catalog' });
+  fastify.register(machineRouter, { prefix: '/machine' });
+  fastify.register(payrollRolesRouter, { prefix: '/payrol' });
+  fastify.register(payrollImprovementsAssignmentsRouter, { prefix: '/payrolAssig' });
 
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);

@@ -50,7 +50,7 @@ const Units = connectToDatabase().define('Units', {
 
 Users.hasMany(Units, { foreignKey: 'created_by' });
 Users.hasMany(Units, { foreignKey: 'updated_by' });
-Units.belongsTo(Users, { foreignKey: 'created_by', as: 'creator' });
-Units.belongsTo(Users, { foreignKey: 'updated_by', as: 'updater' });
+Units.belongsTo(Users, { foreignKey: 'created_by'});
+Units.belongsTo(Users, { foreignKey: 'updated_by'});
 
 export default Units;
