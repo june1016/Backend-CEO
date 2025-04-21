@@ -1,4 +1,3 @@
-// models/MachineShiftAssignment.js
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import PayrollConfiguration from './PayrollConfiguration.js';
@@ -65,15 +64,8 @@ const MachineShiftAssignment = connectToDatabase().define('MachineShiftAssignmen
 }, {
   tableName: 'machine_shift_assignments',
   timestamps: false,
-  indexes: [
-    {
-      unique: true,
-      fields: ['configuration_id', 'machine_id', 'shift_id'],
-    },
-  ],
 });
 
-// Relaciones (si usas `associate` en tus modelos)
 PayrollConfiguration.hasMany(MachineShiftAssignment, { foreignKey: 'configuration_id' });
 MachineShiftAssignment.belongsTo(PayrollConfiguration, { foreignKey: 'configuration_id' });
 

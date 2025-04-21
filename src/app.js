@@ -32,6 +32,7 @@ import catalogRouter from './routes/catalogRouter.js';
 import machineRouter from './routes/machineRouter.js';
 import payrollRolesRouter from './routes/payrollRolesRouter.js';
 import payrollImprovementsAssignmentsRouter from './routes/payrollImprovementsAssignmentsRouter.js';
+import machineShiftAssignmentRouter from './routes/machineShiftAssignmentsRouter.js';
 
 
 const initializeApp = async () => {
@@ -74,7 +75,8 @@ const initializeApp = async () => {
   fastify.register(catalogRouter, { prefix: '/catalog' });
   fastify.register(machineRouter, { prefix: '/machine' });
   fastify.register(payrollRolesRouter, { prefix: '/payrol' });
-  fastify.register(payrollImprovementsAssignmentsRouter, { prefix: '/payrolAssig' });
+  fastify.register(payrollImprovementsAssignmentsRouter, { prefix: '/payrolassig' });
+  fastify.register(machineShiftAssignmentRouter, { prefix: '/machineassig' });
 
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
