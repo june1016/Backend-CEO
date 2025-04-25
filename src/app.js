@@ -28,11 +28,12 @@ import { errorHandler, notFoundHandler } from './errors/errorHandler.js';
 import verifyJwt from './shared/hooks/verifyToken.js';
 import reportRouter from './routes/reportRouter.js';
 import inventoryPoliceRouter from './routes/inventoryPoliceRouter.js';
-import catalogRouter from './routes/catalogRouter.js';
 import machineRouter from './routes/machineRouter.js';
 import payrollRolesRouter from './routes/payrollRolesRouter.js';
 import payrollImprovementsAssignmentsRouter from './routes/payrollImprovementsAssignmentsRouter.js';
 import machineShiftAssignmentRouter from './routes/machineShiftAssignmentsRouter.js';
+import providerRouter from './routes/providersRouter.js';
+import materialsRouter from './routes/materialsRouter.js';
 
 
 const initializeApp = async () => {
@@ -72,11 +73,12 @@ const initializeApp = async () => {
   // pre-operation
   fastify.register(salesBudgetRouter, { prefix: '/salesbudget' });
   fastify.register(inventoryPoliceRouter, { prefix: '/inventorypolice' });
-  fastify.register(catalogRouter, { prefix: '/catalog' });
   fastify.register(machineRouter, { prefix: '/machine' });
   fastify.register(payrollRolesRouter, { prefix: '/payrol' });
-  fastify.register(payrollImprovementsAssignmentsRouter, { prefix: '/payrolassig' });
+  fastify.register(payrollImprovementsAssignmentsRouter, { prefix: '/payrol-assig' });
   fastify.register(machineShiftAssignmentRouter, { prefix: '/machineassig' });
+  fastify.register(providerRouter, { prefix: '/provider' });
+  fastify.register(materialsRouter, { prefix: '/material' });
 
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);

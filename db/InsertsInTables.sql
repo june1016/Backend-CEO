@@ -151,6 +151,11 @@ INSERT INTO other_expenses (concept, value_cop, created_by, updated_by) VALUES
 ('Depreciación y Amortización', 60000000, 1, 1),
 ('Impuestos', 30000000, 1, 1);
 
+INSERT INTO personnel_expenses (name, quantity, value_cop, note, created_by, updated_by) VALUES 
+ ('Nómina Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
+ ('Nómina Vendedor', 1, 0, 'Mínimo requerido (1 × <salario>)', 1, 1),
+ ('Nómina operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
+
 INSERT INTO operating_costs (name, value_cop, created_by, updated_by) VALUES 
 ('Arrendamiento', 12000000, 1, 1),
 ('Servicios Públicos', 8000000, 1, 1),
@@ -227,10 +232,20 @@ VALUES (
   1
 );
 
--- Vendedor
+-- Operarios
 INSERT INTO improvements (id, title, description, effect, created_by)
 VALUES (
   2,
+  'Mayor producción',
+  'Aumenta el rendimiento de la producción mediante mejoras operativas.',
+  '{"productivity_boost": 0.12, "error_reduction": 0.05}',
+  1
+);
+
+-- Vendedor
+INSERT INTO improvements (id, title, description, effect, created_by)
+VALUES (
+  3,
   'Estrategia de ventas básica',
   'Aumenta el flujo de clientes y aplica comisión sobre ventas.',
   '{"sales_boost": 0.10, "commission": 0.01}',
@@ -240,7 +255,7 @@ VALUES (
 -- Jefe de Producción
 INSERT INTO improvements (id, title, description, effect, created_by)
 VALUES (
-  3,
+  4,
   'Optimización de producción',
   'Optimiza distribución de producción, alerta sobre eficiencia y reduce errores.',
   '{"production_distribution": "optimized", "efficiency_alerts": true, "error_reduction": 0.15}',
@@ -250,7 +265,7 @@ VALUES (
 -- Almacenista
 INSERT INTO improvements (id, title, description, effect, created_by)
 VALUES (
-  4,
+  5,
   'Gestión de inventario',
   'Alertas automáticas de stock y reducción de desabastecimiento.',
   '{"stock_alerts": true, "order_optimization": true, "stockout_risk_reduction": 0.20}',
@@ -260,7 +275,7 @@ VALUES (
 -- Contador
 INSERT INTO improvements (id, title, description, effect, created_by)
 VALUES (
-  5,
+  6,
   'Contabilidad automatizada',
   'Estados financieros automáticos, alertas de pagos y reducción de errores contables.',
   '{"financial_statements": "automated", "payment_alerts": true, "accounting_error_reduction": 0.25}',
@@ -270,84 +285,111 @@ VALUES (
 -- Secretaria
 INSERT INTO improvements (id, title, description, effect, created_by)
 VALUES (
-  6,
+  7,
   'Gestión administrativa secundaria',
   'Organización de pagos y reducción de pagos tardíos.',
   '{"payment_organization": true, "due_date_alerts": true, "late_payment_reduction": 0.10}',
   1
 );
 
+-- Asociaciones con roles
 INSERT INTO payroll_role_improvements (role_id, improvement_id)
 VALUES
 (1, 1), -- CEO
 (2, 2), -- Operarios
-(3, 2), -- Vendedor
-(4, 3), -- Jefe de Producción
-(5, 4), -- Almacenista
-(6, 5), -- Contador
-(7, 6); -- Secretaria
+(3, 3), -- Vendedor
+(4, 4), -- Jefe de Producción
+(5, 5), -- Almacenista
+(6, 6), -- Contador
+(7, 7); -- Secretaria
 
 
--- NRX31-001
 INSERT INTO machine_shift_assignments (configuration_id, machine_id, shift_id, operator_count, created_by, updated_by) VALUES
 (1, 1, 1, 0, 1, 1),
 (1, 1, 2, 0, 1, 1),
 (1, 1, 3, 0, 1, 1);
 
--- XLG77-00
+
 INSERT INTO machine_shift_assignments (configuration_id, machine_id, shift_id, operator_count, created_by, updated_by) VALUES
 (1, 2, 1, 0, 1, 1),
 (1, 2, 2, 0, 1, 1),
 (1, 2, 3, 0, 1, 1);
 
--- CP23H-001
+
 INSERT INTO machine_shift_assignments (configuration_id, machine_id, shift_id, operator_count, created_by, updated_by) VALUES
 (1, 3, 1, 0, 1, 1),
 (1, 3, 2, 0, 1, 1),
 (1, 3, 3, 0, 1, 1);
 
-INSERT INTO commercial_conditions (name, created_by, updated_by) VALUES
-('Por compras mayores a 1000 flete gratis', 1, 1),
-('Por compras mayores a 5000 descuento del 10%', 1, 1),
-('Pago en efectivo tiene 5% de descuento', 1, 1),
-('Entregas en 24 horas para compras mayores a 2000', 1, 1),
-('Descuento del 15% por compras mensuales recurrentes', 1, 1),
-('Flete compartido para compras menores a 800', 1, 1),
-('Condición especial para clientes frecuentes', 1, 1),
-('Entrega sin costo en radio urbano', 1, 1);
+INSERT INTO providers (id, name, logo_filename, description, location, delivery_time, volume_discount) VALUES 
+  (1, 'Surtidor', 'El surtidor.png', 'Proveedor con entrega rápida y amplia variedad de materiales industriales.', 'Medellín, Colombia', 2, 3),
+  (2, 'Top Almacén', 'Top almacen.png', 'Proveedor con precios competitivos y políticas de descuento atractivas.', 'Bogotá, Colombia', 4, 5),
+  (3, 'Padilla', 'Padilla.png', 'Especialista en materiales específicos con excelente calidad de producto.', 'Cali, Colombia', 3, 4),
+  (4, 'CostaMater', 'CostaMater.png', 'Proveedor industrial con fuertes descuentos por volumen y plazos extendidos.', 'Barranquilla, Colombia', 6, 8);
 
-INSERT INTO providers (name, commercial_conditions_id, created_by, updated_by) VALUES
-('El surtidor', 1, 1, 1),
-('Top almacen', 2, 1, 1),
-('Pandilla', 3, 1, 1),
-('Pandilla', 4, 1, 1);
+INSERT INTO provider_payment_options (provider_id, option) VALUES
+(1, 'contado'), (1, '30 días'), (1, '60 días'),
+(2, 'contado'), (2, '30 días'),
+(3, 'contado'), (3, '30 días'), (3, '60 días'),
+(4, 'contado'), (4, '30 días'), (4, '60 días');
 
-INSERT INTO catalogs (name, value, unit_id, provider_id, created_by, updated_by) VALUES
-('A1', 15000.00, 3, 1, 1, 1),
-('A2', 3200.50, 5, 1, 1, 1),
-('A3', 210.75, 11, 1, 1, 1),
-('A4', 18000.00, 6, 1, 1, 1),
-('A5', 890.90, 7, 1, 1, 1),
-('A6', 13400.00, 9, 1, 1, 1),
-('A7', 700.25, 10, 1, 1, 1),
-('A8', 152000.00, 12, 1, 1, 1);
+INSERT INTO materials (id, code, name, description, unit_id, base_price) VALUES
+  (1, 'A1', 'Material base', 'Material básico estructural', 11, 4000),
+  (2, 'A2', 'Material de revestimiento', 'Revestimiento para todos los productos', 9, 6000),
+  (3, 'A3', 'Material de refuerzo', 'Refuerzo estructural para productos', 11, 5000),
+  (4, 'A4', 'Componente principal Alfaros', 'Material específico para Alfaros', 5, 4000),
+  (5, 'A5', 'Componente secundario Alfaros', 'Material complementario para Alfaros', 5, 5000),
+  (6, 'A6', 'Componente principal Betacos', 'Material específico para Betacos', 6, 6000),
+  (7, 'A7', 'Componente secundario Betacos', 'Material complementario para Betacos', 5, 4000),
+  (8, 'A8', 'Componente principal Gamaroles', 'Material básico para Gamaroles', 11, 10000),
+  (9, 'A9', 'Componente secundario Gamaroles', 'Material complementario para Gamaroles', 5, 7000),
+  (10, 'A10', 'Material de acabado', 'Acabado final para todos los productos', 9, 8000);
 
-INSERT INTO catalogs (name, value, unit_id, provider_id, created_by, updated_by) VALUES
-('A1', 12500.00, 3, 2, 1, 1),
-('A2', 4500.25, 5, 2, 1, 1),
-('A3', 330.00, 11, 2, 1, 1),
-('A4', 19800.00, 6, 2, 1, 1),
-('A5', 910.10, 7, 2, 1, 1),
-('A6', 14400.00, 9, 2, 1, 1),
-('A7', 755.75, 10, 2, 1, 1),
-('A8', 162500.00, 12, 2, 1, 1);
 
-INSERT INTO catalogs (name, value, unit_id, provider_id, created_by, updated_by) VALUES
-('A1', 13200.00, 3, 3, 1, 1),
-('A2', 3800.00, 5, 3, 1, 1),
-('A3', 290.45, 11, 3, 1, 1),
-('A4', 17200.00, 6, 3, 1, 1),
-('A5', 875.00, 7, 3, 1, 1),
-('A6', 12200.00, 9, 3, 1, 1),
-('A7', 810.99, 10, 3, 1, 1),
-('A8', 147500.00, 12, 3, 1, 1);
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
+  (1, 1, 4200, 1, 1),
+  (1, 2, 6300, 1, 1),
+  (1, 3, 4950, 1, 1),
+  (1, 4, 4100, 1, 1),
+  (1, 5, 4950, 1, 1),
+  (1, 6, 6150, 1, 1),
+  (1, 7, 4250, 1, 1),
+  (1, 8, 9800, 1, 1),
+  (1, 9, 7200, 1, 1),
+  (1, 10, 8400, 1, 1);
+
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
+  (2, 1, 3800, 1, 1),
+  (2, 2, 5850, 1, 1),
+  (2, 3, 5250, 1, 1),
+  (2, 4, 3900, 1, 1),
+  (2, 5, 5200, 1, 1),
+  (2, 6, 5700, 1, 1),
+  (2, 7, 4150, 1, 1),
+  (2, 8, 10500, 1, 1),
+  (2, 9, 6800, 1, 1),
+  (2, 10, 7600, 1, 1);
+
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
+  (3, 1, 4100, 1, 1),
+  (3, 2, 6200, 1, 1),
+  (3, 3, 4700, 1, 1),
+  (3, 4, 3800, 1, 1),
+  (3, 5, 5300, 1, 1),
+  (3, 6, 6400, 1, 1),
+  (3, 7, 3850, 1, 1),
+  (3, 8, 10200, 1, 1),
+  (3, 9, 7500, 1, 1),
+  (3, 10, 8300, 1, 1);
+
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
+  (4, 1, 4050, 1, 1),
+  (4, 2, 5950, 1, 1),
+  (4, 3, 5100, 1, 1),
+  (4, 4, 4200, 1, 1),
+  (4, 5, 4750, 1, 1),
+  (4, 6, 5800, 1, 1),
+  (4, 7, 4150, 1, 1),
+  (4, 8, 9600, 1, 1),
+  (4, 9, 6900, 1, 1),
+  (4, 10, 8100, 1, 1);

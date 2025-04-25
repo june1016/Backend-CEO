@@ -13,9 +13,10 @@ const getPayrollRolesWithImprovements = async (req, reply) => {
         },
         {
           model: PayrollRole,
-          attributes: ['id', 'name'], 
+          attributes: ['id', 'name', 'base_salary', 'optional'], 
         },
       ],
+      logging: false,
       attributes: ['id', 'role_id', 'improvement_id'], 
     });
 

@@ -1,23 +1,18 @@
 import { DataTypes } from "sequelize";
 import { connectToDatabase } from '../../config/index.js';
 
-const CommercialCondition = connectToDatabase().define("commercial_conditions", {
+const ProviderPaymentOption = connectToDatabase().define("provider_payment_options", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  created_by: {
+  provider_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  updated_by: {
-    type: DataTypes.INTEGER,
+  option: {
+    type: DataTypes.STRING,
     allowNull: true
   },
   created_at: {
@@ -29,7 +24,8 @@ const CommercialCondition = connectToDatabase().define("commercial_conditions", 
     defaultValue: DataTypes.NOW
   }
 }, {
+  tableName: 'provider_payment_options',
   timestamps: false
 });
 
-export default CommercialCondition;
+export default ProviderPaymentOption;

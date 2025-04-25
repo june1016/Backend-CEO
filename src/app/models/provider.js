@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { connectToDatabase } from '../../config/index.js';
-import CommercialCondition from "./commercialConditions.js";
+import ProviderPaymentOption from "./providerPaymentOptions.js";
+import MaterialsByProvider from "./materialsByProvider.js";
 
 const Provider = connectToDatabase().define("providers", {
   id: {
@@ -12,20 +13,24 @@ const Provider = connectToDatabase().define("providers", {
     type: DataTypes.STRING,
     allowNull: false
   },
-  commercial_conditions_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: CommercialCondition,
-      key: "id"
-    }
+  logo_filename: {
+    type: DataTypes.STRING,
+    allowNull: true
   },
-  created_by: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+  description: {
+    type: DataTypes.TEXT,  
+    allowNull: true
   },
-  updated_by: {
+  location: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  delivery_time: {
     type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  volume_discount: {
+    type: DataTypes.DECIMAL(5, 2),
     allowNull: true
   },
   created_at: {
@@ -41,6 +46,8 @@ const Provider = connectToDatabase().define("providers", {
   timestamps: false
 });
 
-Provider.belongsTo(CommercialCondition, { foreignKey: 'commercial_conditions_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+Provider.hasMany(ProviderPaymentOption, { foreignKey: 'provider_id' });
+Provider.hasMany(MaterialsByProvider, { foreignKey: 'provider_id' });
+
 
 export default Provider;

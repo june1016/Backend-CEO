@@ -4,12 +4,13 @@ import Product from '../../models/products.js';
 import Shift from '../../models/shifts.js';
 import logger from '../../../config/logger.js';
 
-const postMachineShiftAssignmentsByUser = async (req, reply) => {
-    const { created_by } = req.body;
+const getMachineShiftAssignmentsByUser = async (req, reply) => {
+
+    const userId = req.params.user_id;
 
     try {
         const assignments = await MachineShiftAssignment.findAll({
-            where: { created_by },
+            where: { created_by: userId },
             include: [
                 {
                     model: Machine,
@@ -30,7 +31,6 @@ const postMachineShiftAssignmentsByUser = async (req, reply) => {
             attributes: ['id', 'operator_count']
         });
 
-        // Agrupamos por producto
         const groupedByProduct = {};
         for (const assignment of assignments) {
             const product = assignment.Machine?.Product;
@@ -83,45 +83,51 @@ const postMachineShiftAssignmentsByUser = async (req, reply) => {
     }
 };
 
-const createMachineShiftAssignment = async (req, reply) => {
-  const { created_by, assignments } = req.body;
-
-  try {
-    if (!Array.isArray(assignments) || assignments.length === 0) {
-      return reply.status(400).send({
-        message: 'Debe proporcionar al menos una asignación para registrar.'
+const createMachineShiftAssignments = async (req, reply) => {
+    const assignments = req.body;
+  
+    try {
+      if (!Array.isArray(assignments) || assignments.length === 0) {
+        return reply.status(400).send({ message: 'El cuerpo de la solicitud debe contener un arreglo de asignaciones' });
+      }
+  
+      const isValid = assignments.every(assignment => {
+        return assignment.machine_id && assignment.shift_id && assignment.created_by;
       });
+  
+      if (!isValid) {
+        return reply.status(400).send({ message: 'Cada asignación debe contener machine_id, shift_id y created_by' });
+      }
+  
+      for (let assignment of assignments) {
+        const existingAssignment = await MachineShiftAssignment.findOne({
+          where: {
+            machine_id: assignment.machine_id,
+            shift_id: assignment.shift_id,
+            created_by: assignment.created_by,
+          },
+        });
+  
+        if (existingAssignment) {
+          await existingAssignment.update({
+            shift_id: assignment.shift_id,
+          });
+        } else {
+          await MachineShiftAssignment.create(assignment);
+        }
+      }
+  
+      return reply.status(201).send({
+        ok: true,
+        message: 'Asignaciones de turno creadas o actualizadas correctamente',
+      });
+    } catch (error) {
+      logger.error(error);
+      return reply.status(500).send({ message: 'Error al crear o actualizar las asignaciones de turno', error: error.message });
     }
-
-    const dataToCreate = assignments.map((assignment) => ({
-      configuration_id: assignment.configuration_id,
-      machine_id: assignment.machine_id,
-      shift_id: assignment.shift_id,
-      operator_count: assignment.operator_count || 0,
-      created_by,
-      updated_by: created_by
-    }));
-
-    const savedAssignments = await MachineShiftAssignment.bulkCreate(dataToCreate, {
-      ignoreDuplicates: true,
-      returning: true,
-      logging: false
-    });
-
-    return reply.status(201).send({
-      message: 'Asignaciones creadas exitosamente.',
-      data: savedAssignments,
-    });
-  } catch (error) {
-    console.error('Error al crear asignaciones:', error);
-    return reply.status(500).send({
-      message: 'Error al crear las asignaciones',
-      error: error.message,
-    });
-  }
-};
+  };
 
 export {
-    postMachineShiftAssignmentsByUser,
-    createMachineShiftAssignment
+    getMachineShiftAssignmentsByUser,
+    createMachineShiftAssignments
 };

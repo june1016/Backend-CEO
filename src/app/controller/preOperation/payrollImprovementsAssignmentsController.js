@@ -1,7 +1,6 @@
 import { logger } from '../../../config/index.js';
 import PayrollImprovementsAssignments from '../../models/payrollImprovementsAssignments.js';
 import PayrollRole from '../../models/payrollRoles.js'; 
-import PayrollConfiguration from '../../models/payrollConfiguration.js';
 import PayrollRoleImprovements from '../../models/payrollRoleImprovements.js';
 import Improvement from '../../models/improvements.js';
 
@@ -21,7 +20,11 @@ const createPayrollImprovementsAssignments = async (req, reply) => {
       return reply.status(400).send({ message: 'Cada asignación debe contener role_improvement_id, configuration_id, quantity y created_by' });
     }
 
-    const newAssignments = await PayrollImprovementsAssignments.bulkCreate(assignments);
+    const newAssignments = await PayrollImprovementsAssignments.bulkCreate(assignments, {
+      updateOnDuplicate: ['quantity', 'configuration_id'],
+      loggging: false
+    });
+
 
     return reply.status(201).send({
       message: 'Asignaciones creadas correctamente',
@@ -42,10 +45,6 @@ const getPayrollForUser = async (req, reply) => {
         created_by: userId 
       },
       include: [
-        {
-          model: PayrollConfiguration,
-          attributes: ['id', 'name'],
-        },
         {
           model: PayrollRoleImprovements,
           attributes: ['id'],
@@ -80,7 +79,31 @@ const getPayrollForUser = async (req, reply) => {
   }
 };
 
+const updateAvailableOperators = async (req, reply) => {
+  const { user_id, available_quantity } = req.body;
+
+  try {
+    const assignment = await PayrollImprovementsAssignments.findOne({
+      where: { role_improvement_id: 2, created_by: user_id },
+      logging: false,
+    });
+
+    if (!assignment) {
+      return reply.status(404).send({ message: "No assignment found with role_improvement_id = 2." });
+    }
+
+    assignment.quantity = available_quantity;
+    await assignment.save();
+
+    return reply.status(200).send({ message: "Quantity updated successfully." });
+  } catch (error) {
+    console.error("Error updating quantity:", error);
+    return reply.status(500).send({ message: "Server error." });
+  }
+};
+
 export {
     createPayrollImprovementsAssignments,
-    getPayrollForUser
+    getPayrollForUser,
+    updateAvailableOperators
 }

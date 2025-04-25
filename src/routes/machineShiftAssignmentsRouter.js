@@ -1,4 +1,4 @@
-import { createMachineShiftAssignment, postMachineShiftAssignmentsByUser } from "../app/controller/preOperation/machineShiftAssignmentsController.js";
+import { createMachineShiftAssignments, getMachineShiftAssignmentsByUser } from "../app/controller/preOperation/machineShiftAssignmentsController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
 
@@ -11,12 +11,12 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
  * @date   20-04-2025
  */
 const machineShiftAssignmentRouter = async (fastify) => {
-  fastify.post("/machine-shifts/by-user", {
+  fastify.get("/machine-shifts/user/:user_id", {
     preValidation: [
       authenticateDatabase,
       verifyJwt
     ],
-    handler: postMachineShiftAssignmentsByUser
+    handler: getMachineShiftAssignmentsByUser
   });
 
   fastify.post("/machine-shifts/create", {
@@ -24,7 +24,7 @@ const machineShiftAssignmentRouter = async (fastify) => {
       authenticateDatabase,
       verifyJwt
     ],
-    handler: createMachineShiftAssignment
+    handler: createMachineShiftAssignments
   });
 };
 

@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import PayrollRoleImprovements from './payrollRoleImprovements.js';
 import Users from './users.js';
-import PayrollConfiguration from './payrollConfiguration.js';
+import PayrollConfiguration from './PayrollConfiguration.js';
 
 const PayrollImprovementsAssignments = connectToDatabase().define('PayrollImprovementsAssignments', {
   id: {
@@ -65,6 +65,13 @@ const PayrollImprovementsAssignments = connectToDatabase().define('PayrollImprov
 }, {
   tableName: 'payroll_improvements_assignments',
   timestamps: false,
+  indexes: [
+    {
+      unique: true,
+      fields: ['role_improvement_id', 'created_by'],
+      name: 'payroll_assignments_unique',
+    }
+  ]
 });
 
 PayrollImprovementsAssignments.belongsTo(PayrollRoleImprovements, { foreignKey: 'role_improvement_id' });

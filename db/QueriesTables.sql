@@ -8,9 +8,10 @@ DROP TABLE IF EXISTS machine_shift_assignments;
 DROP TABLE IF EXISTS shifts;
 DROP TABLE IF EXISTS machines;
 DROP TABLE IF EXISTS specifications;
-DROP TABLE IF EXISTS catalogs;
-DROP TABLE IF EXISTS providers;
-DROP TABLE IF EXISTS commercial_conditions;
+DROP TABLE IF EXISTS materials_by_provider CASCADE;
+DROP TABLE IF EXISTS provider_payment_options CASCADE;
+DROP TABLE IF EXISTS providers CASCADE;
+DROP TABLE IF EXISTS materials CASCADE;
 DROP TABLE IF EXISTS inventory_policy;
 DROP TABLE IF EXISTS monthly_operations;
 DROP TABLE IF EXISTS raw_materials_inventory;
@@ -19,6 +20,7 @@ DROP TABLE IF EXISTS financial_obligations;
 DROP TABLE IF EXISTS operating_costs;
 DROP TABLE IF EXISTS other_expenses;
 DROP TABLE IF EXISTS operating_expenses;
+DROP TABLE IF EXISTS personnel_expenses;
 DROP TABLE IF EXISTS costs;
 DROP TABLE IF EXISTS sales_costs;
 DROP TABLE IF EXISTS sales;
@@ -215,6 +217,18 @@ CREATE TABLE operating_expenses (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE personnel_expenses (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(255) NOT NULL,
+     quantity INTEGER NOT NULL,
+     value_cop BIGINT NOT NULL,
+     note TEXT,
+     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ );
+
 CREATE TABLE other_expenses (
     id SERIAL PRIMARY KEY,
     concept VARCHAR(255) NOT NULL,
@@ -303,33 +317,45 @@ CREATE TABLE inventory_policy (
     UNIQUE (month_id, created_by)
 );
 
-CREATE TABLE commercial_conditions (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE,
-  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE providers (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  commercial_conditions_id INTEGER NOT NULL REFERENCES commercial_conditions(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  name VARCHAR(100) NOT NULL,
+  logo_filename VARCHAR(100),
+  description TEXT,
+  location VARCHAR(100),
+  delivery_time INTEGER,
+  volume_discount DECIMAL(5,2),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE catalogs (
+CREATE TABLE provider_payment_options (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  value NUMERIC(12, 2) NOT NULL,
-  unit_id INTEGER NOT NULL REFERENCES units(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  provider_id INTEGER NOT NULL REFERENCES providers(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  provider_id INTEGER REFERENCES providers(id) ON DELETE CASCADE,
+  option VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE materials (
+  id SERIAL PRIMARY KEY,
+  code VARCHAR(20) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  unit_id INTEGER REFERENCES units(id),
+  base_price DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE materials_by_provider (
+  id SERIAL PRIMARY KEY,
+  provider_id INTEGER REFERENCES providers(id) ON DELETE CASCADE,
+  material_id INTEGER REFERENCES materials(id) ON DELETE CASCADE,
+  price DECIMAL(10,2) NOT NULL,
+  payment_option VARCHAR(50),
+  created_by INTEGER REFERENCES users(id),
+  updated_by INTEGER REFERENCES users(id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -409,6 +435,9 @@ CREATE TABLE payroll_improvements_assignments (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE payroll_improvements_assignments 
+ADD CONSTRAINT payroll_assignments_unique UNIQUE (role_improvement_id, created_by);
+
 CREATE TABLE shifts (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL UNIQUE,
@@ -431,3 +460,6 @@ CREATE TABLE machine_shift_assignments (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE machine_shift_assignments
+ADD CONSTRAINT unique_machine_shift_assignment UNIQUE (machine_id, shift_id, created_by);

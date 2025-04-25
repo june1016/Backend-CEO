@@ -5,7 +5,7 @@ import { logger } from '../../../config/index.js';
 
 const salesBudgetReport = async (request, reply) => {
     try {
-        const { month, products, totals } = request.body;
+        const { month, products, title } = request.body;
 
         const doc = new PDFDocument();
         const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +20,7 @@ const salesBudgetReport = async (request, reply) => {
         doc.image(logoPath, 50, 50, { width: 150 });
         doc.moveDown(3);
 
-        doc.font('Montserrat-Bold').fontSize(22).fillColor('#153265').text('Presupuestos de Ventas', { align: 'center' });
+        doc.font('Montserrat-Bold').fontSize(22).fillColor('#153265').text(title, { align: 'center' });
         doc.moveDown(1);
         doc.font('Montserrat').fontSize(12).fillColor('#000000').text(`Datos del mes: ${month}`, { align: 'left' });
         doc.moveDown(1);
