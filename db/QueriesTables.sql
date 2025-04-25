@@ -360,6 +360,9 @@ CREATE TABLE materials_by_provider (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE materials_by_provider
+ADD CONSTRAINT unique_material_updated_by UNIQUE (material_id, updated_by);
+
 CREATE TABLE specifications (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL UNIQUE,
