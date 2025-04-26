@@ -4,6 +4,8 @@ if (process.env.NODE_ENV !== 'production') {
   import('dotenv/config.js'); // Carga dotenv solo en desarrollo
 }
 
+console.log("DB_HOST:", process.env.DB_HOST);
+
 const { get } = env;
 /**
  * @const {Object} envs - Object defining environment variables using the `env-var` library
