@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
-import PayrollConfiguration from './PayrollConfiguration.js';
+import PayrollConfiguration from './payrollConfigurationModel.js';
 import Machine from './machine.js';
 import Shift from './shifts.js';
 
