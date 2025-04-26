@@ -1,7 +1,7 @@
 import logger from "../../../config/logger.js";
-import FinancialData from "../../models/FinancialData.js";
-import FinancialTitle from "../../models/FinancialTitle.js";
-import FinancialCategory from "../../models/FinancialCategory.js";
+import FinancialData from "../../models/financialData.js";
+import FinancialTitle from "../../models/financialTitle.js";
+import FinancialCategory from "../../models/financialCategory.js";
 
 const getInitialFinancialData = async (_req, reply) => {
   try {

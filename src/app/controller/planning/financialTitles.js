@@ -1,6 +1,6 @@
-import FinancialTitle from "../../models/FinancialTitle.js";
+import FinancialTitle from "../../models/financialTitle.js";
 import logger from "../../../config/logger.js";
-import FinancialData from "../../models/FinancialData.js";
+import FinancialData from "../../models/financialData.js";
 
 const getFinancialTitles = async (req, reply) => {
   try {

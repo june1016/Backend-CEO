@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
-import FinancialCategory from './FinancialCategory.js';
+import FinancialCategory from './financialCategory.js';
 
 const FinancialTitle = connectToDatabase().define('FinancialTitle', {
   id: {
