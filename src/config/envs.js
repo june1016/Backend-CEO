@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
   import('dotenv/config.js'); // Carga dotenv solo en desarrollo
 }
 
-console.log("DB_HOST:", process.env.DB_HOST);
+console.log("Todas las variables de entorno:", process.env);
 
 const { get } = env;
 /**
