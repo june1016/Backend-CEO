@@ -1,4 +1,4 @@
-import FinancialTitle from "../../models/financialTitle.js";
+import FinancialTitle from "../../models/financialTitleData.js";
 import logger from "../../../config/logger.js";
 import FinancialData from "../../models/financialData.js";
 

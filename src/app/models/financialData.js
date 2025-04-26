@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
-import FinancialTitle from './financialTitle.js';
+import FinancialTitle from './financialTitleData.js';
 import Users from './users.js';
 import Literals from './literals.js';
 
