@@ -36,7 +36,7 @@ const FinancialData = connectToDatabase().define('FinancialData', {
   },
   icon: {
     type: DataTypes.STRING(50),
-    allowNull: false,
+    allowNull: true,
   },
   created_by: {
     type: DataTypes.INTEGER,

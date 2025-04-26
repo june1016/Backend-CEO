@@ -78,4 +78,49 @@ const createOrUpdateInventoryPolicy = async (req, reply) => {
   }
 };
 
-export default createOrUpdateInventoryPolicy;
+const getInventoryPoliciesByUser = async (req, reply) => {
+  try {
+    const userId = req.params.user_id;
+
+    if (!userId || isNaN(userId)) {
+      return reply.code(400).send({
+        ok: false,
+        statusCode: 400,
+        message: "El parámetro 'userId' es requerido y debe ser un número válido.",
+      });
+    }
+
+    const policies = await InventoryPolicy.findAll({
+      where: { created_by: userId },
+      logging: false,
+    });
+
+    if (policies.length === 0) {
+      return reply.code(404).send({
+        ok: false,
+        statusCode: 404,
+        message: "No se encontraron políticas de inventario para este usuario.",
+      });
+    }
+
+    return reply.code(200).send({
+      ok: true,
+      statusCode: 200,
+      message: "Políticas de inventario obtenidas exitosamente.",
+      inventoryPolicies: policies,
+    });
+
+  } catch (error) {
+    logger.error("Error obteniendo las políticas de inventario:", error);
+    return reply.code(500).send({
+      ok: false,
+      statusCode: 500,
+      message: "Se ha producido un error al intentar obtener las políticas de inventario.",
+    });
+  }
+};
+
+export {
+  getInventoryPoliciesByUser,
+  createOrUpdateInventoryPolicy
+};
