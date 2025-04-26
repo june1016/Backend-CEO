@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { connectToDatabase } from '../../config/index.js';
-import Units from "./Units.js";
+import Units from "./units.js";
 
 const Material = connectToDatabase().define("materials", {
   id: {

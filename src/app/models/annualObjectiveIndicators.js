@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import Users from './users.js';
 import Literals from './literals.js';
-import Units from './Units.js';
+import Units from './units.js';
 import IndicatorTitles from './IndicatorTitles.js';
 
 const AnnualObjectiveIndicators = connectToDatabase().define('AnnualObjectiveIndicators', {

@@ -67,7 +67,7 @@ INSERT INTO financial_data (title_id, literal_id, amount, icon, created_by, upda
 (11, 2, 150000000.00, 'Apartment', 1, 1),
 (12, 3, 300000000.00, 'Work', 1, 1),
 (13, 3, 60000000.00, 'Savings', 1, 1),
-(14 2, 70000000.00, 'CreditCard', 1, 1);
+(14, 2, 70000000.00, 'CreditCard', 1, 1);
 
 INSERT INTO indicator_titles (name) VALUES 
 ('Betacos'), 
@@ -348,50 +348,50 @@ INSERT INTO materials (id, code, name, description, unit_id, base_price) VALUES
   (10, 'A10', 'Material de acabado', 'Acabado final para todos los productos', 9, 8000);
 
 
-INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
-  (1, 1, 4200, 1, 1),
-  (1, 2, 6300, 1, 1),
-  (1, 3, 4950, 1, 1),
-  (1, 4, 4100, 1, 1),
-  (1, 5, 4950, 1, 1),
-  (1, 6, 6150, 1, 1),
-  (1, 7, 4250, 1, 1),
-  (1, 8, 9800, 1, 1),
-  (1, 9, 7200, 1, 1),
-  (1, 10, 8400, 1, 1);
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) VALUES
+  (1, 1, 4200, 1),
+  (1, 2, 6300, 1),
+  (1, 3, 4950, 1),
+  (1, 4, 4100, 1),
+  (1, 5, 4950, 1),
+  (1, 6, 6150, 1),
+  (1, 7, 4250, 1),
+  (1, 8, 9800, 1),
+  (1, 9, 7200, 1),
+  (1, 10, 8400, 1);
 
-INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
-  (2, 1, 3800, 1, 1),
-  (2, 2, 5850, 1, 1),
-  (2, 3, 5250, 1, 1),
-  (2, 4, 3900, 1, 1),
-  (2, 5, 5200, 1, 1),
-  (2, 6, 5700, 1, 1),
-  (2, 7, 4150, 1, 1),
-  (2, 8, 10500, 1, 1),
-  (2, 9, 6800, 1, 1),
-  (2, 10, 7600, 1, 1);
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) VALUES
+  (2, 1, 3800, 1),
+  (2, 2, 5850, 1),
+  (2, 3, 5250, 1),
+  (2, 4, 3900, 1),
+  (2, 5, 5200, 1),
+  (2, 6, 5700, 1),
+  (2, 7, 4150, 1),
+  (2, 8, 10500, 1),
+  (2, 9, 6800, 1),
+  (2, 10, 7600, 1);
 
-INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
-  (3, 1, 4100, 1, 1),
-  (3, 2, 6200, 1, 1),
-  (3, 3, 4700, 1, 1),
-  (3, 4, 3800, 1, 1),
-  (3, 5, 5300, 1, 1),
-  (3, 6, 6400, 1, 1),
-  (3, 7, 3850, 1, 1),
-  (3, 8, 10200, 1, 1),
-  (3, 9, 7500, 1, 1),
-  (3, 10, 8300, 1, 1);
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) VALUES
+  (3, 1, 4100, 1),
+  (3, 2, 6200, 1),
+  (3, 3, 4700, 1),
+  (3, 4, 3800, 1),
+  (3, 5, 5300, 1),
+  (3, 6, 6400, 1),
+  (3, 7, 3850, 1),
+  (3, 8, 10200, 1),
+  (3, 9, 7500, 1),
+  (3, 10, 8300, 1);
 
-INSERT INTO materials_by_provider (provider_id, material_id, price, created_by, updated_by) VALUES
-  (4, 1, 4050, 1, 1),
-  (4, 2, 5950, 1, 1),
-  (4, 3, 5100, 1, 1),
-  (4, 4, 4200, 1, 1),
-  (4, 5, 4750, 1, 1),
-  (4, 6, 5800, 1, 1),
-  (4, 7, 4150, 1, 1),
-  (4, 8, 9600, 1, 1),
-  (4, 9, 6900, 1, 1),
-  (4, 10, 8100, 1, 1);
+INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) VALUES
+  (4, 1, 4050, 1),
+  (4, 2, 5950, 1),
+  (4, 3, 5100, 1),
+  (4, 4, 4200, 1),
+  (4, 5, 4750, 1),
+  (4, 6, 5800, 1),
+  (4, 7, 4150, 1),
+  (4, 8, 9600, 1),
+  (4, 9, 6900, 1),
+  (4, 10, 8100, 1);
