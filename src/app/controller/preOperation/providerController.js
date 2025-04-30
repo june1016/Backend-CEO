@@ -3,7 +3,7 @@ import ProviderPaymentOption from "../../models/providerPaymentOptions.js";
 import Material from "../../models/materials.js";
 import MaterialByProvider from "../../models/materialsByProvider.js";
 import { logger } from "../../../config/index.js";
-import Units from "../../models/Units.js";
+import Units from "../../models/units.js";
 
 const getProviderWithMaterials = async (req, reply) => {
   try {

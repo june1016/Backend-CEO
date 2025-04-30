@@ -1,6 +1,6 @@
 import logger from "../../../config/logger.js";
 import AnnualObjectiveIndicators from "../../models/annualObjectiveIndicators.js";
-import IndicatorTitles from "../../models/IndicatorTitles.js";
+import IndicatorTitles from "../../models/indicatorTitles.js";
 
 const getIndicatorTitles = async (req, reply) => {
   try {

@@ -1,8 +1,12 @@
-import 'dotenv/config.js';
 import env from 'env-var';
 
-const { get } = env;
+if (process.env.NODE_ENV !== 'production') {
+  import('dotenv/config.js'); // Carga dotenv solo en desarrollo
+}
 
+console.log("Todas las variables de entorno:", process.env);
+
+const { get } = env;
 /**
  * @const {Object} envs - Object defining environment variables using the `env-var` library
  * to retrieve and validate values from the environment.

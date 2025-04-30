@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import PayrollRoleImprovements from './payrollRoleImprovements.js';
 import Users from './users.js';
-import PayrollConfiguration from './PayrollConfiguration.js';
+import PayrollConfiguration from './payrollConfigurationModel.js';
 
 const PayrollImprovementsAssignments = connectToDatabase().define('PayrollImprovementsAssignments', {
   id: {

@@ -1,5 +1,5 @@
 import Material from "../../models/materials.js";
-import Unit from "../../models/Units.js";
+import Unit from "../../models/units.js";
 import { logger } from "../../../config/index.js";
 
 const getMaterialsController = async (req, reply) => {
