@@ -1,10 +1,8 @@
-import env from 'env-var';
-
 if (process.env.NODE_ENV !== 'production') {
-  import('dotenv/config.js'); // Carga dotenv solo en desarrollo
+  await import('dotenv/config');
 }
 
-console.log("Todas las variables de entorno:", process.env);
+import env from 'env-var';
 
 const { get } = env;
 /**
