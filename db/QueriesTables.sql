@@ -466,3 +466,16 @@ CREATE TABLE machine_shift_assignments (
 
 ALTER TABLE machine_shift_assignments
 ADD CONSTRAINT unique_machine_shift_assignment UNIQUE (machine_id, shift_id, created_by);
+
+CREATE TABLE operation_progress (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  current_decade INTEGER NOT NULL CHECK (current_decade >= 1 AND current_decade <= 3),
+  is_december BOOLEAN DEFAULT FALSE,
+  start_time TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+
+  CONSTRAINT unique_user_id UNIQUE (user_id)
+);
