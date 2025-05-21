@@ -50,14 +50,12 @@ INSERT INTO financial_titles (name, category_id) VALUES
 ('Letras por pagar', 2),
 ('Deuda a largo plazo', 2),
 ('Capital social', 3),
-('Utilidades retenidas', 3),
-('Obligaciones laborales', 2),
-('Impuestos por pagar', 2);
+('Utilidades retenidas', 3);
 
 INSERT INTO financial_data (title_id, literal_id, amount, icon, created_by, updated_by) VALUES
 (1, 1, 25000000.00, 'Wallet', 1, 1),
-(2, 1, 95000000.00, 'AccountBalance', 1, 1),
-(3, 1, 120000000.00, 'Inventory', 1, 1),
+(2, 1, 123689500.00, 'AccountBalance', 1, 1),
+(3, 1, 91310500.00, 'Inventory', 1, 1),
 (4, 1, 60000000.00, 'Receipt', 1, 1),
 (5, 1, 180000000.00, 'Build', 1, 1),
 (6, 1, 40000000.00, 'Computer', 1, 1),
@@ -67,9 +65,7 @@ INSERT INTO financial_data (title_id, literal_id, amount, icon, created_by, upda
 (10, 2, 30000000.00, 'Description', 1, 1),
 (11, 2, 150000000.00, 'Apartment', 1, 1),
 (12, 3, 300000000.00, 'Work', 1, 1),
-(13, 3, 60000000.00, 'Savings', 1, 1),
-(14, 2, 70000000.00, 'CreditCard', 1, 1),
-(15, 2, 70000000.00, 'AccountBalanceWallet', 1, 1);
+(13, 3, 60000000.00, 'Savings', 1, 1);
 
 INSERT INTO indicator_titles (name) VALUES 
 ('Betacos'), 
@@ -131,9 +127,9 @@ INSERT INTO months (id, name, created_by, updated_by) VALUES
 (12, 'Diciembre', 1, 1);
 
 INSERT INTO products (name, quantity, unit_cost, created_by, updated_by) VALUES 
-('Alfaros', 320, 139500, 1, 1),
-('Betacos', 250, 132000, 1, 1),
-('Gamaroles', 180, 123000, 1, 1);
+('Alfaros', 80, 300000, 1, 1),
+('Betacos', 60, 270000, 1, 1),
+('Gamaroles', 30, 250000, 1, 1);
 
 INSERT INTO sales (product_id, value_cop, created_by, updated_by) VALUES 
 (1, 792000000, 1, 1),
@@ -141,9 +137,9 @@ INSERT INTO sales (product_id, value_cop, created_by, updated_by) VALUES
 (3, 360000000, 1, 1);
 
 INSERT INTO sales_costs (product_id, value_cop, created_by, updated_by) VALUES 
-(1, 475200000, 1, 1),
-(2, 388800000, 1, 1),
-(3, 216000000, 1, 1);
+(1, 467280000, 1, 1),
+(2, 382320000, 1, 1),
+(3, 212400000, 1, 1);
 
 INSERT INTO operating_expenses (type, value_cop, created_by, updated_by) VALUES 
 ('Gastos de Administración', 198000000, 1, 1),
@@ -152,12 +148,12 @@ INSERT INTO operating_expenses (type, value_cop, created_by, updated_by) VALUES
 
 INSERT INTO other_expenses (concept, value_cop, created_by, updated_by) VALUES 
 ('Gastos Financieros', 72000000, 1, 1),
-('Depreciación y Amortización', 60000000, 1, 1),
+('Depreciación y Amortización', 48000000, 1, 1),
 ('Impuestos', 30000000, 1, 1);
 
 INSERT INTO personnel_expenses (name, quantity, value_cop, note, created_by, updated_by) VALUES 
  ('Nómina Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
- ('Nómina Vendedor', 1, 0, 'Mínimo requerido (1 × <salario>)', 1, 1),
+ ('Nómina Vendedor', 1, 2500000, 'Mínimo requerido (1 × 2.500.000)', 1, 1),
  ('Nómina operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
 
 INSERT INTO operating_costs (name, value_cop, created_by, updated_by) VALUES 
@@ -170,25 +166,34 @@ INSERT INTO operating_costs (name, value_cop, created_by, updated_by) VALUES
 
 INSERT INTO financial_obligations (name, value_cop, created_by, updated_by) VALUES 
 ('Abono a Cuentas x pagar', 1500000, 1, 1),
-('Abono Máquina 1 (NRX31 - Alfaros)', 1500000, 1, 1),
-('Abono Máquina 2 (XLG77 - Betacos)', 1200000, 1, 1),
-('Abono Máquina 3 (CP23H - Gamaroles)', 1000000, 1, 1),
+('Abono Máquina 1 NRX31 ', 1500000, 1, 1),
+('Abono Máquina 2 XLG77', 1200000, 1, 1),
+('Abono Máquina 3 CP23H', 1000000, 1, 1),
 ('Abono otras inversiones', 800000, 1, 1);
 
 INSERT INTO social_charges (name, value_cop, created_by, updated_by) VALUES 
 ('PRESTACIONES-POS', 5100000, 1, 1);
 
+-- 1. Primero, eliminar los registros existentes
+DELETE FROM raw_materials_inventory;
+
+-- 2. Luego insertar los nuevos registros con valores coherentes
 INSERT INTO raw_materials_inventory (code, description, quantity, unit, unit_cost, created_by, updated_by) VALUES 
-('A1', 'Material A1', 2500, 'LIBRAS', 8000, 1, 1),
-('A2', 'Material A2', 1500, 'LITROS', 12000, 1, 1),
-('A3', 'Material A3', 1800, 'KILOS', 9500, 1, 1),
-('A4', 'Material A4', 2200, 'UNIDADES', 7500, 1, 1),
-('A5', 'Material A5', 1200, 'UNIDADES', 11000, 1, 1);
+('A1', 'Material base estructural', 950, 'Kilogramo', 4050, 1, 1),       -- 15.800 kg mensual × 0.6 mes
+('A2', 'Material de revestimiento', 570, 'Litro', 5950, 1, 1),           -- 4.750 litros mensual × 1.2 meses
+('A3', 'Material de refuerzo', 425, 'Kilogramo', 5100, 1, 1),            -- 2.120 kg mensual × 2 meses
+('A4', 'Componente principal Alfaros', 1980, 'Unidad', 3900, 1, 1),      -- 7.950 unidades mensual × 0.25 mes
+('A5', 'Componente secundario Alfaros', 1330, 'Unidad', 4950, 1, 1),     -- 5.300 unidades mensual × 0.25 mes
+('A6', 'Componente principal Betacos', 625, 'Metro', 5800, 1, 1),        -- 4.800 metros mensual × 0.13 mes
+('A7', 'Componente secundario Betacos', 960, 'Unidad', 4150, 1, 1),      -- 7.680 unidades mensual × 0.125 mes
+('A8', 'Componente principal Gamaroles', 335, 'Kilogramo', 9600, 1, 1),  -- 1.590 kg mensual × 0.21 mes
+('A9', 'Componente secundario Gamaroles', 640, 'Unidad', 6900, 1, 1),    -- 3.180 unidades mensual × 0.2 mes
+('A10', 'Material de acabado', 575, 'Litro', 8100, 1, 1);                -- 2.870 litros mensual × 0.2 mes
 
 INSERT INTO product_inventory (product_id, quantity, unit_cost, created_by, updated_by) VALUES 
-(1, 320, 139500, 1, 1),
-(2, 250, 132000, 1, 1),
-(3, 180, 123000, 1, 1);
+(1, 80, 300000, 1, 1),
+(2, 60, 270000, 1, 1),
+(3, 30, 250000, 1, 1);
 
 INSERT INTO shifts (name, start_time, end_time, created_by, updated_by) VALUES 
 ('Mañana', '06:00', '14:00', 1, 1),
@@ -216,7 +221,7 @@ INSERT INTO payroll_roles (id, name, base_salary, optional, created_by)
 VALUES 
 (1, 'Gerente (CEO)', 6000000, FALSE, 1),
 (2, 'Operario', 1800000, FALSE, 1),
-(3, 'Vendedor', 1500000, FALSE, 1);
+(3, 'Vendedor', 2500000, FALSE, 1);
 
 -- Personal de apoyo (opcional)
 INSERT INTO payroll_roles (id, name, base_salary, optional, created_by)
