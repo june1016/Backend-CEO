@@ -52,7 +52,9 @@ const getSimulatedTime = async (req, reply) => {
     const progress = await OperationProgress.findOne({
       where: { user_id },
       order: [["created_at", "DESC"]],
-    });
+      logging: false
+    },
+    );
 
     if (!progress || !progress.start_time) {
       return reply.code(200).send({
@@ -120,6 +122,7 @@ const getOperationProgressByUser = async (req, reply) => {
 
     const progress = await OperationProgress.findAll({
       where: { user_id },
+      logging: false
     });
 
     return reply.code(200).send({

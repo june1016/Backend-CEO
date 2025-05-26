@@ -1,12 +1,27 @@
 INSERT INTO rol (id, name_rol) VALUES
 (1, 'Administrador'),
-(2, 'Users');
+(2, 'Docente'),
+(3, 'Estudiante');
 
 INSERT INTO users (email, "password", "name", last_name) VALUES
-('administradorceo@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Administrador', 'Ceo');
+('administradorceo@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Administrador', 'Ceo'),
+('docenteprueba@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Eucario', 'Perez'),
+('estudianteprueba@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Jaime', 'Hernandez'),
+('estudianteprueba2@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Ana', 'Ramirez');
 
 INSERT INTO users_by_rol (user_id, rol_id) VALUES
-(1, 1);
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 3);
+
+INSERT INTO groups (name, description, teacher_id)
+VALUES ('Grupo A', 'Grupo de prueba con un docente y dos estudiantes', 2);
+
+INSERT INTO group_students (group_id, student_id)
+VALUES 
+  (1, 2),
+  (1, 3);
 
 INSERT INTO literals (id, name, active, created_by, updated_by) VALUES
 (1, 'Activos corrientes', TRUE, 1, 1),

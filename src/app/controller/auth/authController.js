@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
-import { Users, UserByRol } from "../../models/index.js";
+import { Users, UserByRol, Rol } from "../../models/index.js";
 import { generateToken } from "../../adapter/tokenAdapter.js";
 import { LoginError } from "../../../errors/error.js";
 import envs from "../../../config/envs.js";
+import GroupStudent from "../../models/groupStudent.js";
+import Group from "../../models/group.js";
 
 /**
  * Handles user authentication by validating the username and password, generating a JWT token, and updating the user with the token.
@@ -26,8 +28,34 @@ const authUser = async (req, reply) => {
     throw new LoginError();
   }
 
-  const userByRol = await UserByRol.findOne({
-    where: { user_id: user.id },
+  const userData = await Users.findOne({
+    where: { id: user.id },
+    include: [
+      {
+        model: UserByRol,
+        include: {
+          model: Rol,
+          attributes: ['name_rol'],
+        },
+      },
+      {
+        model: GroupStudent,
+        include: [
+          {
+            model: Group,
+            attributes: ['name'],
+            include: [
+              {
+                model: Users,
+                attributes: ['id', 'name' ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    raw: true,
+    nest: true,
     logging: false,
   });
 
@@ -35,21 +63,26 @@ const authUser = async (req, reply) => {
     envs.JWT_SECRET,
     user,
     clientIp,
-    userByRol.rol_id
+    userData.UserByRols.Rol.id
   );
 
   await user.update({ token }, { logging: false, silent: true });
 
-  // Enviar datos básicos del usuario en la respuesta
   reply.send({
     ok: true,
     token,
     message: "User login was successful.",
     user: {
-      id: user.id,
-      name: user.name,
-      lastName: user.lastName,
-      email: user.email,
+      id: userData.id,
+      name: userData.name,
+      lastName: userData.lastName,
+      email: userData.email,
+      rol_id: userData?.UserByRols?.Rol?.id,
+      name_rol: userData?.UserByRols?.Rol?.name_rol,
+      group_id: userData?.GroupStudents?.Group?.id,
+      group_name: userData?.GroupStudents?.Group?.name,
+      teacher_id: userData?.GroupStudents?.Group?.User?.id,
+      teacher_name: userData?.GroupStudents?.Group?.User?.name,
     },
   });
 };
