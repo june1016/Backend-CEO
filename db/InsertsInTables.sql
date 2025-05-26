@@ -15,13 +15,17 @@ INSERT INTO users_by_rol (user_id, rol_id) VALUES
 (3, 3),
 (4, 3);
 
-INSERT INTO groups (name, description, teacher_id)
-VALUES ('Grupo A', 'Grupo de prueba con un docente y dos estudiantes', 2);
+INSERT INTO universities (name, city, country) VALUES 
+('Universidad Nacional', 'Bogotá', 'Colombia'),
+('Universidad Luisa Amigo', 'Medellín', 'Colombia');
 
-INSERT INTO group_students (group_id, student_id)
-VALUES 
-  (1, 2),
-  (1, 3);
+INSERT INTO groups (name, description, teacher_id, university_id) VALUES 
+('Grupo A', 'Grupo de prueba con un docente y dos estudiantes', 2, 1),
+('Grupo B', 'Grupo de pruebas para la Universidad Luisa Amigo', 2, 2);
+
+INSERT INTO group_students (group_id, student_id) VALUES 
+(1, 2),
+(1, 3);
 
 INSERT INTO literals (id, name, active, created_by, updated_by) VALUES
 (1, 'Activos corrientes', TRUE, 1, 1),
