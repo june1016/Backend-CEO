@@ -1,44 +1,47 @@
-DROP TABLE IF EXISTS payroll_improvements_assignments CASCADE;
+
+DROP TABLE IF EXISTS operation_progress CASCADE;
 DROP TABLE IF EXISTS payroll_role_improvements CASCADE;
 DROP TABLE IF EXISTS payroll_assignments CASCADE;
 DROP TABLE IF EXISTS improvements CASCADE;
 DROP TABLE IF EXISTS payroll_roles CASCADE;
 DROP TABLE IF EXISTS payroll_configurations CASCADE;
-DROP TABLE IF EXISTS machine_shift_assignments;
-DROP TABLE IF EXISTS shifts;
-DROP TABLE IF EXISTS machines;
-DROP TABLE IF EXISTS specifications;
+DROP TABLE IF EXISTS machine_shift_assignments CASCADE;
+DROP TABLE IF EXISTS shifts CASCADE;
+DROP TABLE IF EXISTS machines CASCADE;
+DROP TABLE IF EXISTS specifications CASCADE;
 DROP TABLE IF EXISTS materials_by_provider CASCADE;
 DROP TABLE IF EXISTS provider_payment_options CASCADE;
 DROP TABLE IF EXISTS providers CASCADE;
 DROP TABLE IF EXISTS materials CASCADE;
-DROP TABLE IF EXISTS inventory_policy;
-DROP TABLE IF EXISTS monthly_operations;
-DROP TABLE IF EXISTS raw_materials_inventory;
-DROP TABLE IF EXISTS social_charges;
-DROP TABLE IF EXISTS financial_obligations;
-DROP TABLE IF EXISTS operating_costs;
-DROP TABLE IF EXISTS other_expenses;
-DROP TABLE IF EXISTS operating_expenses;
-DROP TABLE IF EXISTS personnel_expenses;
-DROP TABLE IF EXISTS costs;
-DROP TABLE IF EXISTS sales_costs;
-DROP TABLE IF EXISTS sales;
-DROP TABLE IF EXISTS projected_sales;
-DROP TABLE IF EXISTS product_inventory;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS sales_budget;
-DROP TABLE IF EXISTS annual_objective_indicators;
-DROP TABLE IF EXISTS indicator_titles;
-DROP TABLE IF EXISTS financial_data;
-DROP TABLE IF EXISTS financial_titles;
-DROP TABLE IF EXISTS financial_categories;
-DROP TABLE IF EXISTS literals;
-DROP TABLE IF EXISTS months;
-DROP TABLE IF EXISTS users_by_rol;
-DROP TABLE IF EXISTS rol;
-DROP TABLE IF EXISTS units;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS inventory_policy CASCADE;
+DROP TABLE IF EXISTS monthly_operations CASCADE;
+DROP TABLE IF EXISTS raw_materials_inventory CASCADE;
+DROP TABLE IF EXISTS social_charges CASCADE;
+DROP TABLE IF EXISTS financial_obligations CASCADE;
+DROP TABLE IF EXISTS operating_costs CASCADE;
+DROP TABLE IF EXISTS other_expenses CASCADE;
+DROP TABLE IF EXISTS operating_expenses CASCADE;
+DROP TABLE IF EXISTS personnel_expenses CASCADE;
+DROP TABLE IF EXISTS costs CASCADE;
+DROP TABLE IF EXISTS sales_costs CASCADE;
+DROP TABLE IF EXISTS sales CASCADE;
+DROP TABLE IF EXISTS projected_sales CASCADE;
+DROP TABLE IF EXISTS product_inventory CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS sales_budget CASCADE;
+DROP TABLE IF EXISTS annual_objective_indicators CASCADE;
+DROP TABLE IF EXISTS indicator_titles CASCADE;
+DROP TABLE IF EXISTS financial_data CASCADE;
+DROP TABLE IF EXISTS financial_titles CASCADE;
+DROP TABLE IF EXISTS financial_categories CASCADE;
+DROP TABLE IF EXISTS literals CASCADE;
+DROP TABLE IF EXISTS months CASCADE;
+DROP TABLE IF EXISTS group_students CASCADE;
+DROP TABLE IF EXISTS groups CASCADE;
+DROP TABLE IF EXISTS users_by_rol CASCADE;
+DROP TABLE IF EXISTS rol CASCADE;
+DROP TABLE IF EXISTS units CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -64,6 +67,33 @@ CREATE TABLE users_by_rol (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
   rol_id INTEGER NOT NULL REFERENCES rol(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE universities (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE groups (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  university_id INTEGER REFERENCES universities(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE group_students (
+  id SERIAL PRIMARY KEY,
+  group_id INTEGER NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+  student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -466,3 +496,16 @@ CREATE TABLE machine_shift_assignments (
 
 ALTER TABLE machine_shift_assignments
 ADD CONSTRAINT unique_machine_shift_assignment UNIQUE (machine_id, shift_id, created_by);
+
+CREATE TABLE operation_progress (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  current_decade INTEGER NOT NULL CHECK (current_decade >= 1 AND current_decade <= 3),
+  is_december BOOLEAN DEFAULT FALSE,
+  start_time TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+
+  CONSTRAINT unique_user_id UNIQUE (user_id)
+);

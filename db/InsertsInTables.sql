@@ -1,12 +1,31 @@
 INSERT INTO rol (id, name_rol) VALUES
 (1, 'Administrador'),
-(2, 'Users');
+(2, 'Docente'),
+(3, 'Estudiante');
 
 INSERT INTO users (email, "password", "name", last_name) VALUES
-('administradorceo@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Administrador', 'Ceo');
+('administradorceo@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Administrador', 'Ceo'),
+('docenteprueba@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Eucario', 'Perez'),
+('estudianteprueba@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Jaime', 'Hernandez'),
+('estudianteprueba2@gmail.com', '$2a$10$8LHmiv1wkvI9SELwGkw.JOom.GT0A.tLDSGAXMqsk.ut85weRSzoG', 'Ana', 'Ramirez');
 
 INSERT INTO users_by_rol (user_id, rol_id) VALUES
-(1, 1);
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 3);
+
+INSERT INTO universities (name, city, country) VALUES 
+('Universidad Nacional', 'Bogotá', 'Colombia'),
+('Universidad Luisa Amigo', 'Medellín', 'Colombia');
+
+INSERT INTO groups (name, description, teacher_id, university_id) VALUES 
+('Grupo A', 'Grupo de prueba con un docente y dos estudiantes', 2, 1),
+('Grupo B', 'Grupo de pruebas para la Universidad Luisa Amigo', 2, 2);
+
+INSERT INTO group_students (group_id, student_id) VALUES 
+(1, 2),
+(1, 3);
 
 INSERT INTO literals (id, name, active, created_by, updated_by) VALUES
 (1, 'Activos corrientes', TRUE, 1, 1),
@@ -43,7 +62,7 @@ INSERT INTO financial_titles (name, category_id) VALUES
 ('Inventario', 1),
 ('Cuentas por cobrar', 1),
 ('Maquinaria y equipo', 1),
-('Equipos de oficina', 1),
+('Equipos de cómputo', 1),
 ('Muebles y enseres', 1),
 ('Patentes', 1),
 ('Cuentas por pagar', 2),

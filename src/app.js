@@ -34,6 +34,7 @@ import payrollImprovementsAssignmentsRouter from './routes/payrollImprovementsAs
 import machineShiftAssignmentRouter from './routes/machineShiftAssignmentsRouter.js';
 import providerRouter from './routes/providersRouter.js';
 import materialsRouter from './routes/materialsRouter.js';
+import operationProgressRouter from './routes/operationProgressRouter.js';
 
 
 const initializeApp = async () => {
@@ -55,6 +56,9 @@ const initializeApp = async () => {
 
   //report
   await fastify.register(reportRouter);
+
+  //global
+  fastify.register(operationProgressRouter, { prefix: '/progress' });
 
   // Planning
   fastify.register(financialDataRouter, { prefix: '/financialdata' });
