@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import Users from './users.js';
+import University from './university.js';
 
 const Group = connectToDatabase().define('Group', {
   id: {
@@ -22,6 +23,11 @@ const Group = connectToDatabase().define('Group', {
     allowNull: false,
     field: 'teacher_id'
   },
+  universityId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'university_id'
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: true,
@@ -42,5 +48,6 @@ const Group = connectToDatabase().define('Group', {
 
 Users.hasMany(Group, { foreignKey: 'teacher_id' });
 Group.belongsTo(Users, { foreignKey: 'teacher_id' });
+Group.belongsTo(University, { foreignKey: 'university_id' });
 
 export default Group;

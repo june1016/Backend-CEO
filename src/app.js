@@ -35,6 +35,9 @@ import machineShiftAssignmentRouter from './routes/machineShiftAssignmentsRouter
 import providerRouter from './routes/providersRouter.js';
 import materialsRouter from './routes/materialsRouter.js';
 import operationProgressRouter from './routes/operationProgressRouter.js';
+import groupsRouter from './routes/groupsRouter.js';
+import universityRouter from './routes/universityRouter.js';
+import roleRouter from './routes/roleRouter.js';
 
 
 const initializeApp = async () => {
@@ -53,6 +56,7 @@ const initializeApp = async () => {
   fastify.register(getVersion, { prefix: '/' });
   fastify.register(authRouter, { prefix: '/auth' });
   fastify.register(userRouter, { prefix: '/users' });
+  fastify.register(roleRouter, { prefix: '/rol' });
 
   //report
   await fastify.register(reportRouter);
@@ -83,6 +87,10 @@ const initializeApp = async () => {
   fastify.register(machineShiftAssignmentRouter, { prefix: '/machineassig' });
   fastify.register(providerRouter, { prefix: '/provider' });
   fastify.register(materialsRouter, { prefix: '/material' });
+
+  // Administrador
+  fastify.register(groupsRouter, { prefix: '/groups' });
+    fastify.register(universityRouter, { prefix: '/university' });
 
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
