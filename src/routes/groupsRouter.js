@@ -1,4 +1,9 @@
-import { getGroupsWithStudents } from "../app/controller/groups/groupsController.js";
+import {
+  getGroupsWithStudents,
+  createGroup,
+  updateGroup,
+  deleteGroup
+} from "../app/controller/groups/groupsController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
 
@@ -14,6 +19,21 @@ const groupsRouter = async (fastify) => {
   fastify.get("/getGroupsWithStudents", {
     preValidation: [authenticateDatabase, verifyJwt],
     handler: getGroupsWithStudents,
+  });
+
+  fastify.post("/create", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: createGroup,
+  });
+
+  fastify.post("/update/:id", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: updateGroup,
+  });
+
+  fastify.post("/delete/:id", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: deleteGroup,
   });
 };
 

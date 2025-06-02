@@ -18,23 +18,23 @@ const Group = connectToDatabase().define('Group', {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  teacherId: {
+  teacher_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: 'teacher_id'
   },
-  universityId: {
+  university_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     field: 'university_id'
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: true,
     defaultValue: DataTypes.NOW,
     field: 'created_at'
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: true,
     defaultValue: DataTypes.NOW,

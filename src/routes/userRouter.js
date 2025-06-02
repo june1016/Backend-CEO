@@ -4,7 +4,8 @@ import {
   updateUser,
   deleteUser,
   createUser,
-  getTotalUsers
+  getTotalUsers,
+  getUsersByRol
 } from "../app/controller/user/userController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
@@ -24,6 +25,14 @@ const userRouter = async (fastify) => {
       verifyJwt
     ],
     handler: getAllUsers
+  });
+
+    fastify.get("/by-rol", {
+    preValidation: [
+      authenticateDatabase,
+      verifyJwt
+    ],
+    handler: getUsersByRol
   });
 
   fastify.get("/:id", {

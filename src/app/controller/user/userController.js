@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import logger from '../../../config/logger.js';
 import Users from '../../models/users.js';
 import UserByRol from '../../models/userByRol.js';
@@ -56,6 +57,63 @@ const getAllUsers = async (req, reply) => {
     reply.code(500).send({
       ok: false,
       message: 'Se ha producido un error al intentar obtener los usuarios.',
+    });
+  }
+};
+
+const getUsersByRol = async (req, reply) => {
+  const { rol } = req.query;
+
+  if (!rol) {
+    return reply.code(400).send({
+      ok: false,
+      message: 'El parámetro "rol" es obligatorio',
+    });
+  }
+
+  try {
+    const users = await Users.findAll({
+      attributes: ['id', 'name', 'email', 'lastName', 'created_at', 'updated_at'],
+      include: [
+        {
+          model: UserByRol,
+          required: true,
+          attributes: [],
+          include: [
+            {
+              model: Rol,
+              required: true,
+              attributes: ['name_rol'],
+              where: { name_rol: rol },
+            },
+          ],
+        },
+      ],
+      raw: true,
+      nest: true,
+      logging: false
+    });
+
+    const formattedUsers = users.map(user => ({
+      id: user.id,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      rol: user.UserByRols?.Rol?.name_rol || 'Sin rol',
+      createdAt: user.created_at.toISOString().split('T')[0],
+      updatedAt: user.updated_at?.toISOString().split('T')[0],
+    }));
+
+    return reply.code(200).send({
+      ok: true,
+      users: formattedUsers,
+    });
+
+  } catch (error) {
+    logger.error(error.message);
+    return reply.code(500).send({
+      ok: false,
+      message: 'Error al obtener usuarios por rol',
     });
   }
 };
@@ -218,7 +276,9 @@ const createUser = async (req, reply) => {
       });
     }
 
-    const newUser = await Users.create({ name, lastName, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await Users.create({ name, lastName, email, password: hashedPassword });
 
     await UserByRol.create({
       user_id: newUser.id,
@@ -274,6 +334,7 @@ const getTotalUsers = async (_req, reply) => {
 
 export {
   getAllUsers,
+  getUsersByRol,
   getUserById,
   updateUser,
   deleteUser,

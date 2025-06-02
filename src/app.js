@@ -90,7 +90,7 @@ const initializeApp = async () => {
 
   // Administrador
   fastify.register(groupsRouter, { prefix: '/groups' });
-    fastify.register(universityRouter, { prefix: '/university' });
+  fastify.register(universityRouter, { prefix: '/university' });
 
   fastify.setNotFoundHandler(notFoundHandler);
   fastify.setErrorHandler(errorHandler);
