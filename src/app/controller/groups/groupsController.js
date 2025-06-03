@@ -72,8 +72,6 @@ const createGroup = async (req, reply) => {
     try {
         const { name, description, teacher_id, university_id, student_ids } = req.body;
 
-        console.log(name, description, teacher_id, university_id, student_ids);
-
         if (!name || !description || !teacher_id || !university_id || !Array.isArray(student_ids)) {
             return reply.code(400).send({ ok: false, message: 'Faltan campos requeridos' });
         }
