@@ -7,7 +7,7 @@ import University from '../../models/university.js';
 const getGroupsWithStudents = async (_req, reply) => {
     try {
         const groups = await Group.findAll({
-            attributes: ['id', 'name', 'teacher_id'],
+            attributes: ['id', 'name', 'teacher_id', 'description'],
             include: [
                 {
                     model: Users,
@@ -47,6 +47,7 @@ const getGroupsWithStudents = async (_req, reply) => {
             return {
                 id: groupData.id,
                 name: groupData.name,
+                description: groupData.description,
                 teacher: `${groupData.User?.name || 'Sin'} ${groupData.User?.lastName || 'Docente'}`,
                 university: groupData.University?.name || 'Sin universidad',
                 students: studentsForGroup
@@ -69,13 +70,15 @@ const getGroupsWithStudents = async (_req, reply) => {
 
 const createGroup = async (req, reply) => {
     try {
-        const { name, teacher_id, university_id, student_ids } = req.body;
+        const { name, description, teacher_id, university_id, student_ids } = req.body;
 
-        if (!name || !teacher_id || !university_id || !Array.isArray(student_ids)) {
+        console.log(name, description, teacher_id, university_id, student_ids);
+
+        if (!name || !description || !teacher_id || !university_id || !Array.isArray(student_ids)) {
             return reply.code(400).send({ ok: false, message: 'Faltan campos requeridos' });
         }
 
-        const group = await Group.create({ name, teacher_id, university_id });
+        const group = await Group.create({ name, description, teacher_id, university_id });
 
         const studentEntries = student_ids.map(student_id => ({
             group_id: group.id,
@@ -94,9 +97,9 @@ const createGroup = async (req, reply) => {
 const updateGroup = async (req, reply) => {
     try {
         const { id } = req.params;
-        const { name, teacher_id, university_id, student_ids } = req.body;
+        const { name, description, teacher_id, university_id, student_ids } = req.body;
 
-        if (!name || !teacher_id || !university_id || !Array.isArray(student_ids)) {
+        if (!name || !description || !teacher_id || !university_id || !Array.isArray(student_ids)) {
             return reply.code(400).send({ ok: false, message: 'Faltan campos requeridos' });
         }
 
@@ -105,7 +108,7 @@ const updateGroup = async (req, reply) => {
             return reply.code(404).send({ ok: false, message: 'Grupo no encontrado' });
         }
 
-        await group.update({ name, teacher_id, university_id });
+        await group.update({ name, description, teacher_id, university_id });
 
         // Eliminar estudiantes anteriores
         await GroupStudent.destroy({ where: { group_id: id } });
