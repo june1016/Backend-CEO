@@ -97,7 +97,7 @@ const updateAvailableOperators = async (req, reply) => {
 
     return reply.status(200).send({ message: "Quantity updated successfully." });
   } catch (error) {
-    console.error("Error updating quantity:", error);
+    logger.error(error);
     return reply.status(500).send({ message: "Server error." });
   }
 };
