@@ -13,6 +13,10 @@ const FinancialTitle = connectToDatabase().define('FinancialTitle', {
     allowNull: false,
     unique: true,
   },
+  icon: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   category_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
