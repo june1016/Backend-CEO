@@ -154,7 +154,6 @@ const updateGroup = async (req, reply) => {
 
         await group.update({ name, description, teacher_id, university_id });
 
-        // Eliminar estudiantes anteriores
         await GroupStudent.destroy({ where: { group_id: id }, logging: false });
 
         const newStudents = student_ids.map(student_id => ({
