@@ -38,6 +38,7 @@ import operationProgressRouter from './routes/operationProgressRouter.js';
 import groupsRouter from './routes/groupsRouter.js';
 import universityRouter from './routes/universityRouter.js';
 import roleRouter from './routes/roleRouter.js';
+import productsRouter from './routes/productsRouter.js';
 
 
 const initializeApp = async () => {
@@ -75,6 +76,7 @@ const initializeApp = async () => {
   fastify.register(personnelExpensesRouter, { prefix: '/personnelexpenses' });
   fastify.register(rawMaterialsInventoryRouter, { prefix: '/rawmaterialsinventory' });
   fastify.register(salesCostRouter, { prefix: '/salescosts' });
+  fastify.register(productsRouter, { prefix: '/products' });
   fastify.register(salesRouter, { prefix: '/sales' });
   fastify.register(socialChargesRouter, { prefix: '/socialcharges' });
 
