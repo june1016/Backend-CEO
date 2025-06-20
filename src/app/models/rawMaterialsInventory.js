@@ -10,8 +10,7 @@ const RawMaterialsInventory = connectToDatabase().define('RawMaterialsInventory'
   },
   code: {
     type: DataTypes.STRING(10),
-    allowNull: false,
-    unique: true,
+    allowNull: false
   },
   description: {
     type: DataTypes.STRING(255),

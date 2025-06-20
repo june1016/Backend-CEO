@@ -1,4 +1,8 @@
-import { getInitialOperatingCosts } from "../app/controller/planning/operatingCostController.js";
+import {
+  getInitialOperatingCosts,
+  getOperatingCostsByCreatedBy,
+  createOrUpdateOperatingCosts
+} from "../app/controller/planning/operatingCostController.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
 
@@ -11,9 +15,20 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
  * @date   10-04-2025
  */
 const operatingCostRouter = async (fastify) => {
+  
   fastify.get("/getInitialOperatingCosts", {
     preValidation: [authenticateDatabase, verifyJwt],
     handler: getInitialOperatingCosts,
+  });
+
+  fastify.get("/getOperatingCostsByCreatedBy", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: getOperatingCostsByCreatedBy,
+  });
+
+  fastify.post("/createOrUpdateOperatingCosts", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: createOrUpdateOperatingCosts,
   });
 };
 

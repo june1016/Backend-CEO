@@ -315,7 +315,7 @@ CREATE TABLE monthly_operations (
 
 CREATE TABLE raw_materials_inventory (
     id SERIAL PRIMARY KEY,
-    code VARCHAR(10) NOT NULL UNIQUE,
+    code VARCHAR(10) NOT NULL,
     description VARCHAR(255) NOT NULL,
     quantity INTEGER NOT NULL,
     unit VARCHAR(50) NOT NULL,
