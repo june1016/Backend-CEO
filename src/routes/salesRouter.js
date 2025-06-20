@@ -1,4 +1,9 @@
-import { getInitialSales } from "../app/controller/planning/salesController.js";
+import {
+  getInitialSales,
+  getSalesByCreatedBy,
+  createSales
+} from "../app/controller/planning/salesController.js";
+
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
 
@@ -14,6 +19,16 @@ const salesRouter = async (fastify) => {
   fastify.get("/getInitialSales", {
     preValidation: [authenticateDatabase, verifyJwt],
     handler: getInitialSales,
+  });
+
+  fastify.get("/getSalesByCreatedBy", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: getSalesByCreatedBy,
+  });
+
+  fastify.post("/createSales", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: createSales,
   });
 };
 

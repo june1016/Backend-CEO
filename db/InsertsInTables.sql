@@ -54,37 +54,40 @@ INSERT INTO units (id, name, active, created_by, updated_by) VALUES
 (14, 'Paquete', TRUE, 1, 1);
 
 INSERT INTO financial_categories (name) VALUES 
-('Activos'), ('Pasivos'), ('Patrimonio'), ('Otros');
+('Activos'), 
+('Pasivos'), 
+('Patrimonio'), 
+('Otros');
 
-INSERT INTO financial_titles (name, category_id) VALUES 
-('Dinero en caja', 1), 
-('Dinero en banco', 1),
-('Inventario', 1),
-('Cuentas por cobrar', 1),
-('Maquinaria y equipo', 1),
-('Equipos de cómputo', 1),
-('Muebles y enseres', 1),
-('Patentes', 1),
-('Cuentas por pagar', 2),
-('Letras por pagar', 2),
-('Deuda a largo plazo', 2),
-('Capital social', 3),
-('Utilidades retenidas', 3);
+INSERT INTO financial_titles (name, category_id, icon) VALUES 
+('Dinero en caja', 1, 'Wallet'),
+('Dinero en banco', 1, 'AccountBalance'),
+('Inventario', 1, 'Inventory'),
+('Cuentas por cobrar', 1, 'Receipt'),
+('Maquinaria y equipo', 1, 'Build'),
+('Equipos de cómputo', 1, 'Computer'),
+('Muebles y enseres', 1, 'MenuBook'),
+('Patentes', 1, 'EmojiEvents'),
+('Cuentas por pagar', 2, 'CreditCard'),
+('Letras por pagar', 2, 'Description'),
+('Deuda a largo plazo', 2, 'Apartment'),
+('Capital social', 3, 'Work'),
+('Utilidades retenidas', 3, 'Savings');
 
-INSERT INTO financial_data (title_id, literal_id, amount, icon, created_by, updated_by) VALUES
-(1, 1, 25000000.00, 'Wallet', 1, 1),
-(2, 1, 123689500.00, 'AccountBalance', 1, 1),
-(3, 1, 91310500.00, 'Inventory', 1, 1),
-(4, 1, 60000000.00, 'Receipt', 1, 1),
-(5, 1, 180000000.00, 'Build', 1, 1),
-(6, 1, 40000000.00, 'Computer', 1, 1),
-(7, 1, 30000000.00, 'MenuBook', 1, 1),
-(8, 1, 50000000.00, 'EmojiEvents', 1, 1),
-(9, 2, 60000000.00, 'CreditCard', 1, 1),
-(10, 2, 30000000.00, 'Description', 1, 1),
-(11, 2, 150000000.00, 'Apartment', 1, 1),
-(12, 3, 300000000.00, 'Work', 1, 1),
-(13, 3, 60000000.00, 'Savings', 1, 1);
+INSERT INTO financial_data (title_id, literal_id, amount, created_by, updated_by) VALUES
+(1, 1, 25000000.00, 1, 1),
+(2, 1, 123689500.00, 1, 1),
+(3, 1, 91310500.00, 1, 1),
+(4, 1, 60000000.00, 1, 1),
+(5, 1, 180000000.00, 1, 1),
+(6, 1, 40000000.00, 1, 1),
+(7, 1, 30000000.00, 1, 1),
+(8, 1, 50000000.00, 1, 1),
+(9, 2, 60000000.00, 1, 1),
+(10, 2, 30000000.00, 1, 1),
+(11, 2, 150000000.00, 1, 1),
+(12, 3, 300000000.00, 1, 1),
+(13, 3, 60000000.00, 1, 1);
 
 INSERT INTO indicator_titles (name) VALUES 
 ('Betacos'), 

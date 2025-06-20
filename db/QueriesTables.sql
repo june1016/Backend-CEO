@@ -1,6 +1,7 @@
 
 DROP TABLE IF EXISTS operation_progress CASCADE;
 DROP TABLE IF EXISTS payroll_role_improvements CASCADE;
+DROP TABLE IF EXISTS payroll_improvements_assignments CASCADE;
 DROP TABLE IF EXISTS payroll_assignments CASCADE;
 DROP TABLE IF EXISTS improvements CASCADE;
 DROP TABLE IF EXISTS payroll_roles CASCADE;
@@ -38,6 +39,7 @@ DROP TABLE IF EXISTS literals CASCADE;
 DROP TABLE IF EXISTS months CASCADE;
 DROP TABLE IF EXISTS group_students CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
+DROP TABLE IF EXISTS universities CASCADE;
 DROP TABLE IF EXISTS users_by_rol CASCADE;
 DROP TABLE IF EXISTS rol CASCADE;
 DROP TABLE IF EXISTS units CASCADE;
@@ -313,7 +315,7 @@ CREATE TABLE monthly_operations (
 
 CREATE TABLE raw_materials_inventory (
     id SERIAL PRIMARY KEY,
-    code VARCHAR(10) NOT NULL UNIQUE,
+    code VARCHAR(10) NOT NULL,
     description VARCHAR(255) NOT NULL,
     quantity INTEGER NOT NULL,
     unit VARCHAR(50) NOT NULL,

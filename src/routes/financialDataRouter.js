@@ -1,5 +1,5 @@
 
-import { createFinancialData, getInitialFinancialData } from "../app/controller/planning/financialDataController.js";
+import { createFinancialData, getInitialFinancialData, getFinancialDataByCreatedBy } from "../app/controller/planning/financialDataController.js";
 import getFinancialTitles from "../app/controller/planning/financialTitles.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js"; "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
@@ -35,6 +35,15 @@ import verifyJwt from "../shared/hooks/verifyToken.js";
         verifyJwt
       ],
       handler: createFinancialData
+    });
+
+    
+    fastify.get("/getfinancialdata/by-user", {
+      preValidation: [
+        authenticateDatabase,
+        verifyJwt
+    ],
+      handler: getFinancialDataByCreatedBy
     });
   };
   

@@ -74,8 +74,6 @@ const saveMaterialsByProvider = async (req, reply) => {
 
     const materialsData = req.body;
 
-    console.log(userId);
-
     const materialsToSave = materialsData.map(item => ({
       provider_id: item.supplierId,
       material_id: item.materialId,

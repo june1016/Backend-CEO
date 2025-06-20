@@ -1,35 +1,31 @@
-import { Rol, UserByRol, Users } from '../../models/index.js';
+import logger from '../../../config/logger.js';
+import Rol from '../../models/rol.js';
 
-exports.assignRoleToUser = async (req, res) => {
-    try {
-      const { user_id, rol_id } = req.body;
-  
-      const user = await Users.findByPk(user_id);
-      const role = await Rol.findByPk(rol_id);
-  
-      if (!user || !role) {
-        return res.status(404).json({ error: "Usuario o Rol no encontrado" });
-      }
-  
-      await UserByRol.create({ user_id, rol_id });
-      res.json({ message: "Rol asignado correctamente" });
-    } catch (error) {
-      res.status(500).json({ error: "Error al asignar rol" });
-    }
-  };
-  
-  exports.getUserRoles = async (req, res) => {
-    try {
-      const userRoles = await UserByRol.findAll({
-        where: { user_id: req.params.user_id },
-        include: [{ model: Rol, attributes: ["name_rol"] }]
-      });
-  
-      if (!userRoles.length) return res.json({ message: "El usuario no tiene roles asignados" });
-  
-      res.json(userRoles);
-    } catch (error) {
-      res.status(500).json({ error: "Error al obtener roles del usuario" });
-    }
-  };
-  
+const getAllRoles = async (req, reply) => {
+  try {
+    const roles = await Rol.findAll({
+      attributes: ['id', 'name_rol'],
+      order: [['id', 'ASC']],
+      raw: true,
+      nest: true,
+      logging: false
+    });
+
+    return reply.code(200).send({
+      ok: true,
+      data: roles,
+    });
+
+  } catch (error) {
+    logger.error(error.message);
+    return reply.code(500).send({
+      ok: false,
+      message: 'Se ha producido un error al intentar obtener los roles.',
+    });
+  }
+};
+
+export {
+  getAllRoles
+};
+

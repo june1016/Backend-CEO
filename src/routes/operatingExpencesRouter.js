@@ -1,19 +1,35 @@
-import { getInitialOperatingExpenses } from "../app/controller/planning/operatingExpencesCrontroller.js";
+import {
+  getInitialOperatingExpenses,
+  createOperatingExpenses,
+  getOperatingExpensesByCreatedBy
+} from "../app/controller/planning/operatingExpencesCrontroller.js";
+
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
 
 /**
- * Routes for operating expenses management in Fastify.
+ * Rutas para la gestión de gastos operacionales.
  *
- * @param {Object} fastify - Fastify framework instance.
+ * @param {Object} fastify - Instancia de Fastify.
  *
  * @author Juan Sebastian Gonzalez Sossa
  * @date   10-04-2025
  */
 const operatingExpencesRouter = async (fastify) => {
+
   fastify.get("/getInitialOperatingExpenses", {
     preValidation: [authenticateDatabase, verifyJwt],
     handler: getInitialOperatingExpenses,
+  });
+
+  fastify.post("/createOperatingExpenses", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: createOperatingExpenses,
+  });
+
+  fastify.get("/getOperatingExpensesByCreatedBy", {
+    preValidation: [authenticateDatabase, verifyJwt],
+    handler: getOperatingExpensesByCreatedBy,
   });
 };
 
