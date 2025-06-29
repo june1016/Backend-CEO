@@ -1,3 +1,54 @@
+-- vacía todo y reinicia los SERIAL  
+TRUNCATE TABLE
+  operation_progress,
+  machine_shift_assignments,
+  shifts,
+  payroll_improvements_assignments,
+  payroll_role_improvements,
+  payroll_roles,
+  payroll_configurations,
+  improvements,
+  machines,
+  specifications,
+  materials_by_provider,
+  materials,
+  provider_payment_options,
+  providers,
+  inventory_policy,
+  product_inventory,
+  raw_materials_inventory,
+  monthly_operations,
+  social_charges,
+  financial_obligations,
+  operating_costs,
+  other_expenses,
+  personnel_expenses,
+  operating_expenses,
+  costs,
+  projected_sales,
+  sales_costs,
+  sales,
+  products,
+  sales_budget,
+  months,
+  annual_objective_indicators,
+  indicator_titles,
+  financial_data,
+  financial_titles,
+  financial_categories,
+  units,
+  literals,
+  group_students,
+  groups,
+  universities,
+  users_by_rol,
+  users,
+  rol
+RESTART IDENTITY CASCADE;
+
+ALTER TABLE financial_titles
+  ADD COLUMN icon VARCHAR(255) NULL;
+
 INSERT INTO rol (id, name_rol) VALUES
 (1, 'Administrador'),
 (2, 'Docente'),
@@ -424,3 +475,14 @@ INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) 
   (4, 8, 9600, 1),
   (4, 9, 6900, 1),
   (4, 10, 8100, 1);
+
+  -- Para cada tabla en que metes IDs manuales, sincroniza la secuencia:
+SELECT setval(pg_get_serial_sequence('rol','id'),             (SELECT MAX(id) FROM rol));
+SELECT setval(pg_get_serial_sequence('literals','id'),        (SELECT MAX(id) FROM literals));
+SELECT setval(pg_get_serial_sequence('units','id'),           (SELECT MAX(id) FROM units));
+SELECT setval(pg_get_serial_sequence('months','id'),          (SELECT MAX(id) FROM months));
+SELECT setval(pg_get_serial_sequence('payroll_roles','id'),   (SELECT MAX(id) FROM payroll_roles));
+SELECT setval(pg_get_serial_sequence('improvements','id'),    (SELECT MAX(id) FROM improvements));
+SELECT setval(pg_get_serial_sequence('providers','id'),       (SELECT MAX(id) FROM providers));
+SELECT setval(pg_get_serial_sequence('materials','id'),       (SELECT MAX(id) FROM materials));
+SELECT setval(pg_get_serial_sequence('financial_titles','id'),(SELECT MAX(id) FROM financial_titles));
