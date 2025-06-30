@@ -72,7 +72,9 @@ INSERT INTO financial_titles (name, category_id, icon) VALUES
 ('Letras por pagar', 2, 'Description'),
 ('Deuda a largo plazo', 2, 'Apartment'),
 ('Capital social', 3, 'Work'),
-('Utilidades retenidas', 3, 'Savings');
+('Utilidades retenidas', 3, 'Savings'),
+('Obligaciones laborales', 2, 'AccountBalance'),
+('Impuestos por pagar', 2, 'Wallet');
 
 INSERT INTO financial_data (title_id, literal_id, amount, created_by, updated_by) VALUES
 (1, 1, 25000000.00, 1, 1),
@@ -80,14 +82,16 @@ INSERT INTO financial_data (title_id, literal_id, amount, created_by, updated_by
 (3, 1, 91310500.00, 1, 1),
 (4, 1, 60000000.00, 1, 1),
 (5, 1, 180000000.00, 1, 1),
-(6, 1, 40000000.00, 1, 1),
+(6, 1, 50000000.00, 1, 1),
 (7, 1, 30000000.00, 1, 1),
-(8, 1, 50000000.00, 1, 1),
+(8, 1, 76000000.00, 1, 1),
 (9, 2, 60000000.00, 1, 1),
 (10, 2, 30000000.00, 1, 1),
 (11, 2, 150000000.00, 1, 1),
 (12, 3, 300000000.00, 1, 1),
-(13, 3, 60000000.00, 1, 1);
+(13, 3, 60000000.00, 1, 1),
+(14, 3, 30000000.00, 1, 1),
+(15, 3, 6000000.00, 1, 1);
 
 INSERT INTO indicator_titles (name) VALUES 
 ('Betacos'), 
