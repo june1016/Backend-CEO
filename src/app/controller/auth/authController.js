@@ -1,33 +1,45 @@
-import bcrypt from "bcryptjs";
-import { Users, UserByRol, Rol } from "../../models/index.js";
-import { generateToken } from "../../adapter/tokenAdapter.js";
-import { LoginError } from "../../../errors/error.js";
-import envs from "../../../config/envs.js";
-import GroupStudent from "../../models/groupStudent.js";
-import Group from "../../models/group.js";
+// src/app/controller/auth/authController.js
+
+import bcrypt from 'bcryptjs';
+import { Users, UserByRol, Rol } from '../../models/index.js';
+import { generateToken } from '../../adapter/tokenAdapter.js';
+import { LoginError } from '../../../errors/error.js';
+import envs from '../../../config/envs.js';
+import GroupStudent from '../../models/groupStudent.js';
+import Group from '../../models/group.js';
 
 /**
- * Handles user authentication by validating the username and password, generating a JWT token, and updating the user with the token.
- *
- * @param {Object} req - Request object containing the user's login details (body) and IP address.
- * @param {Object} reply - Response object used to send the authentication result to the client.
- * @returns {void}
- *
- * @author Juan Sebastian Gonzalez Sosssa
- * @date   20-01-2025
+ * Handles user authentication by validating credentials,
+ * generating a JWT, and returning user info + rol data.
  */
 const authUser = async (req, reply) => {
-  const { body } = req;
+  const { email, password } = req.body;
   const clientIp =
-    req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || req.ip;
-  const { email, password } = body;
+    req.headers['x-real-ip'] ||
+    req.headers['x-forwarded-for'] ||
+    req.ip;
 
+  // 1️⃣ Buscar usuario por email
   const user = await Users.findOne({ where: { email }, logging: false });
-
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new LoginError();
   }
 
+  // 2️⃣ Recuperar únicamente rolId
+  const userRol = await UserByRol.findOne({
+    where: { user_id: user.id },
+    attributes: ['rol_id'],
+    logging: false,
+  });
+  const rolId = userRol ? userRol.rol_id : null;
+
+  // 3️⃣ Recuperar también el nombre del rol en camelCase
+  const rolRecord = rolId
+    ? await Rol.findByPk(rolId, { attributes: ['nameRol'], logging: false })
+    : null;
+  const nameRol = rolRecord ? rolRecord.nameRol : null;
+
+  // 4️⃣ Recuperar info de grupo (igual que antes)
   const userData = await Users.findOne({
     where: { id: user.id },
     include: [
@@ -35,7 +47,7 @@ const authUser = async (req, reply) => {
         model: UserByRol,
         include: {
           model: Rol,
-          attributes: ['name_rol'],
+          attributes: ['nameRol'],
         },
       },
       {
@@ -43,11 +55,11 @@ const authUser = async (req, reply) => {
         include: [
           {
             model: Group,
-            attributes: ['name'],
+            attributes: ['id', 'name'],
             include: [
               {
                 model: Users,
-                attributes: ['id', 'name' ],
+                attributes: ['id', 'name'],
               },
             ],
           },
@@ -59,30 +71,26 @@ const authUser = async (req, reply) => {
     logging: false,
   });
 
-  const token = generateToken(
-    envs.JWT_SECRET,
-    user,
-    clientIp,
-    userData.UserByRols.Rol.id
-  );
-
+  // 5️⃣ Generar y guardar token
+  const token = generateToken(envs.JWT_SECRET, user, clientIp, rolId);
   await user.update({ token }, { logging: false, silent: true });
 
-  reply.send({
+  // 6️⃣ Enviar respuesta con todo en camelCase
+  return reply.send({
     ok: true,
     token,
-    message: "User login was successful.",
+    message: 'Inicio de sesión exitoso.',
     user: {
-      id: userData.id,
-      name: userData.name,
-      lastName: userData.lastName,
-      email: userData.email,
-      rol_id: userData?.UserByRols?.Rol?.id,
-      name_rol: userData?.UserByRols?.Rol?.name_rol,
-      group_id: userData?.GroupStudents?.Group?.id,
-      group_name: userData?.GroupStudents?.Group?.name,
-      teacher_id: userData?.GroupStudents?.Group?.User?.id,
-      teacher_name: userData?.GroupStudents?.Group?.User?.name,
+      id: user.id,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      rolId,
+      nameRol,
+      groupId: userData?.GroupStudents?.Group?.id,
+      groupName: userData?.GroupStudents?.Group?.name,
+      teacherId: userData?.GroupStudents?.Group?.User?.id,
+      teacherName: userData?.GroupStudents?.Group?.User?.name,
     },
   });
 };
