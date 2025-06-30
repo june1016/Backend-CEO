@@ -40,6 +40,7 @@ import universityRouter from './routes/universityRouter.js';
 import roleRouter from './routes/roleRouter.js';
 import productsRouter from './routes/productsRouter.js';
 import productInventoryRouter from './routes/productsInventoryRouter.js';
+import groupStudentsRouter from './routes/groupStudentsRouter.js';
 
 
 const initializeApp = async () => {
@@ -94,6 +95,7 @@ const initializeApp = async () => {
 
   // Administrador
   fastify.register(groupsRouter, { prefix: '/groups' });
+  fastify.register(groupStudentsRouter, { prefix: '/groupstudents' });
   fastify.register(universityRouter, { prefix: '/university' });
 
   fastify.setNotFoundHandler(notFoundHandler);
