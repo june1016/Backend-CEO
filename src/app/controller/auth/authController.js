@@ -1,5 +1,3 @@
-// src/app/controller/auth/authController.js
-
 import bcrypt from 'bcryptjs';
 import { Users, UserByRol, Rol } from '../../models/index.js';
 import { generateToken } from '../../adapter/tokenAdapter.js';
@@ -19,13 +17,11 @@ const authUser = async (req, reply) => {
     req.headers['x-forwarded-for'] ||
     req.ip;
 
-  // 1️⃣ Buscar usuario por email
   const user = await Users.findOne({ where: { email }, logging: false });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new LoginError();
   }
 
-  // 2️⃣ Recuperar únicamente rolId
   const userRol = await UserByRol.findOne({
     where: { user_id: user.id },
     attributes: ['rol_id'],
@@ -33,13 +29,11 @@ const authUser = async (req, reply) => {
   });
   const rolId = userRol ? userRol.rol_id : null;
 
-  // 3️⃣ Recuperar también el nombre del rol en camelCase
   const rolRecord = rolId
     ? await Rol.findByPk(rolId, { attributes: ['nameRol'], logging: false })
     : null;
   const nameRol = rolRecord ? rolRecord.nameRol : null;
 
-  // 4️⃣ Recuperar info de grupo (igual que antes)
   const userData = await Users.findOne({
     where: { id: user.id },
     include: [
@@ -71,11 +65,9 @@ const authUser = async (req, reply) => {
     logging: false,
   });
 
-  // 5️⃣ Generar y guardar token
   const token = generateToken(envs.JWT_SECRET, user, clientIp, rolId);
   await user.update({ token }, { logging: false, silent: true });
 
-  // 6️⃣ Enviar respuesta con todo en camelCase
   return reply.send({
     ok: true,
     token,
