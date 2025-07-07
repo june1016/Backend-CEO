@@ -63,11 +63,12 @@ const getSimulatedTime = async (req, reply) => {
       });
     }
 
+
     const now = new Date();
     const elapsedMs = now.getTime() - new Date(progress.start_time).getTime();
     const elapsedMinutes = elapsedMs / 60000;
 
-    const totalRealMinutes = 120;
+    const totalRealMinutes = 1200;
     const totalSimulatedMonths = 12;
 
     const simulatedMonths = (elapsedMinutes / totalRealMinutes) * totalSimulatedMonths;
@@ -108,6 +109,7 @@ const getSimulatedTime = async (req, reply) => {
     });
   }
 };
+
 // Obtener progreso del usuario (sin recalcular tiempo)
 const getOperationProgressByUser = async (req, reply) => {
   try {
@@ -152,14 +154,12 @@ const upsertOperationProgress = async (req, reply) => {
       });
     }
 
-    // Usar upsert para insertar o actualizar el progreso
     await OperationProgress.upsert({
       user_id,
-      month_id,  // Este campo es opcional si ya decides no usarlo.
+      month_id,
       current_decade,
       is_december,
-      start_time: new Date(),  // Usar el valor por defecto si no es necesario.
-      updated_at: new Date(),  // Actualizar la fecha de modificación.
+      updated_at: new Date(),
     });
 
     return reply.code(200).send({

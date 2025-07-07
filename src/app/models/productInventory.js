@@ -27,6 +27,22 @@ const ProductInventory = connectToDatabase().define('ProductInventory', {
     type: DataTypes.BIGINT,
     allowNull: false,
   },
+  credit30: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+  credit60: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+  investment_percent: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+  note: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   created_by: {
     type: DataTypes.INTEGER,
     allowNull: false,

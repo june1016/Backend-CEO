@@ -331,6 +331,9 @@ CREATE TABLE product_inventory (
     product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
     quantity INTEGER NOT NULL,
     unit_cost BIGINT NOT NULL,
+    credit30 INTEGER DEFAULT 0,
+    credit60 INTEGER DEFAULT 0,
+    investment_percent INTEGER DEFAULT 0,
     note TEXT,
     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -510,4 +513,15 @@ CREATE TABLE operation_progress (
   updated_at TIMESTAMP DEFAULT NOW(),
 
   CONSTRAINT unique_user_id UNIQUE (user_id)
+);
+
+CREATE TABLE marketing_configurations (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    percent INTEGER NOT NULL,
+    cost BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    CONSTRAINT unique_configuration_marketing_user_id UNIQUE (user_id)
 );
