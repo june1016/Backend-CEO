@@ -41,6 +41,7 @@ import roleRouter from './routes/roleRouter.js';
 import productsRouter from './routes/productsRouter.js';
 import productInventoryRouter from './routes/productsInventoryRouter.js';
 import groupStudentsRouter from './routes/groupStudentsRouter.js';
+import marketingConfigurationsRouter from './routes/marketingConfigurationsRouter.js';
 
 
 const initializeApp = async () => {
@@ -66,6 +67,7 @@ const initializeApp = async () => {
 
   //global
   fastify.register(operationProgressRouter, { prefix: '/progress' });
+  fastify.register(marketingConfigurationsRouter, { prefix: '/marketing' });
 
   // Planning
   fastify.register(financialDataRouter, { prefix: '/financialdata' });

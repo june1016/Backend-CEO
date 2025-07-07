@@ -267,10 +267,19 @@ INSERT INTO raw_materials_inventory (code, description, quantity, unit, unit_cos
 ('A9', 'Componente secundario Gamaroles', 640, 'Unidad', 6900, 1, 1),    -- 3.180 unidades mensual × 0.2 mes
 ('A10', 'Material de acabado', 575, 'Litro', 8100, 1, 1);                -- 2.870 litros mensual × 0.2 mes
 
-INSERT INTO product_inventory (product_id, quantity, unit_cost, created_by, updated_by) VALUES 
-(1, 80, 300000, 1, 1),
-(2, 60, 270000, 1, 1),
-(3, 30, 250000, 1, 1);
+INSERT INTO product_inventory (
+  product_id,
+  quantity,
+  unit_cost,
+  credit30,
+  credit60,
+  investment_percent,
+  created_by,
+  updated_by
+) VALUES 
+(1, 80, 300000, 0, 0, 0, 1, 1),  -- Alfaros
+(2, 60, 270000, 0, 0, 0, 1, 1),  -- Betacos
+(3, 30, 250000, 0, 0, 0, 1, 1);  -- Gamaroles
 
 INSERT INTO shifts (name, start_time, end_time, created_by, updated_by) VALUES 
 ('Mañana', '06:00', '14:00', 1, 1),
@@ -479,6 +488,9 @@ INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) 
   (4, 8, 9600, 1),
   (4, 9, 6900, 1),
   (4, 10, 8100, 1);
+
+INSERT INTO marketing_configurations (user_id, percent, cost)
+VALUES (1, 10, 4000000);
 
   -- Para cada tabla en que metes IDs manuales, sincroniza la secuencia:
 SELECT setval(pg_get_serial_sequence('rol','id'),             (SELECT MAX(id) FROM rol));
