@@ -1,5 +1,5 @@
 import { getProducts } from '../../app/services/productService.js';
-import { createMonthlyOperationsBulk, getProgressForUser } from '../../app/services/userService.js';
+import { createMonthlyOperationsBulk, getPayrollAssignmentsForUser, getProgressForUser } from '../../app/services/userService.js';
 import { adjustLambdaByPrice, getPoissonRandom, getRandomClient, quantityWeights } from '../../shared/helper/statsUtils.js';
 
 const calculateFinalProbability = (product) => {
@@ -23,18 +23,18 @@ const calculateFinalProbability = (product) => {
 };
 
 const getRandomQuantity = () => {
-  const totalWeight = quantityWeights.reduce((sum, q) => sum + q.weight, 0);
-  const rand = Math.random() * totalWeight;
-  let cumulative = 0;
+    const totalWeight = quantityWeights.reduce((sum, q) => sum + q.weight, 0);
+    const rand = Math.random() * totalWeight;
+    let cumulative = 0;
 
-  for (const q of quantityWeights) {
-    cumulative += q.weight;
-    if (rand < cumulative) {
-      return q.quantity;
+    for (const q of quantityWeights) {
+        cumulative += q.weight;
+        if (rand < cumulative) {
+            return q.quantity;
+        }
     }
-  }
 
-  return 1;
+    return 1;
 };
 
 const filterPoissonEvents = (lambda, probability) => {
@@ -60,6 +60,15 @@ export const simulateSalesForUser = async (user) => {
 
         const client = await getRandomClient();
 
+        const payrollAssignments = await getPayrollAssignmentsForUser(user.id);
+
+        const sellers = payrollAssignments.find(
+            item => item.PayrollRoleImprovement?.PayrollRole?.name?.toLowerCase() === 'vendedor'
+        );
+        const numSellers = sellers ? sellers.quantity : 1;
+
+        console.log(numSellers);
+
         console.log(`👤 Usuario: ${user.id} - ${user.name || 'sin nombre'}`);
         console.log(`📦 Productos asociados (${products.length}):`);
 
@@ -72,7 +81,12 @@ export const simulateSalesForUser = async (user) => {
             console.log('lamda:', lambda);
             console.log('lamda ajustada:', adjustedLambda);
 
-            const numSales = filterPoissonEvents(adjustedLambda, 1);
+            const finalLambda = adjustedLambda * numSellers;
+
+            console.log(`Lambda base: ${lambda.toFixed(2)} | Ajustada por precio: ${adjustedLambda.toFixed(2)} | Ajustada por vendedores: ${finalLambda.toFixed(2)}`);
+
+
+            const numSales = filterPoissonEvents(finalLambda, probability);
 
             console.log(`📦 Producto: ${product.name}`);
             console.log(`➡️ Probabilidad final: ${probability.toFixed(2)} | Lambda: ${lambda.toFixed(2)}`);
@@ -102,7 +116,6 @@ export const simulateSalesForUser = async (user) => {
         });
 
         console.log(`✅ Ventas totales creadas para usuario ${user.id}: ${salesToCreate.length}`);
-        console.log(salesToCreate);
 
         if (salesToCreate.length > 0) {
             await createMonthlyOperationsBulk(salesToCreate);

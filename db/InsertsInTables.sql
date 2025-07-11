@@ -229,9 +229,9 @@ INSERT INTO other_expenses (concept, value_cop, created_by, updated_by) VALUES
 ('Impuestos', 30000000, 1, 1);
 
 INSERT INTO personnel_expenses (name, quantity, value_cop, note, created_by, updated_by) VALUES 
- ('Nómina Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
- ('Nómina Vendedor', 1, 2500000, 'Mínimo requerido (1 × 2.500.000)', 1, 1),
- ('Nómina operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
+ ('Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
+ ('Vendedor', 1, 2500000, 'Mínimo requerido (1 × 2.500.000)', 1, 1),
+ ('Operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
 
 INSERT INTO operating_costs (name, value_cop, created_by, updated_by) VALUES 
 ('Arrendamiento', 12000000, 1, 1),
@@ -490,12 +490,12 @@ INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) 
   (4, 10, 8100, 1);
 
 INSERT INTO marketing_configurations (user_id, percent, cost) VALUES 
-  (1, 10, 4000000);
+  (1, 11, 60000000);
 
 INSERT INTO clients (name, note) VALUES
 ('Alfa Distribuciones S.A.S.', 'Empresa'),
 ('Beta Soluciones Ltda.', 'Empresa'),
-('Gama Inversiones S.A.', 'Empresa'),
+('Gama Inversiones S.A.', 'Empresa'),z  
 ('Omega Productos S.A.S.', 'Empresa'),
 ('Servicios Delta Ltda.', 'Empresa'),
 ('Insumos Rápidos S.A.S.', 'Empresa'),

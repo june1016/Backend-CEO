@@ -2,7 +2,12 @@
 import { Op } from 'sequelize';
 import MonthlyOperation from '../models/monthlyOperations.js';
 import OperationProgress from '../models/progressOperation.js';
+import PersonnelExpense from '../models/personnelExpenses.js';
 import Users from '../models/users.js';
+import PayrollImprovementsAssignments from '../models/payrollImprovementsAssignments.js';
+import PayrollRoleImprovements from '../models/payrollRoleImprovements.js';
+import PayrollRole from '../models/payrollRoles.js';
+import Improvement from '../models/improvements.js';
 
 export const getAllUsers = async () => {
   const allUsers = await Users.findAll({ logging: false });
@@ -60,3 +65,21 @@ export const createMonthlyOperationsBulk = async (sales) => {
   }
 };
 
+export const getPayrollAssignmentsForUser = async (userId) => {
+  return await PayrollImprovementsAssignments.findAll({
+    where: { created_by: userId },
+    include: [
+      {
+        model: PayrollRoleImprovements,
+        attributes: ['id'],
+        include: [
+          { model: PayrollRole, attributes: ['id', 'name'] },
+          { model: Improvement, attributes: ['id', 'title', 'description', 'effect'] }
+        ]
+      }
+    ],
+    attributes: ['id', 'quantity'],
+    order: [['role_improvement_id', 'ASC']],
+    logging: false
+  });
+};
