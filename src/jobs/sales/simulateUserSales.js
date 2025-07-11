@@ -10,8 +10,8 @@ const calculateFinalProbability = (product) => {
   const maxCredit60Bonus = 0.03;
 
   const marketingBonus = ((product.investment_percent || 0) / 80) * maxMarketingBonus;
-  const creditBonus30 = ((product.credit30 || 0) / 80) * maxCredit30Bonus;
-  const creditBonus60 = ((product.credit60 || 0) / 80) * maxCredit60Bonus;
+  const creditBonus30 = ((product.credit30 || 0) / 50) * maxCredit30Bonus;
+  const creditBonus60 = ((product.credit60 || 0) / 50) * maxCredit60Bonus;
 
   console.log(marketingBonus, creditBonus30, creditBonus60)
 
