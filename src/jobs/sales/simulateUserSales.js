@@ -1,6 +1,6 @@
 import { getProducts } from '../../app/services/productService.js';
 import { createMonthlyOperationsBulk, getProgressForUser } from '../../app/services/userService.js';
-import { adjustLambdaByPrice, getPoissonRandom, getRandomClient } from '../../shared/helper/statsUtils.js';
+import { adjustLambdaByPrice, getPoissonRandom, getRandomClient, quantityWeights } from '../../shared/helper/statsUtils.js';
 
 const calculateFinalProbability = (product) => {
     const base = product.base_probability || 0;
@@ -22,7 +22,20 @@ const calculateFinalProbability = (product) => {
     return Math.min(Math.max(final, 0), 1);
 };
 
-const getRandomQuantity = () => Math.floor(Math.random() * 5) + 1;
+const getRandomQuantity = () => {
+  const totalWeight = quantityWeights.reduce((sum, q) => sum + q.weight, 0);
+  const rand = Math.random() * totalWeight;
+  let cumulative = 0;
+
+  for (const q of quantityWeights) {
+    cumulative += q.weight;
+    if (rand < cumulative) {
+      return q.quantity;
+    }
+  }
+
+  return 1;
+};
 
 const filterPoissonEvents = (lambda, probability) => {
     const predicted = getPoissonRandom(lambda);
@@ -52,7 +65,7 @@ export const simulateSalesForUser = async (user) => {
 
         products.forEach((product) => {
             const probability = calculateFinalProbability(product);
-            const maxLambda = 5;
+            const maxLambda = 4;
             const lambda = probability * maxLambda;
             const adjustedLambda = adjustLambdaByPrice(lambda, product.unit_cost);
 
