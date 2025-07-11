@@ -44,7 +44,7 @@ const OperationProgress = connectToDatabase().define('OperationProgress', {
   },
   start_time: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
   },
   created_at: {
     type: DataTypes.DATE,
