@@ -277,9 +277,9 @@ INSERT INTO product_inventory (
   created_by,
   updated_by
 ) VALUES 
-(1, 80, 300000, 0, 0, 0, 1, 1),  -- Alfaros
-(2, 60, 270000, 0, 0, 0, 1, 1),  -- Betacos
-(3, 30, 250000, 0, 0, 0, 1, 1);  -- Gamaroles
+(1, 80, 100000, 0, 0, 0, 1, 1),  -- Alfaros
+(2, 60, 97000, 0, 0, 0, 1, 1),  -- Betacos
+(3, 30, 88000, 0, 0, 0, 1, 1);  -- Gamaroles
 
 INSERT INTO shifts (name, start_time, end_time, created_by, updated_by) VALUES 
 ('Mañana', '06:00', '14:00', 1, 1),

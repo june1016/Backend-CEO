@@ -14,10 +14,15 @@ export const getPoissonRandom = (lambda) => {
 };
 
 export const getRandomClient = async () => {
-  const clients = await Clients.findAll({ logging: true });
+  const clients = await Clients.findAll({ logging: false });
 
   if (!clients.length) return null;
 
   const randomIndex = Math.floor(Math.random() * clients.length);
   return clients[randomIndex];
+};
+
+export const adjustLambdaByPrice = (baseLambda, unitCost) => {
+  const averageCost = 100000;
+  return baseLambda * (averageCost / unitCost);
 };

@@ -53,6 +53,7 @@ export const createMonthlyOperationsBulk = async (sales) => {
 
     await MonthlyOperation.bulkCreate(sales, {
       validate: true,
+      logging: false
     });
   } catch (error) {
     console.error('Error al guardar ventas en bulk:', error);
