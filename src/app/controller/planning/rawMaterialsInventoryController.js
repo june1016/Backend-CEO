@@ -119,8 +119,6 @@ const createRawMaterialsInventory = async (req, reply) => {
         where: { code, created_by },
       });
 
-      console.log(existing);
-
       if (existing) {
         await existing.update({
           quantity: Number(quantity),

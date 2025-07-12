@@ -229,9 +229,9 @@ INSERT INTO other_expenses (concept, value_cop, created_by, updated_by) VALUES
 ('Impuestos', 30000000, 1, 1);
 
 INSERT INTO personnel_expenses (name, quantity, value_cop, note, created_by, updated_by) VALUES 
- ('Nómina Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
- ('Nómina Vendedor', 1, 2500000, 'Mínimo requerido (1 × 2.500.000)', 1, 1),
- ('Nómina operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
+ ('Gerente (CEO)', 1, 6000000, 'Obligatorio - El CEO asume rol administrativo', 1, 1),
+ ('Vendedor', 1, 2500000, 'Mínimo requerido (1 × 2.500.000)', 1, 1),
+ ('Operarios', 3, 5400000, 'Mínimo requerido (3 × 1.800.000)', 1, 1);
 
 INSERT INTO operating_costs (name, value_cop, created_by, updated_by) VALUES 
 ('Arrendamiento', 12000000, 1, 1),
@@ -277,9 +277,9 @@ INSERT INTO product_inventory (
   created_by,
   updated_by
 ) VALUES 
-(1, 80, 300000, 0, 0, 0, 1, 1),  -- Alfaros
-(2, 60, 270000, 0, 0, 0, 1, 1),  -- Betacos
-(3, 30, 250000, 0, 0, 0, 1, 1);  -- Gamaroles
+(1, 80, 100000, 0, 0, 0, 1, 1),  -- Alfaros
+(2, 60, 97000, 0, 0, 0, 1, 1),  -- Betacos
+(3, 30, 88000, 0, 0, 0, 1, 1);  -- Gamaroles
 
 INSERT INTO shifts (name, start_time, end_time, created_by, updated_by) VALUES 
 ('Mañana', '06:00', '14:00', 1, 1),
@@ -489,8 +489,107 @@ INSERT INTO materials_by_provider (provider_id, material_id, price, created_by) 
   (4, 9, 6900, 1),
   (4, 10, 8100, 1);
 
-INSERT INTO marketing_configurations (user_id, percent, cost)
-VALUES (1, 10, 4000000);
+INSERT INTO marketing_configurations (user_id, percent, cost) VALUES 
+  (1, 11, 60000000);
+
+INSERT INTO clients (name, note) VALUES
+('Alfa Distribuciones S.A.S.', 'Empresa'),
+('Beta Soluciones Ltda.', 'Empresa'),
+('Gama Inversiones S.A.', 'Empresa'),z  
+('Omega Productos S.A.S.', 'Empresa'),
+('Servicios Delta Ltda.', 'Empresa'),
+('Insumos Rápidos S.A.S.', 'Empresa'),
+('Mercantil Global S.A.', 'Empresa'),
+('Proveedores Aliados Ltda.', 'Empresa'),
+('Comercializadora Andes S.A.S.', 'Empresa'),
+('Empresa ABC S.A.', 'Empresa'),
+('Soluciones XYZ Ltda.', 'Empresa'),
+('Constructora LMN S.A.S.', 'Empresa'),
+('InnovaTech S.A.', 'Empresa'),
+('Servicios Integrales Ltda.', 'Empresa'),
+('Distribuciones Oriente S.A.S.', 'Empresa'),
+('Mayoristas Unidos S.A.', 'Cliente Mayorista'),
+('Fábrica Nacional S.A.S.', 'Empresa'),
+('Equipos y Herramientas Ltda.', 'Empresa'),
+('Alimentos del Valle S.A.S.', 'Empresa'),
+('Productos del Norte S.A.', 'Empresa'),
+('Suministros Express Ltda.', 'Empresa'),
+('Ferretería Central S.A.S.', 'Empresa'),
+('Electrodomésticos Omega S.A.', 'Empresa'),
+('Textiles y Moda Ltda.', 'Empresa'),
+('Supermercados América S.A.S.', 'Cliente Mayorista'),
+('Papelería Mundial S.A.', 'Empresa'),
+('Insumos Médicos Ltda.', 'Empresa'),
+('Consultores Eficientes S.A.S.', 'Empresa'),
+('Seguros del Pueblo S.A.', 'Empresa'),
+('Transportes Rápidos Ltda.', 'Empresa'),
+('Agroindustria Central S.A.S.', 'Empresa'),
+('Constructora Bolívar S.A.', 'Empresa'),
+('Comercializadora Global Ltda.', 'Empresa'),
+('Inversiones Suramérica S.A.S.', 'Empresa'),
+('Servicios Médicos Integrales S.A.', 'Empresa'),
+('Productos de Occidente Ltda.', 'Empresa'),
+('Fábrica de Envases S.A.S.', 'Empresa'),
+('Mayoristas del Centro S.A.', 'Cliente Mayorista'),
+('Alimentos Naturales Ltda.', 'Empresa'),
+('Equipos Industriales S.A.S.', 'Empresa'),
+('Distribuciones Universal S.A.', 'Empresa'),
+('Importadora Andina Ltda.', 'Empresa'),
+('Tecnología Total S.A.S.', 'Empresa'),
+('Proveedores Globales S.A.', 'Empresa'),
+('Soluciones del Caribe Ltda.', 'Empresa'),
+('Insumos y Servicios S.A.S.', 'Empresa'),
+('Constructora Progreso S.A.', 'Empresa'),
+('Transportes Nacionales Ltda.', 'Empresa'),
+('Electrónica del Norte S.A.S.', 'Empresa'),
+('Distribuidora Express S.A.', 'Cliente Mayorista'),
+('Productos Selectos Ltda.', 'Empresa'),
+('Consultoría Estratégica S.A.S.', 'Empresa'),
+('Papelería Express S.A.', 'Empresa'),
+('Seguridad Integral Ltda.', 'Empresa'),
+('Fulanito Pérez', 'Cliente Natural'),
+('María Rodríguez', 'Cliente Natural'),
+('Carlos Gómez', 'Cliente Natural'),
+('Diana López', 'Cliente Natural'),
+('Ana María Torres', 'Cliente Natural'),
+('José Martínez', 'Cliente Natural'),
+('Laura Sánchez', 'Cliente Natural'),
+('Fulanito Ramírez', 'Cliente Natural'),
+('Daniel Fernández', 'Cliente Natural'),
+('Camila Herrera', 'Cliente Natural'),
+('Luis Castillo', 'Cliente Natural'),
+('Paola Mendoza', 'Cliente Natural'),
+('Esteban Ortiz', 'Cliente Natural'),
+('Santiago Vargas', 'Cliente Natural'),
+('Valentina Morales', 'Cliente Natural'),
+('Andrés Ruiz', 'Cliente Natural'),
+('Natalia Jiménez', 'Cliente Natural'),
+('Sebastián Soto', 'Cliente Natural'),
+('Andrea Ramírez', 'Cliente Natural'),
+('Miguel Torres', 'Cliente Natural'),
+('Mónica Gutiérrez', 'Cliente Natural'),
+('Gabriel Romero', 'Cliente Natural'),
+('Catalina Rojas', 'Cliente Natural'),
+('Tomás Arias', 'Cliente Natural'),
+('Isabella Franco', 'Cliente Natural'),
+('Julián Molina', 'Cliente Natural'),
+('Mariana Pineda', 'Cliente Natural'),
+('Samuel Velásquez', 'Cliente Natural'),
+('Daniela Salazar', 'Cliente Natural'),
+('Jorge Castaño', 'Cliente Natural'),
+('Lucía Peña', 'Cliente Natural'),
+('Mateo Correa', 'Cliente Natural'),
+('Sofía Aguirre', 'Cliente Natural'),
+('Nicolás Rincón', 'Cliente Natural'),
+('Manuela Cárdenas', 'Cliente Natural'),
+('Martín Silva', 'Cliente Natural'),
+('Sara Guerrero', 'Cliente Natural'),
+('Felipe Cabrera', 'Cliente Natural'),
+('Emilia Delgado', 'Cliente Natural'),
+('Juan Pablo Nieto', 'Cliente Natural'),
+('Renata Valencia', 'Cliente Natural'),
+('Simón Ospina', 'Cliente Natural'),
+('Agustina Rivera', 'Cliente Natural');
 
   -- Para cada tabla en que metes IDs manuales, sincroniza la secuencia:
 SELECT setval(pg_get_serial_sequence('rol','id'),             (SELECT MAX(id) FROM rol));

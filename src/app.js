@@ -42,6 +42,7 @@ import productsRouter from './routes/productsRouter.js';
 import productInventoryRouter from './routes/productsInventoryRouter.js';
 import groupStudentsRouter from './routes/groupStudentsRouter.js';
 import marketingConfigurationsRouter from './routes/marketingConfigurationsRouter.js';
+import runSalesScheduler from './jobs/sales/mainScheduler.js';
 
 
 const initializeApp = async () => {
@@ -104,6 +105,9 @@ const initializeApp = async () => {
   fastify.setErrorHandler(errorHandler);
 
   await authenticateDatabase();
+
+  //Ejecuta el cron de ventas simuladas cada minuto
+  runSalesScheduler();
 
   await fastify.listen({ port: envs.PORT, host: envs.HOST });
 };

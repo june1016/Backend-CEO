@@ -39,6 +39,11 @@ const ProductInventory = connectToDatabase().define('ProductInventory', {
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
+  base_probability: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0.05,
+  },
   note: {
     type: DataTypes.TEXT,
     allowNull: true,
