@@ -23,7 +23,7 @@ export const getAllUsers = async () => {
       progress && 
       progress.start_time !== null &&
       progress.month_id <= 12 &&
-      progress.current_decade < 3
+      progress.current_decade <= 3
     ) {
       return user;
     }
