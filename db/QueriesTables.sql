@@ -309,6 +309,9 @@ CREATE TABLE monthly_operations (
     quantity INTEGER NOT NULL,
     unit_cost DECIMAL(20,2) NOT NULL,
     total_cost DECIMAL(20,2) NOT NULL,
+    credit_days INTEGER NOT NULL DEFAULT 0 CHECK (credit_days IN (0, 30, 60)),
+    is_paid BOOLEAN NOT NULL DEFAULT FALSE,
+    paid_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
