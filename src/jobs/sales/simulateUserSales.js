@@ -13,8 +13,6 @@ const calculateFinalProbability = (product) => {
     const creditBonus30 = ((product.credit30 || 0) / 50) * maxCredit30Bonus;
     const creditBonus60 = ((product.credit60 || 0) / 50) * maxCredit60Bonus;
 
-    console.log(marketingBonus, creditBonus30, creditBonus60)
-
     let final = base + marketingBonus + creditBonus30 + creditBonus60;
 
     final -= 0.01;
@@ -98,7 +96,19 @@ export const simulateSalesForUser = async (user) => {
                 const unit_cost = product.unit_cost;
                 const total_cost = quantity * unit_cost;
 
-                console.log(`   🔸 Venta #${i + 1}: cantidad = ${quantity}, total = $${total_cost.toFixed(2)}`);
+                const rand = Math.random();
+                let credit_days = 0;
+
+                if (rand >= 0.7 && rand < 0.9) {
+                    credit_days = 30;
+                } else if (rand >= 0.9) {
+                    credit_days = 60;
+                }
+
+                const is_paid = credit_days === 0;
+                const paid_at = is_paid ? new Date() : null;
+
+                console.log(`   🔸 Venta #${i + 1}: cantidad = ${quantity}, total = $${total_cost.toFixed(2)}, crédito: ${credit_days} días, pagada: ${is_paid}, fecha pago: ${paid_at}`);
 
                 salesToCreate.push({
                     user_id: user.id,
@@ -107,8 +117,11 @@ export const simulateSalesForUser = async (user) => {
                     client_id: client.id,
                     decade: current_decade,
                     quantity,
+                    credit_days,
                     unit_cost,
                     total_cost,
+                    is_paid,
+                    paid_at
                 });
             }
 

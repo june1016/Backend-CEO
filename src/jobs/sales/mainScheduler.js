@@ -6,16 +6,15 @@ import { simulateSalesForUser } from './simulateUserSales.js';
 
 const runSalesScheduler = () => {
   cron.schedule('* * * * *', async () => {
+      const users = await getAllUsers();
 
-    const users = await getAllUsers();
+      users.forEach(user => {
+        const delay = Math.floor(Math.random() * 30000);
 
-    users.forEach(user => {
-      const delay = Math.floor(Math.random() * 30000);
-
-      setTimeout(() => {
-        simulateSalesForUser(user);
-      }, delay);
-    });
+        setTimeout(() => {
+          simulateSalesForUser(user);
+        }, delay);
+      });
   });
 };
 
