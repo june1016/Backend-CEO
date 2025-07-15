@@ -139,10 +139,19 @@ const createOrUpdateProjectedSales = async (req, reply) => {
       });
 
       if (existing) {
-        existing.quantity = quantity;
-        existing.updated_by = createdBy;
-        await existing.save();
-        updatedSales.push(existing);
+        await ProjectedSales.update(
+          { quantity, updated_by: createdBy },
+          {
+            where: { id: existing.id },
+            logging: false
+          }
+        );
+
+        updatedSales.push({
+          ...existing.toJSON(),
+          quantity,
+          updated_by: createdBy
+        });
       } else {
         const newSale = await ProjectedSales.create({
           product_id,
