@@ -146,6 +146,7 @@ const getInitialProductInventory = async (_req, reply) => {
         'credit30',
         'credit60',
         'investment_percent',
+        'base_probability',
         'created_at',
         'updated_at',
       ],
