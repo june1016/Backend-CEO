@@ -73,9 +73,25 @@ const MonthlyOperation = connectToDatabase().define('MonthlyOperation', {
     allowNull: false,
   },
 
+  credit_days: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+
   total_cost: {
     type: DataTypes.DECIMAL(20, 2),
     allowNull: false,
+  },
+
+  is_paid: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  paid_at: {
+    type: DataTypes.DATE,
+    allowNull: true
   },
 
   created_at: {
