@@ -8,6 +8,7 @@ import OperationProgress from "../../models/progressOperation.js";
 import ProjectedSales from "../../models/projectedSales.js";
 import SalesBudget from "../../models/salesBudget.js";
 import ProductInventory from "../../models/productInventory.js";
+import Clients from "../../models/client.js";
 
 export const getUserIndicators = async (req, reply) => {
     const userId = req.params.user_id;
@@ -283,3 +284,178 @@ export const getUserIndicators = async (req, reply) => {
         return reply.status(500).send({ message: 'Error interno', error: error.message });
     }
 };
+
+export const getUserIndicatorsRecords = async (req, reply) => {
+    const userId = req.params.user_id;
+
+    try {
+        const { month, decade } = req.query;
+
+        const where = { user_id: userId };
+
+        if (month && month !== "Todos") {
+            const monthNumber = parseInt(month.replace("Mes ", ""), 10);
+            if (!isNaN(monthNumber)) {
+                where.month_id = monthNumber;
+            }
+        }
+
+        if (decade && decade !== "Todos") {
+            const decadeNumber = parseInt(decade.replace("Década ", ""), 10);
+            if (!isNaN(decadeNumber)) {
+                where.decade = decadeNumber;
+            }
+        }
+
+        const operations = await MonthlyOperation.findAll({
+            where,
+            include: [
+                {
+                    model: Clients,
+                    attributes: ['id', 'note'],
+                },
+            ],
+            attributes: ['total_cost', 'client_id'],
+            raw: true,
+        });
+
+        let totalVendido = 0;
+        let totalVentas = 0;
+
+        let mayoristasTotal = 0;
+        let minoristasTotal = 0;
+
+        const mayoristasClientesSet = new Set();
+        const minoristasClientesSet = new Set();
+
+        operations.forEach(op => {
+            const cost = Number(op.total_cost) || 0;
+            totalVendido += cost;
+            totalVentas += 1;
+
+            const note = op['Client.note'];
+            const clientId = op.client_id;
+
+            if (note === 'Cliente Mayorista' || note === 'Empresa') {
+                mayoristasTotal += cost;
+                mayoristasClientesSet.add(clientId);
+            } else if (note === 'Cliente Natural') {
+                minoristasTotal += cost;
+                minoristasClientesSet.add(clientId);
+            }
+        });
+
+        const mayoristasClientes = mayoristasClientesSet.size;
+        const minoristasClientes = minoristasClientesSet.size;
+
+        const comisiones = totalVendido * 0.01;
+
+        const payrollAssignments = await PayrollImprovementsAssignments.findAll({
+            where: { created_by: userId },
+            include: [
+                {
+                    model: PayrollRoleImprovements,
+                    include: [{ model: PayrollRole }],
+                },
+            ],
+            attributes: ['id', 'quantity'],
+            logging: false,
+        });
+        const sellers = payrollAssignments.find(
+            (item) =>
+                item.PayrollRoleImprovement?.PayrollRole?.name?.toLowerCase() === "vendedor"
+        );
+        const numSellers = sellers ? sellers.quantity : 0;
+
+        const indicators = [
+            {
+                title: "Total Vendido",
+                value: `$${totalVendido.toLocaleString()}`,
+                subtitle: `${totalVentas} ventas`,
+                icon: "MonetizationOnIcon",
+                colorKey: "green",
+            },
+            {
+                title: "Ventas Mayoristas",
+                value: `$${mayoristasTotal.toLocaleString()}`,
+                subtitle: `${mayoristasClientes} clientes`,
+                icon: "StorefrontIcon",
+                colorKey: "blue",
+            },
+            {
+                title: "Ventas Minoristas",
+                value: `$${minoristasTotal.toLocaleString()}`,
+                subtitle: `${minoristasClientes} clientes`,
+                icon: "ShoppingCartIcon",
+                colorKey: "orange",
+            },
+            {
+                title: "Comisiones",
+                value: `$${comisiones.toLocaleString()}`,
+                subtitle: `${numSellers} vendedores`,
+                icon: "PercentIcon",
+                colorKey: "purple",
+            },
+        ];
+
+        return reply.status(200).send({
+            message: "Indicators records generados correctamente",
+            indicators,
+        });
+    } catch (error) {
+        console.error("Error al obtener indicadores records:", error.message);
+        return reply.status(500).send({ message: "Error interno", error: error.message });
+    }
+};
+
+export const getUserSalesRecords = async (req, reply) => {
+    const userId = req.params.user_id;
+    const { month, decade, page = 1, pageSize = 10 } = req.query;
+
+    const limit = parseInt(pageSize);
+    const offset = (parseInt(page) - 1) * limit;
+
+    try {
+        const whereConditions = { user_id: userId };
+        if (month && month !== "Todos") {
+            whereConditions.month_id = Number(month);
+        }
+        if (decade && decade !== "Todos") {
+            whereConditions.decade = Number(decade);
+        }
+
+        const { rows, count } = await MonthlyOperation.findAndCountAll({
+            where: whereConditions,
+            limit,
+            offset,
+            include: [
+                { model: Clients, attributes: ["name", "note"] },
+                { model: Products, attributes: ["id", "name"] },
+            ],
+            order: [["created_at", "DESC"]],
+        });
+
+        const sales = rows.map(op => ({
+            id: op.id,
+            date: op.created_at,
+            product: op.Product?.name || "Sin producto",
+            quantity: op.quantity,
+            total: `$${Number(op.total_cost).toLocaleString()}`,
+            client: op.Client?.name || "Sin cliente",
+            type: op.Client?.note || "Desconocido",
+            payment: op.is_paid ? "Pagado" : "Pendiente",
+        }));
+
+        return reply.send({
+            sales,
+            total: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: Number(page),
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        return reply.status(500).send({ message: "Error interno", error: error.message });
+    }
+};
+
+
