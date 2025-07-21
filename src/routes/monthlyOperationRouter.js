@@ -1,4 +1,8 @@
-import { getUserIndicators } from "../app/controller/global/monthlyOperations.js";
+import { 
+  getUserIndicators, 
+  getUserIndicatorsRecords, 
+  getUserSalesRecords
+} from "../app/controller/global/monthlyOperations.js";
 import authenticateDatabase from "../shared/functions/authenticateDataBase.js";
 import verifyJwt from "../shared/hooks/verifyToken.js";
 
@@ -14,6 +18,22 @@ const monthlyOperationRouter = async (fastify) => {
     ],
     handler: getUserIndicators,
   });
+
+  fastify.get("/user-indicators-records/:user_id", {
+    preValidation: [
+      authenticateDatabase,
+      verifyJwt,
+    ],
+    handler: getUserIndicatorsRecords,
+  });
+
+  fastify.get("/user-sales-records/:user_id", {
+  preValidation: [
+    authenticateDatabase,
+    verifyJwt,
+  ],
+  handler: getUserSalesRecords,
+});
 };
 
 export default monthlyOperationRouter;
