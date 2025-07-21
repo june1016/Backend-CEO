@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import { Server as SocketIOServer } from 'socket.io';
 import { envs } from './config/index.js';
 import {
   getVersion,
@@ -108,8 +109,15 @@ const initializeApp = async () => {
 
   await authenticateDatabase();
 
-  //Ejecuta el cron de ventas simuladas cada minuto
-  runSalesScheduler();
+  const io = new SocketIOServer(fastify.server, {
+    cors: { origin: "*" },
+  });
+
+  io.on('connection', (socket) => {
+    console.log('Cliente conectado por socket:', socket.id);
+  });
+
+  runSalesScheduler(io);
 
   await fastify.listen({ port: envs.PORT, host: envs.HOST });
 };

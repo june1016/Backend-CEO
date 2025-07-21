@@ -4,17 +4,19 @@ import { getAllUsers } from '../../app/services/userService.js';
 import { simulateSalesForUser } from './simulateUserSales.js';
 
 
-const runSalesScheduler = () => {
+const runSalesScheduler = (io) => {
   cron.schedule('* * * * *', async () => {
-      const users = await getAllUsers();
+    const users = await getAllUsers();
 
-      users.forEach(user => {
-        const delay = Math.floor(Math.random() * 30000);
+    users.forEach(user => {
+      const delay = Math.floor(Math.random() * 30000);
 
-        setTimeout(() => {
-          simulateSalesForUser(user);
-        }, delay);
-      });
+      setTimeout(() => {
+        simulateSalesForUser(user);
+      }, delay);
+    });
+
+    io.emit('salesUpdated');
   });
 };
 
