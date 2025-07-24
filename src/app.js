@@ -45,6 +45,7 @@ import groupStudentsRouter from './routes/groupStudentsRouter.js';
 import marketingConfigurationsRouter from './routes/marketingConfigurationsRouter.js';
 import runSalesScheduler from './jobs/sales/mainScheduler.js';
 import monthlyOperationRouter from './routes/monthlyOperationRouter.js';
+import creditsRouter from './routes/creditsRouter.js';
 
 
 const initializeApp = async () => {
@@ -72,6 +73,9 @@ const initializeApp = async () => {
   fastify.register(operationProgressRouter, { prefix: '/progress' });
   fastify.register(marketingConfigurationsRouter, { prefix: '/marketing' });
   fastify.register(monthlyOperationRouter, { prefix: '/monthlyOperation' });
+
+  //credit
+  fastify.register(creditsRouter, { prefix: '/credit' });
 
   // Planning
   fastify.register(financialDataRouter, { prefix: '/financialdata' });
