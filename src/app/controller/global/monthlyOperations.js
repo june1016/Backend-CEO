@@ -207,17 +207,12 @@ export const getUserIndicators = async (req, reply) => {
             3: Math.round(totalProjectedMonth * (decade3 / 100)),
         };
 
-        const projectedPercentagesByDecade = {
-            1: totalProjectedMonth > 0 ? (projectedTotalsByDecade[1] / totalProjectedMonth) * 100 : 0,
-            2: totalProjectedMonth > 0 ? (projectedTotalsByDecade[2] / totalProjectedMonth) * 100 : 0,
-            3: totalProjectedMonth > 0 ? (projectedTotalsByDecade[3] / totalProjectedMonth) * 100 : 0
-        };
+        const totalDecade = totalsByDecade[decadeParam] || 0;
+        const projectedDecade = projectedTotalsByDecade[decadeParam] || 0;
 
-
-        const ventasChange = totalProjectedMonth > 0
-            ? ((totalMonth - totalProjectedMonth) / totalProjectedMonth) * 100
+        const ventasChange = projectedDecade > 0
+            ? ((totalDecade - projectedDecade) / projectedDecade) * 100
             : 0;
-
         const changePorCobrar = totalMonth > 0
             ? (porCobrar / totalMonth) * 100
             : 0;
