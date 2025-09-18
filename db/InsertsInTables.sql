@@ -495,7 +495,7 @@ INSERT INTO marketing_configurations (user_id, percent, cost) VALUES
 INSERT INTO clients (name, note) VALUES
 ('Alfa Distribuciones S.A.S.', 'Empresa'),
 ('Beta Soluciones Ltda.', 'Empresa'),
-('Gama Inversiones S.A.', 'Empresa'),z  
+('Gama Inversiones S.A.', 'Empresa'),  
 ('Omega Productos S.A.S.', 'Empresa'),
 ('Servicios Delta Ltda.', 'Empresa'),
 ('Insumos Rápidos S.A.S.', 'Empresa'),
