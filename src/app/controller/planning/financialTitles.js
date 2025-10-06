@@ -1,4 +1,4 @@
-// Backend-CEO/src/app/controller/planning/financialTitles.js
+// Backend/src/app/controller/planning/financialTitles.js
 import FinancialTitle from "../../models/financialTitleData.js";
 import logger from "../../../config/logger.js";
 import FinancialData from "../../models/financialData.js";
@@ -6,11 +6,11 @@ import FinancialData from "../../models/financialData.js";
 const getFinancialTitles = async (req, reply) => {
   try {
     const financialTitles = await FinancialTitle.findAll({
-      attributes: ["id", "name", "icon", "category_id", "literal_id"], // ✅ Incluir literal_id
+      attributes: ["id", "name", "icon", "category_id"], // ✅ Eliminar literal_id
       include: [
         {
           model: FinancialData,
-          attributes: ["literal_id"], // Para compatibilidad con frontend anterior
+          attributes: ["literal_id"], // literal_id viene de financial_data, no de financial_titles
         },
       ],
       order: [["id", "ASC"]],
