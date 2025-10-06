@@ -19,7 +19,6 @@ const envs = {
   VERSION: get('VERSION').required().asString(),
   MODE: get('MODE').required().asString(),
 
-  SCHEMA: get('SCHEMA').asString(),
   DB_HOST: get('DB_HOST').required().asString(),
   DB_PORT: get('DB_PORT').required().asPortNumber(),
   DB_NAME: get('DB_NAME').required().asString(),
