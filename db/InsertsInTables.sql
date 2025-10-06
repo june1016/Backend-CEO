@@ -59,12 +59,7 @@ TRUNCATE TABLE
   rol
 RESTART IDENTITY CASCADE;
 
--- ============================================================================
--- MODIFICACIÓN DE ESQUEMA: Agregar columna icon a financial_titles
--- ============================================================================
-
-ALTER TABLE financial_titles
-ADD COLUMN IF NOT EXISTS icon VARCHAR(255);
+-- * Se elimino el alter ALTER TABLE financial_titles ADD COLUMN IF NOT EXISTS icon VARCHAR(255) * --
 
 -- ============================================================================
 -- DATOS BASE: Roles y Usuarios
