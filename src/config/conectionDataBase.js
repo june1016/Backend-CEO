@@ -17,10 +17,8 @@ const connectToDatabase = () =>
     password: envs.DB_PASSWORD,
     timezone: envs.DB_TIMEZONE,
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
+      // Deshabilitar SSL completamente
+      ssl: false
     }
   });
   

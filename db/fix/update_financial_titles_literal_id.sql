@@ -1,3 +1,6 @@
+-- !! ESTE CODIGO TOCA BORRARLO
+
+
 -- 1. Agregar columna literal_id a financial_titles (si aún no existe)
 DO $$
 BEGIN

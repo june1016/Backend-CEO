@@ -1,587 +1,600 @@
-drop table if exists operation_progress CASCADE;
+-- ============================================================================
+-- Script de Creación de Tablas - PostgreSQL 14+
+-- Entorno: Windows
+-- Ejecución: Atómica (todo o nada)
+-- ============================================================================
 
-drop table if exists payroll_role_improvements CASCADE;
+BEGIN;
 
-drop table if exists payroll_improvements_assignments CASCADE;
+-- Limpieza de tablas existentes (orden inverso a dependencias)
+DROP TABLE IF EXISTS marketing_configurations CASCADE;
+DROP TABLE IF EXISTS operation_progress CASCADE;
+DROP TABLE IF EXISTS payroll_role_improvements CASCADE;
+DROP TABLE IF EXISTS payroll_improvements_assignments CASCADE;
+DROP TABLE IF EXISTS payroll_assignments CASCADE;
+DROP TABLE IF EXISTS improvements CASCADE;
+DROP TABLE IF EXISTS payroll_roles CASCADE;
+DROP TABLE IF EXISTS payroll_configurations CASCADE;
+DROP TABLE IF EXISTS machine_shift_assignments CASCADE;
+DROP TABLE IF EXISTS shifts CASCADE;
+DROP TABLE IF EXISTS machines CASCADE;
+DROP TABLE IF EXISTS specifications CASCADE;
+DROP TABLE IF EXISTS materials_by_provider CASCADE;
+DROP TABLE IF EXISTS provider_payment_options CASCADE;
+DROP TABLE IF EXISTS providers CASCADE;
+DROP TABLE IF EXISTS materials CASCADE;
+DROP TABLE IF EXISTS inventory_policy CASCADE;
+DROP TABLE IF EXISTS monthly_operations CASCADE;
+DROP TABLE IF EXISTS clients CASCADE;
+DROP TABLE IF EXISTS raw_materials_inventory CASCADE;
+DROP TABLE IF EXISTS social_charges CASCADE;
+DROP TABLE IF EXISTS financial_obligations CASCADE;
+DROP TABLE IF EXISTS operating_costs CASCADE;
+DROP TABLE IF EXISTS other_expenses CASCADE;
+DROP TABLE IF EXISTS operating_expenses CASCADE;
+DROP TABLE IF EXISTS personnel_expenses CASCADE;
+DROP TABLE IF EXISTS costs CASCADE;
+DROP TABLE IF EXISTS sales_costs CASCADE;
+DROP TABLE IF EXISTS sales CASCADE;
+DROP TABLE IF EXISTS projected_sales CASCADE;
+DROP TABLE IF EXISTS product_inventory CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS sales_budget CASCADE;
+DROP TABLE IF EXISTS annual_objective_indicators CASCADE;
+DROP TABLE IF EXISTS indicator_titles CASCADE;
+DROP TABLE IF EXISTS financial_data CASCADE;
+DROP TABLE IF EXISTS financial_titles CASCADE;
+DROP TABLE IF EXISTS financial_categories CASCADE;
+DROP TABLE IF EXISTS literals CASCADE;
+DROP TABLE IF EXISTS months CASCADE;
+DROP TABLE IF EXISTS group_students CASCADE;
+DROP TABLE IF EXISTS groups CASCADE;
+DROP TABLE IF EXISTS universities CASCADE;
+DROP TABLE IF EXISTS users_by_rol CASCADE;
+DROP TABLE IF EXISTS rol CASCADE;
+DROP TABLE IF EXISTS units CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
-drop table if exists payroll_assignments CASCADE;
+-- ============================================================================
+-- TABLAS BASE: Usuarios y Roles
+-- ============================================================================
 
-drop table if exists improvements CASCADE;
-
-drop table if exists payroll_roles CASCADE;
-
-drop table if exists payroll_configurations CASCADE;
-
-drop table if exists machine_shift_assignments CASCADE;
-
-drop table if exists shifts CASCADE;
-
-drop table if exists machines CASCADE;
-
-drop table if exists specifications CASCADE;
-
-drop table if exists materials_by_provider CASCADE;
-
-drop table if exists provider_payment_options CASCADE;
-
-drop table if exists providers CASCADE;
-
-drop table if exists materials CASCADE;
-
-drop table if exists inventory_policy CASCADE;
-
-drop table if exists monthly_operations CASCADE;
-
-drop table if exists raw_materials_inventory CASCADE;
-
-drop table if exists social_charges CASCADE;
-
-drop table if exists financial_obligations CASCADE;
-
-drop table if exists operating_costs CASCADE;
-
-drop table if exists other_expenses CASCADE;
-
-drop table if exists operating_expenses CASCADE;
-
-drop table if exists personnel_expenses CASCADE;
-
-drop table if exists costs CASCADE;
-
-drop table if exists sales_costs CASCADE;
-
-drop table if exists sales CASCADE;
-
-drop table if exists projected_sales CASCADE;
-
-drop table if exists product_inventory CASCADE;
-
-drop table if exists products CASCADE;
-
-drop table if exists sales_budget CASCADE;
-
-drop table if exists annual_objective_indicators CASCADE;
-
-drop table if exists indicator_titles CASCADE;
-
-drop table if exists financial_data CASCADE;
-
-drop table if exists financial_titles CASCADE;
-
-drop table if exists financial_categories CASCADE;
-
-drop table if exists literals CASCADE;
-
-drop table if exists months CASCADE;
-
-drop table if exists group_students CASCADE;
-
-drop table if exists groups CASCADE;
-
-drop table if exists universities CASCADE;
-
-drop table if exists users_by_rol CASCADE;
-
-drop table if exists rol CASCADE;
-
-drop table if exists units CASCADE;
-
-drop table if exists users CASCADE;
-
-create table users (
-  id SERIAL primary key,
-  email VARCHAR(500) not null unique,
-  password TEXT not null,
-  name VARCHAR(500) not null,
-  last_name VARCHAR(500) not null,
-  token TEXT null,
-  reset_password_token varchar(255) null,
-  reset_password_expires timestamp null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE users (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  email VARCHAR(500) NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  name VARCHAR(500) NOT NULL,
+  last_name VARCHAR(500) NOT NULL,
+  token TEXT,
+  reset_password_token VARCHAR(255),
+  reset_password_expires TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table rol (
-  id SERIAL primary key,
-  name_rol VARCHAR(50) not null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE rol (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name_rol VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table users_by_rol (
-  id SERIAL primary key,
-  user_id INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  rol_id INTEGER not null references rol (id) on delete CASCADE on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE users_by_rol (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  rol_id INTEGER NOT NULL REFERENCES rol(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table universities (
-  id SERIAL primary key,
-  name VARCHAR(150) not null,
-  city VARCHAR(100) not null,
-  country VARCHAR(100) not null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+-- ============================================================================
+-- MÓDULO ACADÉMICO: Universidades y Grupos
+-- ============================================================================
+
+CREATE TABLE universities (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table groups (
-  id SERIAL primary key,
-  name VARCHAR(100) not null,
+CREATE TABLE groups (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
   description TEXT,
-  teacher_id INTEGER not null references users (id) on delete CASCADE,
-  university_id INTEGER references universities (id) on delete set null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  teacher_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  university_id INTEGER REFERENCES universities(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table group_students (
-  id SERIAL primary key,
-  group_id INTEGER not null references groups (id) on delete CASCADE,
-  student_id INTEGER not null references users (id) on delete CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE group_students (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  group_id INTEGER NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+  student_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table literals (
-  id SERIAL primary key,
-  name VARCHAR(255) not null,
-  active BOOLEAN not null default true,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+-- ============================================================================
+-- CATÁLOGOS: Literales y Unidades
+-- ============================================================================
+
+CREATE TABLE literals (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table units (
-  id INT primary key,
-  name VARCHAR(255) not null,
-  active BOOLEAN default true,
-  created_by INT not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INT null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE units (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  active BOOLEAN DEFAULT TRUE,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table financial_categories (
-  id SERIAL primary key,
-  name VARCHAR(255) not null unique
+-- ============================================================================
+-- MÓDULO FINANCIERO
+-- ============================================================================
+
+CREATE TABLE financial_categories (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
 );
 
-create table financial_titles (
-  id SERIAL primary key,
-  name VARCHAR(255) not null unique,
-  category_id INTEGER not null references financial_categories (id) on delete CASCADE
+CREATE TABLE financial_titles (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  category_id INTEGER NOT NULL REFERENCES financial_categories(id) ON DELETE CASCADE
 );
 
-create table financial_data (
-  id SERIAL primary key,
-  title_id INTEGER not null references financial_titles (id) on delete CASCADE,
-  literal_id INTEGER not null references literals (id) on delete CASCADE,
-  amount DECIMAL(50, 2) not null,
-  icon VARCHAR(255) null,
-  created_by INTEGER not null references users (id) on delete CASCADE,
-  updated_by INTEGER null references users (id) on delete set null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE financial_data (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  title_id INTEGER NOT NULL REFERENCES financial_titles(id) ON DELETE CASCADE,
+  literal_id INTEGER NOT NULL REFERENCES literals(id) ON DELETE CASCADE,
+  amount DECIMAL(50, 2) NOT NULL,
+  icon VARCHAR(255),
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_title_user_financial_data UNIQUE (title_id, created_by)
 );
 
-alter table financial_data
-add constraint unique_title_user_financial_data unique (title_id, created_by);
-
-create table indicator_titles (
-  id SERIAL primary key,
-  name VARCHAR(255) not null unique
+CREATE TABLE indicator_titles (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
 );
 
-create table annual_objective_indicators (
-  id SERIAL primary key,
-  title_id INTEGER not null references indicator_titles (id) on update CASCADE on delete RESTRICT,
-  literal_id INTEGER not null references literals (id) on update CASCADE on delete RESTRICT,
-  unit_id INTEGER not null references units (id) on update CASCADE on delete RESTRICT,
-  value DECIMAL(50, 2) not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE annual_objective_indicators (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  title_id INTEGER NOT NULL REFERENCES indicator_titles(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  literal_id INTEGER NOT NULL REFERENCES literals(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  unit_id INTEGER NOT NULL REFERENCES units(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  value DECIMAL(50, 2) NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_title_user_annual_objective_indicators UNIQUE (title_id, created_by)
 );
 
-alter table annual_objective_indicators
-add constraint unique_title_user_annual_objective_indicators unique (title_id, created_by);
+-- ============================================================================
+-- MÓDULO TEMPORAL: Meses
+-- ============================================================================
 
-create table months (
-  id SERIAL primary key,
-  name VARCHAR(255) not null unique,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE months (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table sales_budget (
-  id SERIAL primary key,
-  month_id INTEGER not null references months (id) on delete CASCADE on update CASCADE,
-  growth DECIMAL(5, 2) not null,
-  decade_1 DECIMAL(50, 2) not null,
-  decade_2 DECIMAL(50, 2) not null,
-  decade_3 DECIMAL(50, 2) not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+-- ============================================================================
+-- MÓDULO VENTAS
+-- ============================================================================
+
+CREATE TABLE sales_budget (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  growth DECIMAL(5, 2) NOT NULL,
+  decade_1 DECIMAL(50, 2) NOT NULL,
+  decade_2 DECIMAL(50, 2) NOT NULL,
+  decade_3 DECIMAL(50, 2) NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table products (
-  id SERIAL primary key,
-  name VARCHAR(255) not null unique,
-  quantity INTEGER not null, -- ← CAMPO FALTANTE
-  unit_cost BIGINT not null, -- ← CAMPO FALTANTE  
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE products (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  quantity INTEGER NOT NULL,
+  unit_cost BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table sales (
-  id SERIAL primary key,
-  product_id INTEGER not null references products (id) on delete CASCADE on update CASCADE,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE sales (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table sales_costs (
-  id SERIAL primary key,
-  product_id INTEGER not null references products (id) on delete CASCADE on update CASCADE,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE sales_costs (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table projected_sales (
-  id SERIAL primary key,
-  product_id INTEGER not null references products (id) on delete CASCADE on update CASCADE,
-  quantity INTEGER not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE projected_sales (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  quantity INTEGER NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table costs (
-  id SERIAL primary key,
-  labor_cost INTEGER not null,
-  raw_material_cost INTEGER not null,
-  indirect_costs INTEGER not null,
-  total DECIMAL(100, 2) not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+-- ============================================================================
+-- MÓDULO COSTOS Y GASTOS
+-- ============================================================================
+
+CREATE TABLE costs (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  labor_cost INTEGER NOT NULL,
+  raw_material_cost INTEGER NOT NULL,
+  indirect_costs INTEGER NOT NULL,
+  total DECIMAL(100, 2) NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table operating_expenses (
-  id SERIAL primary key,
-  type VARCHAR(255) not null,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE operating_expenses (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  type VARCHAR(255) NOT NULL,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table personnel_expenses (
-  id SERIAL primary key,
-  name VARCHAR(255) not null,
-  quantity INTEGER not null,
-  value_cop BIGINT not null,
+CREATE TABLE personnel_expenses (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  quantity INTEGER NOT NULL,
+  value_cop BIGINT NOT NULL,
   note TEXT,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table other_expenses (
-  id SERIAL primary key,
-  concept VARCHAR(255) not null,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE other_expenses (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  concept VARCHAR(255) NOT NULL,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table operating_costs (
-  id SERIAL primary key,
-  name VARCHAR(255) not null,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE operating_costs (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table financial_obligations (
-  id SERIAL primary key,
-  name VARCHAR(255) not null,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE financial_obligations (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table social_charges (
-  id SERIAL primary key,
-  name VARCHAR(255) not null,
-  value_cop BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE social_charges (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  value_cop BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table clients (
-  id SERIAL primary key,
-  name TEXT not null,
+-- ============================================================================
+-- MÓDULO OPERACIONES
+-- ============================================================================
+
+CREATE TABLE clients (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name TEXT NOT NULL,
   note TEXT,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table monthly_operations (
-  id SERIAL primary key,
-  user_id INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  product_id INTEGER not null references products (id) on delete CASCADE on update CASCADE,
-  month_id INTEGER not null references months (id) on delete CASCADE on update CASCADE,
-  client_id INTEGER not null references clients (id) on delete CASCADE on update CASCADE,
-  decade INTEGER not null check (decade between 1 and 3),
-  quantity INTEGER not null,
-  unit_cost DECIMAL(20, 2) not null,
-  total_cost DECIMAL(20, 2) not null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE monthly_operations (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  client_id INTEGER NOT NULL REFERENCES clients(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  decade INTEGER NOT NULL CHECK (decade BETWEEN 1 AND 3),
+  quantity INTEGER NOT NULL,
+  unit_cost DECIMAL(20, 2) NOT NULL,
+  total_cost DECIMAL(20, 2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table raw_materials_inventory (
-  id SERIAL primary key,
-  code VARCHAR(10) not null,
-  description VARCHAR(255) not null,
-  quantity INTEGER not null,
-  unit VARCHAR(50) not null,
-  unit_cost BIGINT not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+-- ============================================================================
+-- MÓDULO INVENTARIO
+-- ============================================================================
+
+CREATE TABLE raw_materials_inventory (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  code VARCHAR(10) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  quantity INTEGER NOT NULL,
+  unit VARCHAR(50) NOT NULL,
+  unit_cost BIGINT NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table product_inventory (
-  id SERIAL primary key,
-  product_id INTEGER not null references products (id) on delete CASCADE on update CASCADE,
-  quantity INTEGER not null,
-  unit_cost BIGINT not null,
-  credit30 INTEGER default 0,
-  credit60 INTEGER default 0,
-  investment_percent INTEGER default 0,
-  base_probability REAL not null default 0.05,
+CREATE TABLE product_inventory (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  quantity INTEGER NOT NULL,
+  unit_cost BIGINT NOT NULL,
+  credit30 INTEGER DEFAULT 0,
+  credit60 INTEGER DEFAULT 0,
+  investment_percent INTEGER DEFAULT 0,
+  base_probability REAL NOT NULL DEFAULT 0.05,
   note TEXT,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table inventory_policy (
-  id SERIAL primary key,
-  month_id INTEGER not null references months (id) on delete CASCADE on update CASCADE,
-  value INTEGER not null check (
-    value >= 0
-    and value <= 30
-  ),
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP,
-  unique (month_id, created_by)
+CREATE TABLE inventory_policy (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  value INTEGER NOT NULL CHECK (value >= 0 AND value <= 30),
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (month_id, created_by)
 );
 
-create table providers (
-  id SERIAL primary key,
-  name VARCHAR(100) not null,
+-- ============================================================================
+-- MÓDULO PROVEEDORES Y MATERIALES
+-- ============================================================================
+
+CREATE TABLE providers (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
   logo_filename VARCHAR(100),
   description TEXT,
   location VARCHAR(100),
   delivery_time INTEGER,
   volume_discount DECIMAL(5, 2),
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table provider_payment_options (
-  id SERIAL primary key,
-  provider_id INTEGER references providers (id) on delete CASCADE,
+CREATE TABLE provider_payment_options (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  provider_id INTEGER REFERENCES providers(id) ON DELETE CASCADE,
   option VARCHAR(50),
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table materials (
-  id SERIAL primary key,
-  code VARCHAR(20) not null,
-  name VARCHAR(100) not null,
+CREATE TABLE materials (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  code VARCHAR(20) NOT NULL,
+  name VARCHAR(100) NOT NULL,
   description TEXT,
-  unit_id INTEGER references units (id),
-  base_price DECIMAL(10, 2) not null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  unit_id INTEGER REFERENCES units(id),
+  base_price DECIMAL(10, 2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table materials_by_provider (
-  id SERIAL primary key,
-  provider_id INTEGER references providers (id) on delete CASCADE,
-  material_id INTEGER references materials (id) on delete CASCADE,
-  price DECIMAL(10, 2) not null,
+CREATE TABLE materials_by_provider (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  provider_id INTEGER REFERENCES providers(id) ON DELETE CASCADE,
+  material_id INTEGER REFERENCES materials(id) ON DELETE CASCADE,
+  price DECIMAL(10, 2) NOT NULL,
   payment_option VARCHAR(50),
-  created_by INTEGER references users (id),
-  updated_by INTEGER references users (id),
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_by INTEGER REFERENCES users(id),
+  updated_by INTEGER REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_material_updated_by UNIQUE (material_id, updated_by)
 );
 
-alter table materials_by_provider
-add constraint unique_material_updated_by unique (material_id, updated_by);
+-- ============================================================================
+-- MÓDULO PRODUCCIÓN: Especificaciones y Máquinas
+-- ============================================================================
 
-create table specifications (
-  id SERIAL primary key,
-  name VARCHAR(255) not null unique,
-  base_capacity INTEGER not null,
-  setup_time INTEGER not null,
-  production_time INTEGER not null,
-  maintenance_time INTEGER not null,
-  daily_standard_output INTEGER not null,
-  max_monthly_capacity INTEGER not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE specifications (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  base_capacity INTEGER NOT NULL,
+  setup_time INTEGER NOT NULL,
+  production_time INTEGER NOT NULL,
+  maintenance_time INTEGER NOT NULL,
+  daily_standard_output INTEGER NOT NULL,
+  max_monthly_capacity INTEGER NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table machines (
-  id SERIAL primary key,
-  name VARCHAR(255) not null,
-  specification_id INTEGER not null references specifications (id) on delete CASCADE on update CASCADE,
-  product_id INTEGER not null references products (id) on delete CASCADE on update CASCADE,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER null references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE machines (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  specification_id INTEGER NOT NULL REFERENCES specifications(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table payroll_roles (
-  id SERIAL primary key,
-  name VARCHAR(100) not null unique,
-  base_salary INTEGER not null,
-  optional BOOLEAN default false,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+-- ============================================================================
+-- MÓDULO NÓMINA Y MEJORAS
+-- ============================================================================
+
+CREATE TABLE payroll_roles (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  base_salary INTEGER NOT NULL,
+  optional BOOLEAN DEFAULT FALSE,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table payroll_configurations (
-  id SERIAL primary key,
+CREATE TABLE payroll_configurations (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name VARCHAR(100),
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table improvements (
-  id SERIAL primary key,
-  title VARCHAR(100) not null,
-  description TEXT not null,
-  effect JSONB not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE improvements (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  title VARCHAR(100) NOT NULL,
+  description TEXT NOT NULL,
+  effect JSONB NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table payroll_role_improvements (
-  id SERIAL primary key,
-  role_id INTEGER not null references payroll_roles (id) on delete CASCADE on update CASCADE,
-  improvement_id INTEGER not null references improvements (id) on delete CASCADE on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE payroll_role_improvements (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  role_id INTEGER NOT NULL REFERENCES payroll_roles(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  improvement_id INTEGER NOT NULL REFERENCES improvements(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table payroll_improvements_assignments (
-  id SERIAL primary key,
-  role_improvement_id INTEGER not null references payroll_role_improvements (id) on delete CASCADE on update CASCADE,
-  configuration_id INTEGER not null references payroll_configurations (id) on delete CASCADE on update CASCADE,
-  quantity INTEGER not null default 0,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE payroll_improvements_assignments (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  role_improvement_id INTEGER NOT NULL REFERENCES payroll_role_improvements(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  configuration_id INTEGER NOT NULL REFERENCES payroll_configurations(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  quantity INTEGER NOT NULL DEFAULT 0,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT payroll_assignments_unique UNIQUE (role_improvement_id, created_by)
 );
 
-alter table payroll_improvements_assignments
-add constraint payroll_assignments_unique unique (role_improvement_id, created_by);
+-- ============================================================================
+-- MÓDULO TURNOS Y ASIGNACIONES
+-- ============================================================================
 
-create table shifts (
-  id SERIAL primary key,
-  name VARCHAR(50) not null unique,
-  start_time TIME not null,
-  end_time TIME not null,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE shifts (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR(50) NOT NULL UNIQUE,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table machine_shift_assignments (
-  id SERIAL primary key,
-  configuration_id INTEGER not null references payroll_configurations (id) on delete CASCADE on update CASCADE,
-  machine_id INTEGER not null references machines (id) on delete CASCADE on update CASCADE,
-  shift_id INTEGER not null references shifts (id) on delete CASCADE on update CASCADE,
-  operator_count INTEGER not null default 0,
-  created_by INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  updated_by INTEGER references users (id) on delete set null on update CASCADE,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP
+CREATE TABLE machine_shift_assignments (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  configuration_id INTEGER NOT NULL REFERENCES payroll_configurations(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  machine_id INTEGER NOT NULL REFERENCES machines(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  shift_id INTEGER NOT NULL REFERENCES shifts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  operator_count INTEGER NOT NULL DEFAULT 0,
+  created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_machine_shift_assignment UNIQUE (machine_id, shift_id, created_by)
 );
 
-alter table machine_shift_assignments
-add constraint unique_machine_shift_assignment unique (machine_id, shift_id, created_by);
+-- ============================================================================
+-- MÓDULO PROGRESO DE OPERACIONES
+-- ============================================================================
 
-create table operation_progress (
-  id SERIAL primary key,
-  user_id INTEGER not null references users (id) on delete CASCADE on update CASCADE,
-  month_id INTEGER not null references months (id) on delete CASCADE on update CASCADE,
-  current_decade INTEGER not null check (
-    current_decade >= 1
-    and current_decade <= 3
-  ),
-  is_december BOOLEAN default false,
+CREATE TABLE operation_progress (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  month_id INTEGER NOT NULL REFERENCES months(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  current_decade INTEGER NOT NULL CHECK (current_decade >= 1 AND current_decade <= 3),
+  is_december BOOLEAN DEFAULT FALSE,
   start_time TIMESTAMP,
-  created_at TIMESTAMP default NOW(),
-  updated_at TIMESTAMP default NOW(),
-  constraint unique_user_id unique (user_id)
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  CONSTRAINT unique_user_id UNIQUE (user_id)
 );
 
-create table marketing_configurations (
-  id SERIAL primary key,
-  user_id INTEGER not null references users (id) on delete CASCADE,
-  percent INTEGER not null,
-  cost BIGINT not null,
-  created_at TIMESTAMP default CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP default CURRENT_TIMESTAMP,
-  constraint unique_configuration_marketing_user_id unique (user_id)
+-- ============================================================================
+-- MÓDULO MARKETING
+-- ============================================================================
+
+CREATE TABLE marketing_configurations (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  percent INTEGER NOT NULL,
+  cost BIGINT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_configuration_marketing_user_id UNIQUE (user_id)
 );
+
+COMMIT;
