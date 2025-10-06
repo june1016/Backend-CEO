@@ -44,6 +44,16 @@ const sequelize = new Sequelize(
 async function testConnection() {
     try {
         console.log('🔄 Intentando conectar con la base de datos...');
+        // Mostrar (de forma segura) las variables de entorno relevantes para depuración
+        console.log('🔎 Variables de entorno utilizadas:');
+        console.log(`   - Host: ${process.env.DB_HOST}`);
+        console.log(`   - Puerto: ${process.env.DB_PORT}`);
+        console.log(`   - Base de datos: ${process.env.DB_NAME}`);
+        console.log(`   - Usuario: ${process.env.DB_USER}`);
+        console.log(`   - Tipo/Dialect: postgres`);
+        console.log(`   - Timezone: ${process.env.DB_TIMEZONE}`);
+        // No mostrar la contraseña completa por seguridad, sólo su longitud
+        console.log(`   - Password length: ${process.env.DB_PASSWORD ? process.env.DB_PASSWORD.length : 0}`);
         
         await sequelize.authenticate();
         console.log('✅ Conexión exitosa a la base de datos PostgreSQL');
@@ -59,26 +69,41 @@ async function testConnection() {
         
     } catch (error) {
         console.error('❌ Error de conexión a la base de datos:');
-        
-        // Mensajes de error más descriptivos
-        switch (error.original?.code) {
+        // Mensajes de error más descriptivos y volcado completo para depuración
+        // Primero intentamos mapear códigos comunes
+        switch (error.original?.code || error.parent?.code) {
             case 'ECONNREFUSED':
-                console.error('   No se pudo conectar al servidor de base de datos');
+                console.error('   No se pudo conectar al servidor de base de datos (ECONNREFUSED)');
                 console.error('   Verifica que:');
                 console.error('   - El servidor PostgreSQL esté en ejecución');
                 console.error('   - El host y puerto sean correctos');
                 console.error('   - El firewall permita la conexión');
                 break;
             case '28P01':
-                console.error('   Error de autenticación');
+                console.error('   Error de autenticación (28P01)');
                 console.error('   Verifica que el usuario y contraseña sean correctos');
                 break;
             case '3D000':
-                console.error('   La base de datos no existe');
+                console.error('   La base de datos no existe (3D000)');
                 console.error('   Verifica el nombre de la base de datos');
                 break;
             default:
-                console.error(`   ${error.message}`);
+                // Si no es un código conocido, imprimimos el mensaje y volcado completo
+                console.error(`   Mensaje: ${error.message}`);
+        }
+
+        // Volcar información completa del error para diagnóstico (sin exponer contraseña)
+        try {
+            console.error('--- Detalle completo del error ---');
+            // error.original y error.parent contienen detalles del driver/pg
+            console.error('error.name:', error.name);
+            console.error('error.message:', error.message);
+            if (error.original) console.error('error.original:', JSON.stringify(error.original, Object.getOwnPropertyNames(error.original)));
+            if (error.parent) console.error('error.parent:', JSON.stringify(error.parent, Object.getOwnPropertyNames(error.parent)));
+            console.error('error.stack:', error.stack);
+            console.error('----------------------------------');
+        } catch (dumpErr) {
+            console.error('No fue posible serializar el error completo:', dumpErr);
         }
         
         return false;
