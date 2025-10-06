@@ -151,18 +151,20 @@ CREATE TABLE financial_categories (
   name VARCHAR(255) NOT NULL UNIQUE
 );
 
+-- * cambio para que el ícono se guarde en la tabla titles y no en data y tampoco desde el insert * --
 CREATE TABLE financial_titles (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name VARCHAR(255) NOT NULL UNIQUE,
-  category_id INTEGER NOT NULL REFERENCES financial_categories(id) ON DELETE CASCADE
+  category_id INTEGER NOT NULL REFERENCES financial_categories(id) ON DELETE CASCADE,
+  icon VARCHAR(255)
 );
 
+-- * se eliminó el campo icon de la tabla financial_data * --
 CREATE TABLE financial_data (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   title_id INTEGER NOT NULL REFERENCES financial_titles(id) ON DELETE CASCADE,
   literal_id INTEGER NOT NULL REFERENCES literals(id) ON DELETE CASCADE,
   amount DECIMAL(50, 2) NOT NULL,
-  icon VARCHAR(255),
   created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   updated_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
