@@ -555,3 +555,5 @@ SELECT setval(pg_get_serial_sequence('materials', 'id'), (SELECT MAX(id) FROM ma
 SELECT setval(pg_get_serial_sequence('financial_titles', 'id'), (SELECT MAX(id) FROM financial_titles));
 
 COMMIT;
+
+---
