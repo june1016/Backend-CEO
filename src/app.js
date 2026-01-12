@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import { Server as SocketIOServer } from 'socket.io';
 import { envs } from './config/index.js';
 import {
   getVersion,
@@ -43,6 +44,8 @@ import productInventoryRouter from './routes/productsInventoryRouter.js';
 import groupStudentsRouter from './routes/groupStudentsRouter.js';
 import marketingConfigurationsRouter from './routes/marketingConfigurationsRouter.js';
 import runSalesScheduler from './jobs/sales/mainScheduler.js';
+import monthlyOperationRouter from './routes/monthlyOperationRouter.js';
+import creditsRouter from './routes/creditsRouter.js';
 
 
 const initializeApp = async () => {
@@ -69,6 +72,10 @@ const initializeApp = async () => {
   //global
   fastify.register(operationProgressRouter, { prefix: '/progress' });
   fastify.register(marketingConfigurationsRouter, { prefix: '/marketing' });
+  fastify.register(monthlyOperationRouter, { prefix: '/monthlyOperation' });
+
+  //credit
+  fastify.register(creditsRouter, { prefix: '/credit' });
 
   // Planning
   fastify.register(financialDataRouter, { prefix: '/financialdata' });
@@ -106,8 +113,15 @@ const initializeApp = async () => {
 
   await authenticateDatabase();
 
-  //Ejecuta el cron de ventas simuladas cada minuto
-  runSalesScheduler();
+  const io = new SocketIOServer(fastify.server, {
+    cors: { origin: "*" },
+  });
+
+  io.on('connection', (socket) => {
+    console.log('Cliente conectado por socket:', socket.id);
+  });
+
+  runSalesScheduler(io);
 
   await fastify.listen({ port: envs.PORT, host: envs.HOST });
 };

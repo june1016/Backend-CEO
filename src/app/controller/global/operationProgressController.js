@@ -68,7 +68,7 @@ const getSimulatedTime = async (req, reply) => {
     const elapsedMs = now.getTime() - new Date(progress.start_time).getTime();
     const elapsedMinutes = elapsedMs / 60000;
 
-    const totalRealMinutes = 21600;
+    const totalRealMinutes = 120960;
     const totalSimulatedMonths = 12;
 
     const simulatedMonths = (elapsedMinutes / totalRealMinutes) * totalSimulatedMonths;

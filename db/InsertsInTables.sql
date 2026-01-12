@@ -148,7 +148,7 @@ INSERT INTO financial_titles(name, category_id, icon) VALUES
 ('Inventario', 1, 'Inventory'),
 ('Cuentas por cobrar', 1, 'Receipt'),
 ('Maquinaria y equipo', 1, 'Build'),
-('Equipos de cómputo', 1, 'Computer'),
+('Equipos de oficina', 1, 'Computer'),
 ('Muebles y enseres', 1, 'MenuBook'),
 ('Patentes', 1, 'EmojiEvents'),
 ('Cuentas por pagar', 2, 'CreditCard'),
