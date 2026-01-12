@@ -10,13 +10,17 @@ import envs from './envs.js';
 const connectToDatabase = () =>
   new Sequelize({
     dialect: envs.DB_TYPE,
-    schema: envs.SCHEMA,
     database: envs.DB_NAME,
     host: envs.DB_HOST,
     port: envs.DB_PORT,
     username: envs.DB_USER,
     password: envs.DB_PASSWORD,
     timezone: envs.DB_TIMEZONE,
+    dialectOptions: {
+      // Deshabilitar SSL completamente
+      ssl: false
+    }
   });
+  
 
 export default connectToDatabase;

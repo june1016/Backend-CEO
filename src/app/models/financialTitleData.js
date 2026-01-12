@@ -1,3 +1,4 @@
+// Backend/src/app/models/financialTitleData.js
 import { DataTypes } from 'sequelize';
 import { connectToDatabase } from '../../config/index.js';
 import FinancialCategory from './financialCategoryData.js';
@@ -15,7 +16,7 @@ const FinancialTitle = connectToDatabase().define('FinancialTitle', {
   },
   icon: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   category_id: {
     type: DataTypes.INTEGER,
@@ -41,6 +42,7 @@ const FinancialTitle = connectToDatabase().define('FinancialTitle', {
   timestamps: false,
 });
 
+// Relaciones
 FinancialCategory.hasMany(FinancialTitle, { foreignKey: 'category_id', onDelete: 'CASCADE' });
 FinancialTitle.belongsTo(FinancialCategory, { foreignKey: 'category_id' });
 

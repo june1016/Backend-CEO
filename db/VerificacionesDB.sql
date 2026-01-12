@@ -1,12 +1,12 @@
 -- Ver cuántas tablas hay en el esquema
 SELECT COUNT(*) 
 FROM information_schema.tables
-WHERE table_schema = 'schemaceo';
+WHERE table_schema = 'public';
 
 -- Ver la lista de nombres de todas las tablas
 SELECT table_name 
 FROM information_schema.tables 
-WHERE table_schema = 'schemaceo'
+WHERE table_schema = 'public'
 ORDER BY table_name;
 
 -- Comprobar algunos conteos de filas clave
