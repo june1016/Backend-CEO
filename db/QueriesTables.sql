@@ -1,4 +1,4 @@
-
+DROP TABLE IF EXISTS marketing_configurations CASCADE;
 DROP TABLE IF EXISTS operation_progress CASCADE;
 DROP TABLE IF EXISTS payroll_role_improvements CASCADE;
 DROP TABLE IF EXISTS payroll_improvements_assignments CASCADE;
@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS provider_payment_options CASCADE;
 DROP TABLE IF EXISTS providers CASCADE;
 DROP TABLE IF EXISTS materials CASCADE;
 DROP TABLE IF EXISTS inventory_policy CASCADE;
+DROP TABLE IF EXISTS clients CASCADE;
 DROP TABLE IF EXISTS monthly_operations CASCADE;
 DROP TABLE IF EXISTS raw_materials_inventory CASCADE;
 DROP TABLE IF EXISTS social_charges CASCADE;
@@ -189,6 +190,8 @@ CREATE TABLE sales_budget (
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
+    quantity INTEGER NOT NULL,
+    unit_cost BIGINT NOT NULL,
     created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -297,6 +300,14 @@ CREATE TABLE social_charges (
     updated_by INTEGER NULL REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE clients (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  note TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE monthly_operations (
@@ -525,15 +536,7 @@ CREATE TABLE marketing_configurations (
     percent INTEGER NOT NULL,
     cost BIGINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT unique_configuration_marketing_user_id UNIQUE (user_id)
-);
-
-CREATE TABLE clients (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  note TEXT
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

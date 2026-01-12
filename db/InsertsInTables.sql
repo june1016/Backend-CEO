@@ -46,9 +46,6 @@ TRUNCATE TABLE
   rol
 RESTART IDENTITY CASCADE;
 
-ALTER TABLE financial_titles
-  ADD COLUMN icon VARCHAR(255) NULL;
-
 INSERT INTO rol (id, name_rol) VALUES
 (1, 'Administrador'),
 (2, 'Docente'),
@@ -116,7 +113,7 @@ INSERT INTO financial_titles (name, category_id, icon) VALUES
 ('Inventario', 1, 'Inventory'),
 ('Cuentas por cobrar', 1, 'Receipt'),
 ('Maquinaria y equipo', 1, 'Build'),
-('Equipos de cómputo', 1, 'Computer'),
+('Equipos de oficina', 1, 'Computer'),
 ('Muebles y enseres', 1, 'MenuBook'),
 ('Patentes', 1, 'EmojiEvents'),
 ('Cuentas por pagar', 2, 'CreditCard'),
@@ -495,7 +492,7 @@ INSERT INTO marketing_configurations (user_id, percent, cost) VALUES
 INSERT INTO clients (name, note) VALUES
 ('Alfa Distribuciones S.A.S.', 'Empresa'),
 ('Beta Soluciones Ltda.', 'Empresa'),
-('Gama Inversiones S.A.', 'Empresa'),z  
+('Gama Inversiones S.A.', 'Empresa'),
 ('Omega Productos S.A.S.', 'Empresa'),
 ('Servicios Delta Ltda.', 'Empresa'),
 ('Insumos Rápidos S.A.S.', 'Empresa'),
